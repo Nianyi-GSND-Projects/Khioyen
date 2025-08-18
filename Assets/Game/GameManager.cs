@@ -16,7 +16,7 @@ namespace LongLiveKhioyen
 			ReadSettings();
 			ReadSavegamePaths();
 
-			// Fetch build-in resources.
+			// Fetch built-in resources.
 			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Initial Building Definition Sheet"));
 			if(buildingDefinitionSheet == null)
 			{
@@ -31,6 +31,11 @@ namespace LongLiveKhioyen
 				CreateNewGameInstance();
 #endif
 		}
+		#endregion
+
+		#region Built-in resources
+		static BuildingDefinitionSheet buildingDefinitionSheet;
+		public static List<BuildingDefinitionData> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
 		#endregion
 
 		#region Local data
@@ -145,7 +150,7 @@ namespace LongLiveKhioyen
 		#endregion
 		#endregion
 
-		#region Game
+		#region Game instance
 		public static GameInstance Instance => GameInstance.Instance;
 
 		public static void StartNewGame()
@@ -183,7 +188,9 @@ namespace LongLiveKhioyen
 
 			SceneManager.LoadScene("Start Menu");
 		}
+		#endregion
 
+		#region Pause menu
 		static PauseMenu pauseMenu;
 		public static void OpenPauseMenu()
 		{
@@ -208,9 +215,6 @@ namespace LongLiveKhioyen
 			pauseMenu = null;
 			Time.timeScale = 1.0f;
 		}
-
-		static BuildingDefinitionSheet buildingDefinitionSheet;
-		public static List<BuildingDefinitionData> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
 		#endregion
 	}
 }

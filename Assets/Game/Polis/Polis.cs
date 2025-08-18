@@ -4,13 +4,13 @@ namespace LongLiveKhioyen
 {
 	public class Polis : MonoBehaviour
 	{
+		#region Life cycle
 		bool initialized = false;
 		public bool Initialized => initialized;
 		PolisData data;
 		public PolisData Data => data;
 		public ControlledPolisData Controlled => data?.controlledData;
 
-		#region Life cycle
 		void Awake()
 		{
 			var gameData = GameInstance.Instance?.Data;

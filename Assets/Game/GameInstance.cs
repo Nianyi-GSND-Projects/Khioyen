@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LongLiveKhioyen
 {
@@ -35,6 +36,31 @@ namespace LongLiveKhioyen
 			{
 				data = JsonUtility.FromJson<GameData>(JsonUtility.ToJson(value));
 			}
+		}
+		#endregion
+
+		#region Scene transition
+		public void DepartFromPolis()
+		{
+			Debug.Log($"Departing rom polis \"{Data.lastPoleis}\".");
+			// TODO
+			SceneManager.LoadScene("World Map");
+		}
+
+		public void EnterPolis(string polisId)
+		{
+			var polis = Data.poleis.Find(p => p.id == polisId);
+			if(polis == null)
+			{
+				Debug.LogWarning($"Cannot enter polis \"{polisId}\", failed to find.");
+				return;
+			}
+			Debug.Log($"Entering polis \"{polis.id}\".");
+
+			// TODO
+			Data.lastPoleis = polis.id;
+
+			SceneManager.LoadScene("Polis");
 		}
 		#endregion
 	}

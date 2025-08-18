@@ -39,7 +39,7 @@ namespace LongLiveKhioyen
 	{
 		public string id;
 		public string name;  // Needs localization.
-		public Vector3 position;
+		public Vector2 position;
 		[Range(0, 359)] public float orientation;
 
 		public bool isControlled;

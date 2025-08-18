@@ -26,6 +26,11 @@ namespace LongLiveKhioyen
 		{
 			GameManager.OpenPauseMenu();
 		}
+
+		public void DepartFromPolis()
+		{
+			GameInstance.Instance.DepartFromPolis();
+		}
 		#endregion
 
 		#region Status Bar
