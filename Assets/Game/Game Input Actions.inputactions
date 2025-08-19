@@ -191,7 +191,7 @@
                     "id": "1c95822e-142d-4328-aaf2-3c0247c5da16",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=0.01)",
                     "groups": "",
                     "action": "Scroll",
                     "isComposite": false,

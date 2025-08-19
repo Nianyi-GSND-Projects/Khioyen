@@ -30,5 +30,7 @@ namespace LongLiveKhioyen
 			model.name = "Model";
 			model.transform.SetParent(transform, false);
 		}
+
+		public bool Selected { get; set; }
 	}
 }

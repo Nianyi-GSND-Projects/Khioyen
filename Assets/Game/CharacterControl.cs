@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace LongLiveKhioyen
 {
-	public class CharacterControlInputHandler : MonoBehaviour
+	public class CharacterControl : MonoBehaviour
 	{
 		public AbstractCharacterController characterController;
 		public UnityEvent onInteract;
