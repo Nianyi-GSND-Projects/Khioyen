@@ -5,62 +5,23 @@ using System.Collections.Generic;
 
 namespace LongLiveKhioyen
 {
-	[RequireComponent(typeof(CharacterController))]
+	[RequireComponent(typeof(AbstractCharacterController))]
 	public class WorldMapPlayerArmy : MonoBehaviour
 	{
-		#region Settings
-		[Min(0)] public float maxInteractDistance = 10;
-		#endregion
-
-		#region Movement
-		CharacterController controller;
-		CharacterController Controller
+		AbstractCharacterController controller;
+		public AbstractCharacterController Controller
 		{
 			get
 			{
 				if(controller == null)
-					controller = GetComponent<CharacterController>();
+					controller = GetComponent<AbstractCharacterController>();
 				return controller;
 			}
 		}
 
-		[Min(0)] public float moveSpeed = 30;
-		[Min(0)] public float rotateSpeed = 40;
+		[Min(0)] public float maxInteractDistance = 10;
 
-		float moveInput = 0;
-		float rotateInput = 0;
-
-		public void SetPosition(Vector3 position)
-		{
-			Controller.enabled = false;
-			transform.position = position;
-			Controller.enabled = true;
-		}
-		#endregion
-
-		#region Life cycle
-		void FixedUpdate()
-		{
-			float dt = Time.fixedDeltaTime;
-			Controller.Move(transform.forward * (moveInput * dt));
-			transform.Rotate(Vector3.up * (rotateInput * dt));
-		}
-		#endregion
-
-		#region Input handler
-		protected void OnMove(InputValue value)
-		{
-			var raw = value.Get<float>();
-			moveInput = raw * moveSpeed;
-		}
-
-		protected void OnRotate(InputValue value)
-		{
-			var raw = value.Get<float>();
-			rotateInput = raw * rotateSpeed;
-		}
-
-		protected void OnInteract()
+		public void InteractWithNearbyPolis()
 		{
 			var polisMiniatures = FindObjectsByType<PolisMiniature>(FindObjectsSortMode.None)
 				.Select(p => new KeyValuePair<PolisMiniature, float>(p, Vector3.Distance(p.transform.position, transform.position)))
@@ -81,6 +42,5 @@ namespace LongLiveKhioyen
 			{
 			}
 		}
-		#endregion
 	}
 }

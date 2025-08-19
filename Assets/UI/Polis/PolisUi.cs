@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 namespace LongLiveKhioyen
@@ -75,6 +76,34 @@ namespace LongLiveKhioyen
 		public void SwitchToNormalPanel()
 		{
 			SwitchBottomPanel(normalPanel);
+		}
+
+		void SetBottomAreaVisibiltiy(bool visible)
+		{
+			bottomArea.gameObject.SetActive(visible);
+		}
+		#endregion
+
+		#region Side bar
+		[Header("Side Bar")]
+		public Image switchModeImage;
+		public Sprite wanderModeIcon;
+		public Sprite mayorModeIcon;
+
+		public void SwitchMode()
+		{
+			polis.SwitchMode();
+			switch(polis.CurrentMode)
+			{
+				case Polis.Mode.Mayor:
+					switchModeImage.sprite = wanderModeIcon;
+					SetBottomAreaVisibiltiy(true);
+					break;
+				case Polis.Mode.Wander:
+					switchModeImage.sprite = mayorModeIcon;
+					SetBottomAreaVisibiltiy(false);
+					break;
+			}
 		}
 		#endregion
 	}

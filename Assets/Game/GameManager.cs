@@ -35,7 +35,7 @@ namespace LongLiveKhioyen
 
 		#region Built-in resources
 		static BuildingDefinitionSheet buildingDefinitionSheet;
-		public static List<BuildingDefinitionData> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
+		public static List<BuildingDefinition> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
 		#endregion
 
 		#region Local data

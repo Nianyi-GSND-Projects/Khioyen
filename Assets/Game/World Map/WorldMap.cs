@@ -37,8 +37,8 @@ namespace LongLiveKhioyen
 			}
 			else
 			{
-				playerArmy.SetPosition(lastPolis.transform.position + lastPolis.transform.forward * departureDistance);
-				playerArmy.transform.rotation = Quaternion.LookRotation(lastPolis.transform.forward, Vector3.up);
+				playerArmy.Controller.Teleport(lastPolis.transform.position + lastPolis.transform.forward * departureDistance);
+				playerArmy.Controller.FaceTowards(lastPolis.transform.forward);
 			}
 		}
 		#endregion

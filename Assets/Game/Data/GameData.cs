@@ -71,6 +71,9 @@ namespace LongLiveKhioyen
 			public string type;  // The building ID stored in the definition sheet.
 			public Vector2Int position;
 			[Range(0, 3)] public int orientation;  // By 90 degrees.
+
+			public bool underConstruction;
+			public float remainingConstructionTime;
 		}
 		public List<BuildingPlacement> buildings;
 	}
@@ -81,7 +84,7 @@ namespace LongLiveKhioyen
 	}
 
 	[Serializable]
-	public class BuildingDefinitionData
+	public class BuildingDefinition
 	{
 		public string id;
 		public string name;  // Needs localization.

@@ -1,4 +1,6 @@
 using UnityEngine;
+using Cinemachine;
+using System.Collections.Generic;
 
 namespace LongLiveKhioyen
 {
@@ -34,6 +36,7 @@ namespace LongLiveKhioyen
 			initialized = true;
 
 			Construct();
+			SwitchToMode(Mode.Mayor);
 		}
 		#endregion
 
@@ -57,6 +60,7 @@ namespace LongLiveKhioyen
 			SpawnBuildings();
 		}
 
+		readonly List<Building> buildings = new();
 		void SpawnBuildings()
 		{
 			foreach(var placement in Controlled.buildings)
@@ -67,20 +71,67 @@ namespace LongLiveKhioyen
 					Debug.LogWarning($"Skipping spawning building of ID \"{placement.type}\", cannot find its definition.");
 					continue;
 				}
-				var model = Resources.Load<GameObject>(definition.modelAddress);
-				if(model == null)
-				{
-					Debug.LogWarning($"Skipping spawning building of ID \"{placement.type}\", cannot find its model at {definition.modelAddress}.");
-					continue;
-				}
 
-				var building = Instantiate(model);
+				var building = new GameObject().AddComponent<Building>();
 				building.transform.SetParent(transform, false);
-				building.transform.localPosition = grid.CellToLocalInterpolated(
-					(Vector3Int)placement.position - definition.bounds.center + Vector3.one
-				);
-				building.transform.localEulerAngles = Vector3.up * (placement.orientation * 90);
+				buildings.Add(building);
+				building.definition = definition;
+				building.placement = placement;
 			}
+		}
+		#endregion
+
+		#region Mode
+		public enum Mode { Mayor, Wander }
+		Mode currentMode = Mode.Mayor;
+		public Mode CurrentMode => currentMode;
+
+		[Header("Mayor Mode")]
+		public InputGroup mayorInput;
+		public CinemachineVirtualCamera mayorCamera;
+
+		[Header("Wander Mode")]
+		public InputGroup wanderInput;
+		public AbstractCharacterController player;
+		public CinemachineVirtualCamera wanderCamera;
+
+		public void SwitchMode()
+		{
+			switch(currentMode)
+			{
+				case Mode.Mayor:
+					SwitchToMode(Mode.Wander);
+					break;
+				case Mode.Wander:
+					SwitchToMode(Mode.Mayor);
+					break;
+			}
+		}
+
+		public void SwitchToMode(Mode mode)
+		{
+			if(mode != Mode.Mayor)
+				SetMayorMode(false);
+			if(mode != Mode.Wander)
+				SetWanderMode(false);
+
+			if(mode == Mode.Mayor)
+				SetMayorMode(true);
+			if(mode == Mode.Wander)
+				SetWanderMode(true);
+
+			currentMode = mode;
+		}
+
+		void SetMayorMode(bool enabled)
+		{
+			mayorCamera.enabled = enabled;
+		}
+
+		void SetWanderMode(bool enabled)
+		{
+			wanderCamera.enabled = enabled;
+			player.gameObject.SetActive(enabled);
 		}
 		#endregion
 	}

@@ -1,8 +1,8 @@
 {
-    "name": "World Map Player Input Actions",
+    "name": "Game Input Actions",
     "maps": [
         {
-            "name": "Exploring",
+            "name": "Character Control",
             "id": "8a3bb811-9aff-42d3-a42a-dd94419e27ff",
             "actions": [
                 {
@@ -108,6 +108,114 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Mayor Mode",
+            "id": "f486af7b-bcb4-4e00-89d5-66a1b02ab7e8",
+            "actions": [
+                {
+                    "name": "Point",
+                    "type": "Value",
+                    "id": "2882237a-06cb-44ca-9e70-b4373cce2424",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Drag",
+                    "type": "Value",
+                    "id": "269f04c7-4ff4-4efc-9482-4d3d4942da88",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "f937d171-77af-40c5-8d64-32554367c8c7",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Primary Click",
+                    "type": "Button",
+                    "id": "602ae018-5a67-4d90-98b7-28e4d4142c7e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary Click",
+                    "type": "Button",
+                    "id": "65b3359c-4d6c-4527-8609-b79052e565bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0051ee79-c6e6-429c-86c9-ba68e2d79422",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e9380ec-cbfe-4459-9988-55c62d2fdb32",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c95822e-142d-4328-aaf2-3c0247c5da16",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "97940e48-eb2b-4c29-891e-8367c188e6e7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Primary Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b507e08e-e6ec-4b72-a1e3-90328e3dc47b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Secondary Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
