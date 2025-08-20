@@ -9,12 +9,6 @@ namespace LongLiveKhioyen
 		#region Life cycle
 		void Awake()
 		{
-			if(!polis.Initialized)
-			{
-				Debug.LogWarning("Cannot initialize polis UI, as the polis instance is not successfully initialized.");
-				return;
-			}
-
 			UpdateTopBar();
 			SwitchBottomPanel(normalPanel);
 		}

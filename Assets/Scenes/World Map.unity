@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2511093577f3e5642b008152b0cfb872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 183374823}
+  characterController: {fileID: 183374822}
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -291,7 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 183374819}
   - component: {fileID: 183374820}
-  - component: {fileID: 183374823}
+  - component: {fileID: 183374822}
   - component: {fileID: 183374821}
   m_Layer: 0
   m_Name: Player Army
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxInteractDistance: 10
---- !u!114 &183374823
+--- !u!114 &183374822
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -365,11 +365,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 183374818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78188262c7175d8438fa9fb13a0d1447, type: 3}
+  m_Script: {fileID: 11500000, guid: d973255ce89bba340b9ea93cfa1a14bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 30
-  rotateSpeed: 40
+  lateralSpeed: 40
 --- !u!1 &399805397
 GameObject:
   m_ObjectHideFlags: 0

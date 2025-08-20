@@ -9,14 +9,14 @@ namespace LongLiveKhioyen
 		public AbstractCharacterController characterController;
 		public UnityEvent onInteract;
 
-		protected void OnMove(InputValue value)
+		protected void OnForwardMove(InputValue value)
 		{
-			characterController.MoveInput = value.Get<float>();
+			characterController.ForwardMoveInput = value.Get<float>();
 		}
 
-		protected void OnRotate(InputValue value)
+		protected void OnLateralMove(InputValue value)
 		{
-			characterController.RotateInput = value.Get<float>();
+			characterController.LateralMoveInput = value.Get<float>();
 		}
 
 		protected void OnInteract()

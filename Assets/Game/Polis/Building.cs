@@ -5,14 +5,12 @@ namespace LongLiveKhioyen
 {
 	public class Building : MonoBehaviour
 	{
-		Polis polis;
 		[NonSerialized] public BuildingDefinition definition;
 		[NonSerialized] public ControlledPolisData.BuildingPlacement placement;
 		GameObject model;
 
 		void Start()
 		{
-			polis = GetComponentInParent<Polis>();
 			name = definition.name;
 
 			model = GameManager.GetBuildingModelTemplate(definition);

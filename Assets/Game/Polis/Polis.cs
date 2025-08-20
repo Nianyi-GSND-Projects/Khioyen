@@ -1,16 +1,14 @@
-using Cinemachine;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Device;
+using Cinemachine;
+using Unity.AI.Navigation;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace LongLiveKhioyen
 {
 	public class Polis : MonoBehaviour
 	{
 		#region Life cycle
-		bool initialized = false;
-		public bool Initialized => initialized;
 		PolisData data;
 		public PolisData Data => data;
 		public ControlledPolisData Controlled => data?.controlledData;
@@ -35,20 +33,13 @@ namespace LongLiveKhioyen
 				return;
 			}
 			name = $"{data.name} (Polis)";
-			initialized = true;
+		}
 
-			Construct();
+		void Start()
+		{
 			SwitchToMode(Mode.Mayor);
 			IsInConstructModal = false;
-		}
-		#endregion
 
-		#region Construction
-		public GameObject ground;
-		public Grid grid;
-
-		void Construct()
-		{
 			// TODO: Procedural polis generation.
 
 			/* Orientation */
@@ -56,12 +47,29 @@ namespace LongLiveKhioyen
 			gameObject.isStatic = true;
 
 			/* Ground */
-			ground.transform.localScale = new Vector3(Controlled.size.x, Controlled.size.y, 1);
+			ground.transform.localScale = new Vector3(Controlled.size.x, 1, Controlled.size.y);
 			ground.isStatic = true;
 
 			/* Buildings */
 			SpawnBuildingsFromGameData();
 		}
+
+		void Update()
+		{
+			if(isNavMeshDirty)
+			{
+				isNavMeshDirty = false;
+				UpdateGroundNavMesh();
+			}
+		}
+		#endregion
+
+		#region Construction
+		public GameObject ground;
+		public Grid grid;
+
+		#region Ground
+		bool isNavMeshDirty = true;
 
 		public bool RayToGround(Ray ray, out Vector3 ground)
 		{
@@ -80,6 +88,14 @@ namespace LongLiveKhioyen
 			var ray = Camera.main.ScreenPointToRay(screen);
 			return RayToGround(ray, out ground);
 		}
+
+		void UpdateGroundNavMesh()
+		{
+			var surface = ground.GetComponent<NavMeshSurface>();
+			surface.RemoveData();
+			surface.BuildNavMesh();
+		}
+		#endregion
 
 		#region Building
 		readonly List<Building> buildings = new();
@@ -128,6 +144,8 @@ namespace LongLiveKhioyen
 			buildings.Add(building);
 			building.definition = definition;
 			building.placement = placement;
+
+			isNavMeshDirty = true;
 		}
 
 		public void ConstructBuilding(string type, Vector2Int gridPosition, int orientation)
@@ -225,6 +243,8 @@ namespace LongLiveKhioyen
 		{
 			wanderCamera.enabled = enabled;
 			player.gameObject.SetActive(enabled);
+			if(enabled)
+				player.Teleport(mayorCamera.LookAt.position);
 		}
 		#endregion
 		#endregion
