@@ -49,19 +49,20 @@ namespace LongLiveKhioyen
 	}
 
 	[Serializable]
+	public struct Economy
+	{
+		public float food;
+		public float money;
+		public float knowledge;
+	}
+
+	[Serializable]
 	public class ControlledPolisData
 	{
 		/* Geometry */
 		public Vector2Int size;
 
 		/* Resources */
-		[Serializable]
-		public struct Economy
-		{
-			public float food;
-			public float money;
-			public float knowledge;
-		}
 		public Economy economy;
 
 		/* Buildings */
@@ -89,12 +90,14 @@ namespace LongLiveKhioyen
 		public string typeId;
 		public string name;  // Needs localization.
 		public string[] tags;
+		public Sprite figure;
 
 		[Header("Geometry")]
 		public Bounds bounds;
-		public string modelAddress;
+		public GameObject model;
 
 		[Header("Construction")]
 		[Min(0)] public float constructionTime;
+		public Economy cost;
 	}
 }

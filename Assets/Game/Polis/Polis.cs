@@ -33,6 +33,8 @@ namespace LongLiveKhioyen
 				return;
 			}
 			name = $"{data.name} (Polis)";
+
+			player.gameObject.SetActive(false);
 		}
 
 		void Start()
@@ -244,7 +246,10 @@ namespace LongLiveKhioyen
 			wanderCamera.enabled = enabled;
 			player.gameObject.SetActive(enabled);
 			if(enabled)
+			{
 				player.Teleport(mayorCamera.LookAt.position);
+				player.FaceTowards(Camera.main.transform.forward);
+			}
 		}
 		#endregion
 		#endregion

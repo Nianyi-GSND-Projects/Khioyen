@@ -51,10 +51,8 @@ namespace LongLiveKhioyen
 			foreach(var definition in GameManager.BuildingDefinitions)
 			{
 				var card = Instantiate(cardTemplate).GetComponent<ConstructOptionCard>();
+				card.buildingDefinition = definition;
 				card.transform.SetParent(constructOptionsUi.transform, false);
-
-				card.button.onClick.AddListener(() => SelectedBuildingType = definition.typeId);
-				card.text.text = definition.name;
 			}
 			constructOptionsUi.CalculateLayoutInputHorizontal();
 		}
@@ -77,12 +75,11 @@ namespace LongLiveKhioyen
 				if(!GameManager.FindBuildingDefinitionByType(value, out selectedBuildingType))
 					return;
 
-				var template = GameManager.GetBuildingModelTemplate(selectedBuildingType);
-				if(template == null)
+				if(selectedBuildingType.model == null)
 					return;
 
 				orientation = 0;
-				previewModel = Instantiate(template);
+				previewModel = Instantiate(selectedBuildingType.model);
 				previewModel.transform.SetParent(Polis.transform, false);
 				UpdatePreviewModelPose();
 			}

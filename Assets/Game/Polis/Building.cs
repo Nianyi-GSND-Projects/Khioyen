@@ -13,13 +13,7 @@ namespace LongLiveKhioyen
 		{
 			name = definition.name;
 
-			model = GameManager.GetBuildingModelTemplate(definition);
-			if(model == null)
-			{
-				Debug.LogWarning($"Cannot find the model of building \"{placement.type}\" at {definition.modelAddress}.");
-				return;
-			}
-			model = Instantiate(model);
+			model = Instantiate(definition.model);
 			model.name = "Model";
 			model.transform.SetParent(transform, false);
 		}

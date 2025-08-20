@@ -41,10 +41,6 @@ namespace LongLiveKhioyen
 			definition = BuildingDefinitions.Find(d => d.typeId == type);
 			return definition != null;
 		}
-		public static GameObject GetBuildingModelTemplate(BuildingDefinition definition)
-		{
-			return Resources.Load<GameObject>(definition?.modelAddress);
-		}
 		#endregion
 
 		#region Local data
