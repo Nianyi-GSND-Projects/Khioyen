@@ -57,7 +57,7 @@ namespace LongLiveKhioyen
 		public CanvasGroup normalPanel;
 		public CanvasGroup constructPanel;
 
-		public void SwitchBottomPanel(CanvasGroup panel)
+		void SwitchBottomPanel(CanvasGroup panel)
 		{
 			bool flag = false;  // Record if any panels has been switched to.
 
@@ -70,12 +70,7 @@ namespace LongLiveKhioyen
 			}
 
 			if(!flag)  // If nothing has been switched to, display the normal panel.
-				SwitchToNormalPanel();
-		}
-
-		public void SwitchToNormalPanel()
-		{
-			SwitchBottomPanel(normalPanel);
+				SwitchBottomPanel(normalPanel);
 		}
 
 		void SetBottomAreaVisibiltiy(bool visible)
@@ -100,10 +95,25 @@ namespace LongLiveKhioyen
 					SetBottomAreaVisibiltiy(true);
 					break;
 				case Polis.Mode.Wander:
+					ExitConstructModal();
 					switchModeImage.sprite = mayorModeIcon;
 					SetBottomAreaVisibiltiy(false);
 					break;
 			}
+		}
+		#endregion
+
+		#region Construction
+		public void EnterConstructModal()
+		{
+			SwitchBottomPanel(constructPanel);
+			polis.IsInConstructModal = true;
+		}
+
+		public void ExitConstructModal()
+		{
+			SwitchBottomPanel(normalPanel);
+			polis.IsInConstructModal = false;
 		}
 		#endregion
 	}

@@ -16,10 +16,14 @@ namespace LongLiveKhioyen
 		public float rotateSpeed = 1;
 		#endregion
 
-		#region Private states
-		Vector2 pointerPosition;
-		bool isPrimaryButtonDown, isSecondaryButtonDown;
+		#region Input states
+		Vector2 pointerScreenPosition;
+		public Vector2 PointerScreenPosition => pointerScreenPosition;
 		bool isPointerOverGameObjects;
+
+		bool isPrimaryButtonDown, isSecondaryButtonDown;
+		float lastPrimaryClickTime;
+		Vector2 primaryStartScreenPosition;
 		#endregion
 
 		#region Life cycle
@@ -33,7 +37,7 @@ namespace LongLiveKhioyen
 		protected void OnPoint(InputValue value)
 		{
 			var raw = value.Get<Vector2>();
-			pointerPosition = raw;
+			pointerScreenPosition = raw;
 		}
 
 		protected void OnDrag(InputValue value)
@@ -57,8 +61,22 @@ namespace LongLiveKhioyen
 			var raw = value.isPressed;
 			isPrimaryButtonDown = raw;
 
-			if(!isPointerOverGameObjects)
-				Interact(pointerPosition);
+			if(raw)
+			{
+				lastPrimaryClickTime = Time.realtimeSinceStartup;
+				primaryStartScreenPosition = pointerScreenPosition;
+			}
+			else
+			{
+				float elapsedTime = Time.realtimeSinceStartup - lastPrimaryClickTime;
+				Vector2 mouseMoved = primaryStartScreenPosition - pointerScreenPosition;
+				if(
+					elapsedTime <= 0.3f &&
+					mouseMoved.magnitude <= 5 &&
+					!isPointerOverGameObjects
+				)
+					BroadcastMessage("Interact", pointerScreenPosition);
+			}
 		}
 
 		protected void OnSecondaryClick(InputValue value)
@@ -71,17 +89,11 @@ namespace LongLiveKhioyen
 		#region Functions
 		void Pan(Vector2 screenDelta)
 		{
-			static Vector3 ScreenToGround(Vector2 screen)
-			{
-				var ray = Camera.main.ScreenPointToRay(screen);
-				var plane = new Plane(Vector3.up, Vector3.zero);
-				if(plane.Raycast(ray, out float t))
-					return ray.GetPoint(t);
-				return default;
-			}
-
-			Vector3 worldDelta = ScreenToGround(pointerPosition - screenDelta) - ScreenToGround(pointerPosition);
-			polis.mayorCamera.LookAt.position += worldDelta * panSpeed;
+			if(!polis.ScreenToGround(pointerScreenPosition - screenDelta, out var to))
+				return;
+			if(!polis.ScreenToGround(pointerScreenPosition, out var from))
+				return;
+			polis.mayorCamera.LookAt.position += (to - from) * panSpeed;
 		}
 
 		void Zoom(float scrollY)
@@ -107,8 +119,11 @@ namespace LongLiveKhioyen
 			root.localEulerAngles = euler;
 		}
 
-		void Interact(Vector2 screenPos)
+		protected void Interact(Vector2 screenPos)
 		{
+			if(polis.IsInConstructModal)
+				return;
+
 			var ray = Camera.main.ScreenPointToRay(screenPos);
 			if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
 				return;

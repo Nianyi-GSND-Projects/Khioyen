@@ -86,9 +86,15 @@ namespace LongLiveKhioyen
 	[Serializable]
 	public class BuildingDefinition
 	{
-		public string id;
+		public string typeId;
 		public string name;  // Needs localization.
+		public string[] tags;
+
+		[Header("Geometry")]
 		public Bounds bounds;
 		public string modelAddress;
+
+		[Header("Construction")]
+		[Min(0)] public float constructionTime;
 	}
 }

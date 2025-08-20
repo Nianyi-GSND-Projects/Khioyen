@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: Initial Building Definition Sheet
   m_EditorClassIdentifier: 
   buildingDefinitions:
-  - id: water-well
+  - typeId: water-well
     name: "\u6C34\u4E95"
+    tags: []
     bounds:
-      m_Center: {x: 0.5, y: 0.5, z: 0.5}
+      m_Center: {x: 0.5, y: 0.5, z: 0}
       m_Extent: {x: 1, y: 1, z: 1}
     modelAddress: Building Models/Water Well
-  - id: barracks
+    constructionTime: 0
+  - typeId: barracks
     name: "\u5175\u8425"
+    tags: []
     bounds:
-      m_Center: {x: 1.5, y: 1.5, z: 1.5}
+      m_Center: {x: 1.5, y: 1.5, z: 0}
       m_Extent: {x: 3, y: 3, z: 3}
     modelAddress: Building Models/Barracks
+    constructionTime: 10

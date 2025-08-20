@@ -15,12 +15,7 @@ namespace LongLiveKhioyen
 			polis = GetComponentInParent<Polis>();
 			name = definition.name;
 
-			transform.localPosition = polis.grid.CellToLocalInterpolated(
-				(Vector3Int)placement.position - definition.bounds.center + Vector3.one
-			);
-			transform.localEulerAngles = Vector3.up * (placement.orientation * 90);
-
-			model = Resources.Load<GameObject>(definition.modelAddress);
+			model = GameManager.GetBuildingModelTemplate(definition);
 			if(model == null)
 			{
 				Debug.LogWarning($"Cannot find the model of building \"{placement.type}\" at {definition.modelAddress}.");

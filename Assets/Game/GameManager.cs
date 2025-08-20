@@ -1,7 +1,7 @@
-using UnityEngine;
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace LongLiveKhioyen
@@ -36,6 +36,15 @@ namespace LongLiveKhioyen
 		#region Built-in resources
 		static BuildingDefinitionSheet buildingDefinitionSheet;
 		public static List<BuildingDefinition> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
+		public static bool FindBuildingDefinitionByType(string type, out BuildingDefinition definition)
+		{
+			definition = BuildingDefinitions.Find(d => d.typeId == type);
+			return definition != null;
+		}
+		public static GameObject GetBuildingModelTemplate(BuildingDefinition definition)
+		{
+			return Resources.Load<GameObject>(definition?.modelAddress);
+		}
 		#endregion
 
 		#region Local data

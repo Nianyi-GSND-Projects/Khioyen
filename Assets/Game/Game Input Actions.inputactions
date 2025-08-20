@@ -220,6 +220,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Construct Modal",
+            "id": "399c1d23-cc43-4ca4-9e1c-e83773d58ec7",
+            "actions": [
+                {
+                    "name": "Rotate Building",
+                    "type": "Button",
+                    "id": "fa7ef845-f548-4e35-9e03-c16138699c07",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0ad0d1dc-1d54-45b9-9634-5aec2807f8b6",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate Building",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
