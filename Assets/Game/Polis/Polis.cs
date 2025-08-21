@@ -2,7 +2,6 @@ using UnityEngine;
 using Cinemachine;
 using Unity.AI.Navigation;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace LongLiveKhioyen
 {
