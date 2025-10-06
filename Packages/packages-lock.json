@@ -435,6 +435,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.xelu.prompts": {
+      "version": "file:Xelu Free Controller & Key Prompts",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

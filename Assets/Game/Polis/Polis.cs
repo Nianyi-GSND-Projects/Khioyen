@@ -1,7 +1,8 @@
 using UnityEngine;
-using Cinemachine;
 using Unity.AI.Navigation;
+using Cinemachine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LongLiveKhioyen
 {
@@ -48,11 +49,17 @@ namespace LongLiveKhioyen
 			gameObject.isStatic = true;
 
 			/* Ground */
-			ground.transform.localScale = new Vector3(Controlled.size.x, 1, Controlled.size.y);
-			ground.isStatic = true;
+			groundMesh = ConstructGroundMesh();
+			ground.GetComponent<MeshFilter>().sharedMesh = groundMesh;
+			ground.GetComponent<MeshCollider>().sharedMesh = groundMesh;
 
 			/* Buildings */
 			SpawnBuildingsFromGameData();
+		}
+
+		void OnDestroy()
+		{
+			Destroy(groundMesh);
 		}
 
 		void Update()
@@ -66,11 +73,43 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Construction
+		[Header("Construction")]
 		public GameObject ground;
 		public Grid grid;
+		Mesh groundMesh;
+		public NavMeshSurface navMeshSurface;
 
 		#region Ground
-		bool isNavMeshDirty = true;
+		Mesh ConstructGroundMesh()
+		{
+			Mesh mesh = new() { name = $"Ground mesh ({Data.name})" };
+			Dictionary<(int, int), (int, Vector2)> vertices = new();
+			float mx = Controlled.size.x * -.5f, my = Controlled.size.y * -.5f;
+			for(int x = 0; x <= Controlled.size.x; ++x)
+			{
+				for(int y = 0; y <= Controlled.size.y; ++y)
+					vertices[(x, y)] = (vertices.Count, new(x + mx, y + my));
+			}
+			mesh.vertices = vertices.Values.Select(pair => new Vector3(pair.Item2.x, 0, pair.Item2.y)).ToArray();
+			mesh.uv = vertices.Values.Select(pair => pair.Item2).ToArray();
+			List<int> indices = new();
+			for(int x = 0; x < Controlled.size.x; ++x)
+			{
+				for(int y = 0; y < Controlled.size.y; ++y)
+				{
+					indices.Add(vertices[(x, y)].Item1);
+					indices.Add(vertices[(x, y + 1)].Item1);
+					indices.Add(vertices[(x + 1, y)].Item1);
+					indices.Add(vertices[(x + 1, y)].Item1);
+					indices.Add(vertices[(x, y + 1)].Item1);
+					indices.Add(vertices[(x + 1, y + 1)].Item1);
+				}
+			}
+			mesh.SetIndices(indices, MeshTopology.Triangles, 0);
+			mesh.RecalculateNormals();
+			mesh.RecalculateBounds();
+			return mesh;
+		}
 
 		public bool RayToGround(Ray ray, out Vector3 ground)
 		{
@@ -90,11 +129,12 @@ namespace LongLiveKhioyen
 			return RayToGround(ray, out ground);
 		}
 
+		bool isNavMeshDirty = true;
+
 		void UpdateGroundNavMesh()
 		{
-			var surface = ground.GetComponent<NavMeshSurface>();
-			surface.RemoveData();
-			surface.BuildNavMesh();
+			navMeshSurface.RemoveData();
+			navMeshSurface.BuildNavMesh();
 		}
 		#endregion
 
