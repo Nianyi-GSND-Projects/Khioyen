@@ -118,21 +118,4 @@ namespace LongLiveKhioyen
 	public class HostilePolisData
 	{
 	}
-
-	[Serializable]
-	public class BuildingDefinition
-	{
-		public string typeId;
-		public string name;  // Needs localization.
-		public string[] tags;
-		public Sprite figure;
-
-		[Header("Geometry")]
-		public Bounds bounds;
-		public GameObject model;
-
-		[Header("Construction")]
-		[Min(0)] public float constructionTime;
-		public Economy cost;
-	}
 }
