@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace LongLiveKhioyen
@@ -17,6 +16,7 @@ namespace LongLiveKhioyen
 		{
 			GenerateUi();
 			SelectedBuildingType = null;
+			ShowCostPreview = false;
 		}
 
 		void OnDisable()
@@ -53,13 +53,33 @@ namespace LongLiveKhioyen
 				var card = Instantiate(cardTemplate).GetComponent<ConstructOptionCard>();
 				card.buildingDefinition = definition;
 				card.transform.SetParent(constructOptionsUi.transform, false);
+
+				card.onSelected += OnConstructionCardSelected;
+				card.onHovered += OnConstructionCardHovered;
+				card.onUnhovered += OnConstructionCardUnhovered;
 			}
 			constructOptionsUi.CalculateLayoutInputHorizontal();
+		}
+
+		void OnConstructionCardSelected(ConstructOptionCard card)
+		{
+			SelectedBuildingType = card.buildingDefinition.typeId;
+		}
+
+		void OnConstructionCardHovered(ConstructOptionCard card)
+		{
+			hoveredBuildingType = card.buildingDefinition;
+			ShowCostPreview = true;
+		}
+
+		void OnConstructionCardUnhovered(ConstructOptionCard card)
+		{
+			ShowCostPreview = false;
 		}
 		#endregion
 
 		#region Selection
-		BuildingDefinition selectedBuildingType;
+		BuildingDefinition selectedBuildingType, hoveredBuildingType;
 		GameObject previewModel;
 		public string SelectedBuildingType
 		{
@@ -101,6 +121,25 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
+		#region Cost preview
+		[SerializeField] CostPreviewPanel costPreviewPanel;
+		bool ShowCostPreview
+		{
+			get => costPreviewPanel.gameObject.activeSelf;
+			set
+			{
+				if(hoveredBuildingType == null)
+					value = false;
+				if(value == ShowCostPreview)
+					return;
+
+				costPreviewPanel.gameObject.SetActive(value);
+				if(value)
+					costPreviewPanel.UpdateCostData(hoveredBuildingType.cost);
+			}
+		}
+		#endregion
+
 		#region Actions
 		protected void Interact()
 		{
@@ -109,6 +148,8 @@ namespace LongLiveKhioyen
 
 		void TryPlaceBuilding()
 		{
+			if(selectedBuildingType == null)
+				return;
 			if(!Polis.ScreenToGround(mayorMode.PointerScreenPosition, out Vector3 groundPosition))
 				return;
 			if(!Polis.TryCostResource(selectedBuildingType.cost))
@@ -120,7 +161,7 @@ namespace LongLiveKhioyen
 				return;
 			}
 			var gridPosition = (Vector2Int)Polis.grid.WorldToCell(groundPosition);
-			Polis.ConstructBuilding(selectedBuildingType.typeId , gridPosition, orientation);
+			Polis.ConstructBuilding(selectedBuildingType.typeId, gridPosition, orientation);
 		}
 		#endregion
 	}
