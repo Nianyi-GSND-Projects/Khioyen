@@ -4,14 +4,20 @@ using Unity.AI.Navigation;
 using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace LongLiveKhioyen
 {
 	public class Polis : MonoBehaviour
 	{
+		static Polis instance;
+		public static Polis Instance => instance;
+
 		#region Unity life cycle
 		void Awake()
 		{
+			instance = this;
+
 			var gameData = GameInstance.Instance?.Data;
 			if(gameData == null)
 			{
@@ -57,6 +63,8 @@ namespace LongLiveKhioyen
 		void OnDestroy()
 		{
 			Destroy(groundMesh);
+
+			instance = null;
 		}
 
 		void Update()
@@ -76,6 +84,11 @@ namespace LongLiveKhioyen
 
 		#region Economy
 		public System.Action onEconomyDataChanged;
+		IEnumerator EmitOnEconomyDataChangedOnNextFrame()
+		{
+			yield return new WaitForEndOfFrame();
+			onEconomyDataChanged?.Invoke();
+		}
 
 		public bool CheckResourceAffordance(Economy cost)
 		{
@@ -89,7 +102,7 @@ namespace LongLiveKhioyen
 			if(actuallyCost)
 			{
 				ControlledData.economy = ControlledData.economy - cost;
-				onEconomyDataChanged?.Invoke();
+				StartCoroutine(nameof(EmitOnEconomyDataChangedOnNextFrame));
 			}
 			return true;
 		}

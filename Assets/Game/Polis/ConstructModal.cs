@@ -8,7 +8,7 @@ namespace LongLiveKhioyen
 	{
 		public MayorMode mayorMode;
 		int orientation;
-		Polis Polis => mayorMode.polis;
+		Polis Polis => Polis.Instance;
 		public LayoutGroup constructOptionsUi;
 
 		#region Life cycle
@@ -17,11 +17,21 @@ namespace LongLiveKhioyen
 			GenerateUi();
 			SelectedBuildingType = null;
 			ShowCostPreview = false;
+			Polis.onEconomyDataChanged += OnEconomyDataChanged;
 		}
 
 		void OnDisable()
 		{
 			SelectedBuildingType = null;
+		}
+
+		void OnEconomyDataChanged()
+		{
+			if(selectedBuildingType != null)
+			{
+				if(!(selectedBuildingType.cost <= Polis.ControlledData.economy))
+					SelectedBuildingType = null;
+			}
 		}
 		#endregion
 

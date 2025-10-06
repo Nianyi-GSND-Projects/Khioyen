@@ -6,9 +6,9 @@ namespace LongLiveKhioyen
 {
 	public class MayorMode : MonoBehaviour
 	{
-		#region Settings
-		public Polis polis;
+		Polis Polis => Polis.Instance;
 
+		#region Settings
 		[Header("Settings")]
 		public float panSpeed = 1;
 		public float zoomSpeed = 1;
@@ -89,16 +89,16 @@ namespace LongLiveKhioyen
 		#region Functions
 		void Pan(Vector2 screenDelta)
 		{
-			if(!polis.ScreenToGround(pointerScreenPosition - screenDelta, out var to))
+			if(!Polis.ScreenToGround(pointerScreenPosition - screenDelta, out var to))
 				return;
-			if(!polis.ScreenToGround(pointerScreenPosition, out var from))
+			if(!Polis.ScreenToGround(pointerScreenPosition, out var from))
 				return;
-			polis.mayorCamera.LookAt.position += (to - from) * panSpeed;
+			Polis.mayorCamera.LookAt.position += (to - from) * panSpeed;
 		}
 
 		void Zoom(float scrollY)
 		{
-			var follow = polis.mayorCamera.Follow;
+			var follow = Polis.mayorCamera.Follow;
 
 			float z = -follow.localPosition.z;
 			z *= Mathf.Exp(-scrollY * zoomSpeed);
@@ -112,7 +112,7 @@ namespace LongLiveKhioyen
 			screenDelta.y *= -1;
 			screenDelta *= rotateSpeed;
 
-			var root = polis.mayorCamera.LookAt;
+			var root = Polis.mayorCamera.LookAt;
 			var euler = root.localEulerAngles;
 			euler.x = Mathf.Clamp(euler.x + screenDelta.y, 0, 90);
 			euler.y += screenDelta.x;
@@ -121,7 +121,7 @@ namespace LongLiveKhioyen
 
 		protected void Interact(Vector2 screenPos)
 		{
-			if(polis.IsInConstructModal)
+			if(Polis.IsInConstructModal)
 				return;
 
 			var ray = Camera.main.ScreenPointToRay(screenPos);
@@ -129,7 +129,7 @@ namespace LongLiveKhioyen
 				return;
 
 			var hitBuilding = hit.collider.GetComponentInParent<Building>();
-			polis.SelectedBuilding = hitBuilding;
+			Polis.SelectedBuilding = hitBuilding;
 		}
 		#endregion
 	}

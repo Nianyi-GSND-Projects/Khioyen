@@ -3509,6 +3509,7 @@ GameObject:
   - component: {fileID: 1253757548}
   - component: {fileID: 1253757550}
   - component: {fileID: 1253757551}
+  - component: {fileID: 1253757552}
   m_Layer: 5
   m_Name: Cost Preview Panel
   m_TagString: Untagged
@@ -3637,6 +3638,18 @@ MonoBehaviour:
   foodText: {fileID: 3112158668346799994}
   moneyText: {fileID: 1095338797}
   knowledgeText: {fileID: 1440893632}
+--- !u!225 &1253757552
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253757545}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1322722010
 PrefabInstance:
   m_ObjectHideFlags: 0
