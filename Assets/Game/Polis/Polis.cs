@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using Unity.AI.Navigation;
 using Cinemachine;
 using System.Collections.Generic;
@@ -284,6 +285,7 @@ namespace LongLiveKhioyen
 		{
 			wanderCamera.enabled = enabled;
 			player.gameObject.SetActive(enabled);
+			player.GetComponent<NavMeshAgent>().enabled = enabled;
 			if(enabled)
 			{
 				player.Teleport(mayorCamera.LookAt.position);

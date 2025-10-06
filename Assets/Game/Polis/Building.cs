@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 using System;
 
 namespace LongLiveKhioyen
@@ -18,8 +19,9 @@ namespace LongLiveKhioyen
 			model.name = "Model";
 			model.transform.SetParent(transform, false);
 
-			var obstacle = gameObject.AddComponent<NavMeshObstacle>();
-			obstacle.carving = true;
+			var modifier = gameObject.AddComponent<NavMeshModifier>();
+			modifier.overrideArea = true;
+			modifier.area = NavMesh.GetAreaFromName("Not Walkable");
 		}
 
 		public bool Selected { get; set; }
