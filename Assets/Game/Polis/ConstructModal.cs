@@ -111,6 +111,14 @@ namespace LongLiveKhioyen
 		{
 			if(!Polis.ScreenToGround(mayorMode.PointerScreenPosition, out Vector3 groundPosition))
 				return;
+			if(!Polis.TryCostResource(selectedBuildingType.cost))
+			{
+				Debug.LogWarning(
+					$"Not enough resources to build a {selectedBuildingType.name}!\n" +
+					$"Required: {selectedBuildingType.cost}, current: {Polis.ControlledData.economy}."
+				);
+				return;
+			}
 			var gridPosition = (Vector2Int)Polis.grid.WorldToCell(groundPosition);
 			Polis.ConstructBuilding(selectedBuildingType.typeId , gridPosition, orientation);
 		}

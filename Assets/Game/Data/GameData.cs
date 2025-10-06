@@ -1,7 +1,8 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LongLiveKhioyen
 {
@@ -54,6 +55,40 @@ namespace LongLiveKhioyen
 		public float food;
 		public float money;
 		public float knowledge;
+
+		public override string ToString()
+		{
+			return $"(food:{food}, money:{money}, knowledge:{knowledge})";
+		}
+
+		static IEnumerable<(float, float)> ValuePairs(in Economy a, in Economy b)
+		{
+			return new (float, float)[] {
+				(a.food, b.food),
+				(a.money, b.money),
+				(a.knowledge, b.knowledge),
+			};
+		}
+		static bool Compare(in Economy a, in Economy b, Func<float, float, bool> comparer)
+		{
+			return ValuePairs(a, b)
+				.Select(pair => comparer.Invoke(pair.Item1, pair.Item2))
+				.Aggregate((a, b) => a && b);
+		}
+
+		public static bool operator <(in Economy a, in Economy b) => Compare(a, b, (a, b) => a < b);
+		public static bool operator >(in Economy a, in Economy b) => Compare(a, b, (a, b) => a > b);
+		public static bool operator <=(in Economy a, in Economy b) => Compare(a, b, (a, b) => a <= b);
+		public static bool operator >=(in Economy a, in Economy b) => Compare(a, b, (a, b) => a >= b);
+
+		public static Economy operator -(in Economy a, in Economy b)
+		{
+			Economy result = a;
+			result.food -= b.food;
+			result.money -= b.money;
+			result.knowledge -= b.knowledge;
+			return result;
+		}
 	}
 
 	[Serializable]

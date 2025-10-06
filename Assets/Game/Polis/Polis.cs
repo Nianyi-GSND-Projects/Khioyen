@@ -9,11 +9,7 @@ namespace LongLiveKhioyen
 {
 	public class Polis : MonoBehaviour
 	{
-		#region Life cycle
-		PolisData data;
-		public PolisData Data => data;
-		public ControlledPolisData Controlled => data?.controlledData;
-
+		#region Unity life cycle
 		void Awake()
 		{
 			var gameData = GameInstance.Instance?.Data;
@@ -73,6 +69,33 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
+		#region Data
+		PolisData data;
+		public PolisData Data => data;
+		public ControlledPolisData ControlledData => data?.controlledData;
+
+		#region Economy
+		public System.Action onEconomyDataChanged;
+
+		public bool CheckResourceAffordance(Economy cost)
+		{
+			return cost <= ControlledData.economy;
+		}
+
+		public bool TryCostResource(Economy cost, bool actuallyCost = true)
+		{
+			if(!CheckResourceAffordance(cost))
+				return false;
+			if(actuallyCost)
+			{
+				ControlledData.economy = ControlledData.economy - cost;
+				onEconomyDataChanged?.Invoke();
+			}
+			return true;
+		}
+		#endregion
+		#endregion
+
 		#region Construction
 		[Header("Construction")]
 		public GameObject ground;
@@ -85,18 +108,18 @@ namespace LongLiveKhioyen
 		{
 			Mesh mesh = new() { name = $"Ground mesh ({Data.name})" };
 			Dictionary<(int, int), (int, Vector2)> vertices = new();
-			float mx = Controlled.size.x * -.5f, my = Controlled.size.y * -.5f;
-			for(int x = 0; x <= Controlled.size.x; ++x)
+			float mx = ControlledData.size.x * -.5f, my = ControlledData.size.y * -.5f;
+			for(int x = 0; x <= ControlledData.size.x; ++x)
 			{
-				for(int y = 0; y <= Controlled.size.y; ++y)
+				for(int y = 0; y <= ControlledData.size.y; ++y)
 					vertices[(x, y)] = (vertices.Count, new(x + mx, y + my));
 			}
 			mesh.vertices = vertices.Values.Select(pair => new Vector3(pair.Item2.x, 0, pair.Item2.y)).ToArray();
 			mesh.uv = vertices.Values.Select(pair => pair.Item2).ToArray();
 			List<int> indices = new();
-			for(int x = 0; x < Controlled.size.x; ++x)
+			for(int x = 0; x < ControlledData.size.x; ++x)
 			{
-				for(int y = 0; y < Controlled.size.y; ++y)
+				for(int y = 0; y < ControlledData.size.y; ++y)
 				{
 					indices.Add(vertices[(x, y)].Item1);
 					indices.Add(vertices[(x, y + 1)].Item1);
@@ -169,7 +192,7 @@ namespace LongLiveKhioyen
 
 		void SpawnBuildingsFromGameData()
 		{
-			foreach(var placement in Controlled.buildings)
+			foreach(var placement in ControlledData.buildings)
 				SpawnBuilding(placement);
 		}
 

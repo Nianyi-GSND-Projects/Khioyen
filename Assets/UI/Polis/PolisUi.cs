@@ -9,6 +9,8 @@ namespace LongLiveKhioyen
 		#region Life cycle
 		void Awake()
 		{
+			polis.onEconomyDataChanged += UpdateTopBar;
+
 			UpdateTopBar();
 			SwitchBottomPanel(normalPanel);
 		}
@@ -39,9 +41,9 @@ namespace LongLiveKhioyen
 		void UpdateTopBar()
 		{
 			polisName.text = polis.Data.name;
-			foodValue.text = polis.Controlled.economy.food.ToString();
-			moneyValue.text = polis.Controlled.economy.money.ToString();
-			knowledgeValue.text = polis.Controlled.economy.knowledge.ToString();
+			foodValue.text = polis.ControlledData.economy.food.ToString();
+			moneyValue.text = polis.ControlledData.economy.money.ToString();
+			knowledgeValue.text = polis.ControlledData.economy.knowledge.ToString();
 		}
 		#endregion
 
