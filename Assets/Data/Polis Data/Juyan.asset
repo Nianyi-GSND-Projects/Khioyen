@@ -27,7 +27,7 @@ MonoBehaviour:
     buildings:
     - type: water-well
       position: {x: 0, y: 0}
-      orientation: 0
+      orientation: 2
       underConstruction: 0
       remainingConstructionTime: 0
     - type: barracks

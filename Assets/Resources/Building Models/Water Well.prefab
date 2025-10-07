@@ -84,10 +84,30 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8581639168119804344, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c0bb5f102c95a6b4d89fb03e9add0c1b, type: 2}
+    - target: {fileID: -301936414629383384, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c0bb5f102c95a6b4d89fb03e9add0c1b, type: 2}
     - target: {fileID: 919132149155446097, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
       propertyPath: m_Name
       value: Water Well
       objectReference: {fileID: 0}
+    - target: {fileID: 2167182490188901415, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 20c104ada30b1c646851373bd19875af, type: 2}
+    - target: {fileID: 3609140267267314525, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e8de0adcc760fdf49a85b92de2e4054e, type: 2}
+    - target: {fileID: 7202271454713460447, guid: bdde11dbcb1893648a8872fc6a96fba2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c0bb5f102c95a6b4d89fb03e9add0c1b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
