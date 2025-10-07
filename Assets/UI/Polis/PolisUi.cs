@@ -1,6 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
+using UnityEngine.UI;
 
 namespace LongLiveKhioyen
 {
@@ -9,9 +12,12 @@ namespace LongLiveKhioyen
 		#region Life cycle
 		void Awake()
 		{
-			polis.onEconomyDataChanged += UpdateTopBar;
+			localizedPolisName = new("Polis Names", "");
+			localizedPolisName.StringChanged += s => polisName.text = s;
 
+			polis.onEconomyDataChanged += UpdateTopBar;
 			UpdateTopBar();
+
 			SwitchBottomPanel(normalPanel);
 		}
 		#endregion
@@ -34,13 +40,15 @@ namespace LongLiveKhioyen
 		[Header("Status Bar")]
 		public CanvasGroup statusBar;
 		public TMP_Text polisName;
+		LocalizedString localizedPolisName;
 		public TMP_Text foodValue;
 		public TMP_Text moneyValue;
 		public TMP_Text knowledgeValue;
 
 		void UpdateTopBar()
 		{
-			polisName.text = polis.Data.name;
+			localizedPolisName.TableEntryReference = polis.Data.id;
+			localizedPolisName.RefreshString();
 			foodValue.text = polis.ControlledData.economy.food.ToString();
 			moneyValue.text = polis.ControlledData.economy.money.ToString();
 			knowledgeValue.text = polis.ControlledData.economy.knowledge.ToString();

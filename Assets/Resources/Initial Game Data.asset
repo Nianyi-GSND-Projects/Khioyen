@@ -22,45 +22,6 @@ MonoBehaviour:
         scale: 0.0001
         mapAddress: 
     poleis:
-    - id: "\u5C45\u5EF6"
-      name: "\u5C45\u5EF6"
-      position: {x: 0, y: 0}
-      orientation: 22.5
-      isControlled: 1
-      isHostile: 0
-      controlledData:
-        size: {x: 40, y: 40}
-        economy:
-          food: 1000
-          money: 100
-          knowledge: 0
-        buildings:
-        - type: water-well
-          position: {x: 0, y: 0}
-          orientation: 0
-          underConstruction: 0
-          remainingConstructionTime: 0
-        - type: barracks
-          position: {x: 5, y: 3}
-          orientation: 1
-          underConstruction: 0
-          remainingConstructionTime: 0
-    - id: "\u756A\u548C"
-      name: "\u756A\u548C"
-      position: {x: 10000, y: 3000}
-      orientation: 10
-      isControlled: 1
-      isHostile: 0
-      controlledData:
-        size: {x: 25, y: 25}
-        economy:
-          food: 1000
-          money: 100
-          knowledge: 0
-        buildings:
-        - type: water-well
-          position: {x: 5, y: 5}
-          orientation: 0
-          underConstruction: 0
-          remainingConstructionTime: 0
-    lastPoleis: "\u5C45\u5EF6"
+    - {fileID: 11400000, guid: 34bb9abc2e2b17b4abebde3028a9ae26, type: 2}
+    - {fileID: 11400000, guid: aece4e0b33aa00f4e8f491ab9e80d217, type: 2}
+    lastPoleis: juyan
