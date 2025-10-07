@@ -108,7 +108,7 @@ namespace LongLiveKhioyen
 				if(selectedBuildingType.model == null)
 					return;
 
-				orientation = 0;
+				orientation = selectedBuildingType.defaultOrientation;
 				previewModel = Instantiate(selectedBuildingType.model);
 				previewModel.transform.SetParent(Polis.transform, false);
 				UpdatePreviewModelPose();
@@ -126,8 +126,8 @@ namespace LongLiveKhioyen
 				return;
 			}
 
-			var gridPos = Polis.grid.WorldToCell(groundPos);
-			Polis.PositionBuilding(previewModel.transform, selectedBuildingType.bounds, (Vector2Int)gridPos, orientation);
+			var gridPosition = Polis.grid.WorldToCell(groundPos);
+			Polis.PositionBuilding(previewModel.transform, selectedBuildingType.pivot, Polis.GridToMap(gridPosition), orientation);
 		}
 		#endregion
 
@@ -170,8 +170,8 @@ namespace LongLiveKhioyen
 				);
 				return;
 			}
-			var gridPosition = (Vector2Int)Polis.grid.WorldToCell(groundPosition);
-			Polis.ConstructBuilding(selectedBuildingType.typeId, gridPosition, orientation);
+			var gridPosition = Polis.grid.WorldToCell(groundPosition);
+			Polis.ConstructBuilding(selectedBuildingType.typeId, Polis.GridToMap(gridPosition), orientation);
 		}
 		#endregion
 	}

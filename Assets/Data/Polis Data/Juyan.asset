@@ -22,7 +22,7 @@ MonoBehaviour:
     size: {x: 40, y: 40}
     economy:
       food: 1000
-      money: 100
+      money: 200
       knowledge: 0
     buildings:
     - type: water-well
@@ -32,6 +32,6 @@ MonoBehaviour:
       remainingConstructionTime: 0
     - type: barracks
       position: {x: 5, y: 3}
-      orientation: 1
+      orientation: 2
       underConstruction: 0
       remainingConstructionTime: 0

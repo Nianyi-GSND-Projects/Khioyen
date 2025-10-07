@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace LongLiveKhioyen
 {
@@ -32,10 +31,7 @@ namespace LongLiveKhioyen
 		public GameData Data
 		{
 			get => data;
-			set
-			{
-				data = JsonUtility.FromJson<GameData>(JsonUtility.ToJson(value));
-			}
+			set => data = new(value);
 		}
 		#endregion
 

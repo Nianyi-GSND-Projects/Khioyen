@@ -175,6 +175,17 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
+		#region Grid
+		public Vector2Int GridToMap(Vector3Int grid)
+		{
+			return new(grid.x, grid.z);
+		}
+		public Vector3Int MapToGrid(Vector2Int map)
+		{
+			return new(map.x, 0, map.y);
+		}
+		#endregion
+
 		#region Building
 		readonly List<Building> buildings = new();
 
@@ -218,7 +229,7 @@ namespace LongLiveKhioyen
 			}
 
 			var building = new GameObject().AddComponent<Building>();
-			PositionBuilding(building.transform, definition.bounds, placement.position, placement.orientation);
+			PositionBuilding(building.transform, definition.pivot, placement.position, placement.orientation);
 			buildings.Add(building);
 			building.definition = definition;
 			building.placement = placement;
@@ -226,7 +237,7 @@ namespace LongLiveKhioyen
 			isNavMeshDirty = true;
 		}
 
-		public void ConstructBuilding(string type, Vector2Int gridPosition, int orientation)
+		public void ConstructBuilding(string type, Vector2Int mapPosition, int orientation)
 		{
 			if(!GameManager.FindBuildingDefinitionByType(type, out var definition))
 				return;
@@ -234,7 +245,7 @@ namespace LongLiveKhioyen
 			ControlledPolisData.BuildingPlacement placement = new()
 			{
 				type = type,
-				position = gridPosition,
+				position = mapPosition,
 				orientation = orientation,
 				underConstruction = definition.constructionTime > 0,
 				remainingConstructionTime = definition.constructionTime,
@@ -242,11 +253,11 @@ namespace LongLiveKhioyen
 			SpawnBuilding(placement);
 		}
 
-		public void PositionBuilding(Transform building, Bounds bounds, Vector2Int gridPosition, int orientation)
+		public void PositionBuilding(Transform building, Vector3 pivot, Vector2Int mapPosition, int orientation)
 		{
 			building.SetParent(transform, false);
 			building.localPosition = grid.CellToLocalInterpolated(
-				(Vector3Int)gridPosition - bounds.center + Vector3.one
+				MapToGrid(mapPosition) - pivot + Vector3.one
 			);
 			building.localEulerAngles = Vector3.up * (orientation * 90);
 		}

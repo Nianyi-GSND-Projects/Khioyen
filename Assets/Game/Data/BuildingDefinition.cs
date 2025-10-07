@@ -1,4 +1,5 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace LongLiveKhioyen
 {
@@ -11,8 +12,12 @@ namespace LongLiveKhioyen
 		public Sprite figure;
 
 		[Header("Geometry")]
-		public Bounds bounds;
 		public GameObject model;
+		[Range(0, 3)] public int defaultOrientation;
+		public Vector3 pivot;
+		public bool obstructive;
+		[HideIf("usePreciseGeometry")] public Vector3 center;
+		[HideIf("usePreciseGeometry")] public Vector3 size;
 
 		[Header("Construction")]
 		[Min(0)] public float constructionTime;
