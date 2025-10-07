@@ -44,7 +44,7 @@ namespace LongLiveKhioyen
 		{
 			Debug.Log($"Departing rom polis \"{Data.lastPoleis}\".");
 			// TODO
-			SceneManager.LoadScene("World Map");
+			GameManager.SwitchScene("World Map");
 		}
 
 		public void EnterPolis(string polisId)
@@ -60,7 +60,7 @@ namespace LongLiveKhioyen
 			// TODO
 			Data.lastPoleis = polis.id;
 
-			SceneManager.LoadScene("Polis");
+			GameManager.SwitchScene("Polis");
 		}
 		#endregion
 	}

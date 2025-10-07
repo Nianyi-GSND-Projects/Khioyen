@@ -1,8 +1,9 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace LongLiveKhioyen
 {
@@ -12,11 +13,11 @@ namespace LongLiveKhioyen
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
 		static void OnGameStart()
 		{
-			// Setup local data.
+			/* Local data */
 			ReadSettings();
 			ReadSavegamePaths();
 
-			// Fetch built-in resources.
+			/* Built-in resources */
 			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Initial Building Definition Sheet"));
 			if(buildingDefinitionSheet == null)
 			{
@@ -24,7 +25,8 @@ namespace LongLiveKhioyen
 				return;
 			}
 
-
+			/* Scene */
+			SceneManager.activeSceneChanged += OnSceneChanged;
 #if DEBUG
 			// Use initial game data if not starting from the menu scene.
 			if(SceneManager.GetActiveScene().buildIndex != 0)
@@ -155,6 +157,19 @@ namespace LongLiveKhioyen
 		#endregion
 		#endregion
 
+		#region Scene
+		public static void SwitchScene(string sceneName)
+		{
+			SceneManager.LoadScene(sceneName);
+		}
+
+		static void OnSceneChanged(Scene previous, Scene after)
+		{
+			// Update environmental lighting.
+			DynamicGI.UpdateEnvironment();
+		}
+		#endregion
+
 		#region Game instance
 		public static GameInstance Instance => GameInstance.Instance;
 
@@ -168,7 +183,7 @@ namespace LongLiveKhioyen
 
 			CreateNewGameInstance();
 
-			SceneManager.LoadScene("Polis");
+			SwitchScene("Polis");
 		}
 
 		private static void CreateNewGameInstance()
@@ -191,7 +206,7 @@ namespace LongLiveKhioyen
 			// Destroy the current game instance.
 			UnityEngine.Object.Destroy(Instance);
 
-			SceneManager.LoadScene("Start Menu");
+			SwitchScene("Start Menu");
 		}
 		#endregion
 

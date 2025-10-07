@@ -2414,7 +2414,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59554615f74054e42aa64e071173a3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  polis: {fileID: 528471306}
   panSpeed: 2
   zoomSpeed: 0.25
   zoomRange: {x: 2, y: 100}
@@ -3902,7 +3901,7 @@ MonoBehaviour:
   constructPanel: {fileID: 1410869439}
   switchModeImage: {fileID: 407105098}
   wanderModeIcon: {fileID: 21300000, guid: d18ef669efd206b45a57a45d4dd9876e, type: 3}
-  mayorModeIcon: {fileID: 21300000, guid: c2051310b188ce244bf16fe851e581c6, type: 3}
+  mayorModeIcon: {fileID: 21300000, guid: 0397b25d086162240b19348c3e5bb0b0, type: 3}
 --- !u!224 &1329727382 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3083851564030733744, guid: 3c62eb1e40f4e2048936b3c58397a7ab, type: 3}
@@ -6175,6 +6174,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 976895810}
     m_Modifications:
+    - target: {fileID: 1187411223623226980, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c2051310b188ce244bf16fe851e581c6, type: 3}
     - target: {fileID: 2438463608658274574, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Name
       value: "Construct \u5EFA\u9020"
