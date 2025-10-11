@@ -40,7 +40,7 @@ namespace LongLiveKhioyen
 		public static List<BuildingDefinition> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
 		public static bool FindBuildingDefinitionByType(string type, out BuildingDefinition definition)
 		{
-			definition = BuildingDefinitions.Find(d => d.typeId == type);
+			definition = BuildingDefinitions.Find(d => d.id == type);
 			return definition != null;
 		}
 		#endregion

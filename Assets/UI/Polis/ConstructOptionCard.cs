@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using TMPro;
+using UnityEngine.Localization;
 using System;
+using TMPro;
 
 namespace LongLiveKhioyen
 {
 	public class ConstructOptionCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	{
-		[NonSerialized] public BuildingDefinition buildingDefinition;
 		Polis Polis => Polis.Instance;
+		[NonSerialized] public BuildingDefinition buildingDefinition;
+		LocalizedString localizedBuildingName;
 
 		CanvasGroup group;
 		[SerializeField] Button button;
@@ -22,13 +24,18 @@ namespace LongLiveKhioyen
 		{
 			group = GetComponent<CanvasGroup>();
 			Polis.onEconomyDataChanged += OnEconomyDataChanged;
+
+			localizedBuildingName = new("Building Names", "");
+			localizedBuildingName.StringChanged += s => text.text = s;
+
+			button.onClick.AddListener(() => onSelected?.Invoke(this));
 		}
 
 		protected void Start()
 		{
-			text.text = buildingDefinition.name;
+			localizedBuildingName.TableEntryReference = buildingDefinition.id;
+			localizedBuildingName.RefreshString();
 			image.sprite = buildingDefinition.figure;
-			button.onClick.AddListener(() => onSelected?.Invoke(this));
 		}
 
 		protected void OnDestroy()

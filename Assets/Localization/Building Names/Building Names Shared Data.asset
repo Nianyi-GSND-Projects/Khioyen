@@ -10,31 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: Polis Names Shared Data
+  m_Name: Building Names Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: Polis Names
-  m_TableCollectionNameGuidString: 9c06ed6766601084292951a250abbc53
+  m_TableCollectionName: Building Names
+  m_TableCollectionNameGuidString: eaf765579db7db64ba3156b3171ec01c
   m_Entries:
-  - m_Id: 23700660224
-    m_Key: juyan
+  - m_Id: 84698423296
+    m_Key: barracks
     m_Metadata:
       m_Items: []
-  - m_Id: 142269440000
-    m_Key: fanhe
-    m_Metadata:
-      m_Items: []
-  - m_Id: 225991501504512
-    m_Key: dunhuang
+  - m_Id: 97021288448
+    m_Key: water-well
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 7866834333827596355
+    rid: 7866834444220104704
   references:
     version: 2
     RefIds:
-    - rid: 7866834333827596355
+    - rid: 7866834444220104704
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1759805642759
+        m_CustomEpoch: 1760225315310

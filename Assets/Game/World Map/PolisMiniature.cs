@@ -8,7 +8,7 @@ namespace LongLiveKhioyen
 
 		void Start()
 		{
-			name = data.name;
+			name = data.id;
 		}
 	}
 }

@@ -10,7 +10,6 @@ namespace LongLiveKhioyen
 	public class PolisData : ScriptableObject
 	{
 		public string id;
-		public new string name;  // Needs localization.
 		public Vector2 position;
 		[Range(0, 359)] public float orientation;
 

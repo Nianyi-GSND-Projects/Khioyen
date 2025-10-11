@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a291e6bdf3089f241a4ab811eecfdaf5, type: 3}
   m_Name: Water Well
   m_EditorClassIdentifier: 
-  typeId: water-well
-  name: "\u6C34\u4E95"
+  id: water-well
   tags: []
   figure: {fileID: 21300000, guid: 61ac40b257b3a994f841856ad38b2b6b, type: 3}
   model: {fileID: 884995026640950202, guid: ea65c588aff6967459dd86664741216f, type: 3}

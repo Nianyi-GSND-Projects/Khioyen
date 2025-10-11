@@ -10,24 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: Polis Names_en
+  m_Name: Building Names_en
   m_EditorClassIdentifier: 
   m_LocaleId:
     m_Code: en
-  m_SharedData: {fileID: 11400000, guid: 9c06ed6766601084292951a250abbc53, type: 2}
+  m_SharedData: {fileID: 11400000, guid: eaf765579db7db64ba3156b3171ec01c, type: 2}
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 23700660224
-    m_Localized: Khioyen
+  - m_Id: 84698423296
+    m_Localized: Barracks
     m_Metadata:
       m_Items: []
-  - m_Id: 142269440000
-    m_Localized: Phian'ghwa
-    m_Metadata:
-      m_Items: []
-  - m_Id: 225991501504512
-    m_Localized: Twen'ghwang
+  - m_Id: 97021288448
+    m_Localized: Water Well
     m_Metadata:
       m_Items: []
   references:

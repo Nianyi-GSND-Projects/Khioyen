@@ -6,8 +6,7 @@ namespace LongLiveKhioyen
 	[CreateAssetMenu(menuName = "Long Live Khioyen/Building Definition")]
 	public class BuildingDefinition : ScriptableObject
 	{
-		public string typeId;
-		public new string name;  // Needs localization.
+		public string id;
 		public string[] tags;
 		public Sprite figure;
 
@@ -16,8 +15,8 @@ namespace LongLiveKhioyen
 		[Range(0, 3)] public int defaultOrientation;
 		public Vector3 pivot;
 		public bool obstructive;
-		[HideIf("usePreciseGeometry")] public Vector3 center;
-		[HideIf("usePreciseGeometry")] public Vector3 size;
+		public Vector3 center;
+		public Vector3 size;
 
 		[Header("Construction")]
 		[Min(0)] public float constructionTime;

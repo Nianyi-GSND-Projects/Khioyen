@@ -24,4 +24,5 @@ MonoBehaviour:
     poleis:
     - {fileID: 11400000, guid: 34bb9abc2e2b17b4abebde3028a9ae26, type: 2}
     - {fileID: 11400000, guid: aece4e0b33aa00f4e8f491ab9e80d217, type: 2}
+    - {fileID: 11400000, guid: 6fdc3c4f1af894940ae27c5cc0700b0e, type: 2}
     lastPoleis: juyan

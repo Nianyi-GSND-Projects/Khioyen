@@ -32,10 +32,10 @@ namespace LongLiveKhioyen
 			}
 			if(!data.isControlled || data.controlledData == null)
 			{
-				Debug.LogWarning($"Cannot initialize polis \"{data.name}\", because it is not controlled.");
+				Debug.LogWarning($"Cannot initialize polis \"{data.id}\", because it is not controlled.");
 				return;
 			}
-			name = $"{data.name} (Polis)";
+			name = $"{data.id} (Polis)";
 
 			player.gameObject.SetActive(false);
 		}
@@ -119,7 +119,7 @@ namespace LongLiveKhioyen
 		#region Ground
 		Mesh ConstructGroundMesh()
 		{
-			Mesh mesh = new() { name = $"Ground mesh ({Data.name})" };
+			Mesh mesh = new() { name = $"Ground mesh ({Data.id})" };
 			Dictionary<(int, int), (int, Vector2)> vertices = new();
 			float mx = ControlledData.size.x * -.5f, my = ControlledData.size.y * -.5f;
 			for(int x = 0; x <= ControlledData.size.x; ++x)

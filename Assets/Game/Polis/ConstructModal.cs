@@ -73,7 +73,7 @@ namespace LongLiveKhioyen
 
 		void OnConstructionCardSelected(ConstructOptionCard card)
 		{
-			SelectedBuildingType = card.buildingDefinition.typeId;
+			SelectedBuildingType = card.buildingDefinition.id;
 		}
 
 		void OnConstructionCardHovered(ConstructOptionCard card)
@@ -93,7 +93,7 @@ namespace LongLiveKhioyen
 		GameObject previewModel;
 		public string SelectedBuildingType
 		{
-			get => selectedBuildingType?.typeId;
+			get => selectedBuildingType?.id;
 			set
 			{
 				if(previewModel != null)
@@ -171,7 +171,7 @@ namespace LongLiveKhioyen
 				return;
 			}
 			var gridPosition = Polis.grid.WorldToCell(groundPosition);
-			Polis.ConstructBuilding(selectedBuildingType.typeId, Polis.GridToMap(gridPosition), orientation);
+			Polis.ConstructBuilding(selectedBuildingType.id, Polis.GridToMap(gridPosition), orientation);
 		}
 		#endregion
 	}
