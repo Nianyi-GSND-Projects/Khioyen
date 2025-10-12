@@ -25,6 +25,11 @@ namespace LongLiveKhioyen
 				obstale.size = definition.size;
 				obstale.center = definition.center;
 			}
+
+			var collider = gameObject.AddComponent<BoxCollider>();
+			collider.isTrigger = definition.obstructive;
+			collider.size = definition.size;
+			collider.center = definition.center;
 		}
 
 		public bool Selected { get; set; }

@@ -14,6 +14,7 @@ namespace LongLiveKhioyen
 		public float zoomSpeed = 1;
 		public Vector2 zoomRange = new(2, 100);
 		public float rotateSpeed = 1;
+		public float minAzimuth = 10f;
 		#endregion
 
 		#region Input states
@@ -75,7 +76,7 @@ namespace LongLiveKhioyen
 					mouseMoved.magnitude <= 5 &&
 					!isPointerOverGameObjects
 				)
-					BroadcastMessage("Interact", pointerScreenPosition);
+					Interact(pointerScreenPosition);
 			}
 		}
 
@@ -93,7 +94,13 @@ namespace LongLiveKhioyen
 				return;
 			if(!Polis.ScreenToGround(pointerScreenPosition, out var from))
 				return;
-			Polis.AnchorPosition += (to - from) * panSpeed;
+			Vector3 pos = Polis.AnchorPosition + (to - from) * panSpeed;
+			Vector3 boundedPos = Polis.transform.worldToLocalMatrix.MultiplyPoint(pos);
+			boundedPos = Polis.Bounds.ClosestPoint(boundedPos);
+			boundedPos = Polis.transform.localToWorldMatrix.MultiplyPoint(boundedPos);
+			pos.x = boundedPos.x;
+			pos.z = boundedPos.z;
+			Polis.AnchorPosition = pos;
 		}
 
 		void Zoom(float scrollY)
@@ -110,8 +117,9 @@ namespace LongLiveKhioyen
 			screenDelta *= rotateSpeed;
 
 			var euler = Polis.AnchorEulers;
-			euler.x = Mathf.Clamp(euler.x + screenDelta.y, 0, 90);
+			euler.x = Mathf.Clamp(euler.x + screenDelta.y, minAzimuth, 90);
 			euler.y += screenDelta.x;
+
 			Polis.AnchorEulers = euler;
 		}
 

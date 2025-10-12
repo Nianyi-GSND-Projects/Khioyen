@@ -1048,11 +1048,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 1
-  far clip plane: 1000
-  field of view: 10
+  near clip plane: 0.1
+  far clip plane: 250
+  field of view: 60
   orthographic: 0
-  orthographic size: 10
+  orthographic size: 20
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1076,8 +1076,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425449516}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23911719, y: 0.36964393, z: -0.09904557, w: 0.89239925}
-  m_LocalPosition: {x: -30.618643, y: 24.99996, z: -30.618639}
+  m_LocalRotation: {x: 0.024960712, y: -5.245885e-10, z: 1.3098181e-11, w: 0.99968845}
+  m_LocalPosition: {x: 0.0000000010481962, y: 1.1499059, z: -2.998754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1535,9 +1535,7 @@ MonoBehaviour:
   navMeshSurface: {fileID: 528471308}
   anchor: {fileID: 1064727833}
   constructModal: {fileID: 210610424}
-  mayorInput: {fileID: 914021009}
   mayorCamera: {fileID: 7655285}
-  wanderInput: {fileID: 783057270}
   player: {fileID: 792397364}
   wanderCamera: {fileID: 707400281}
 --- !u!156049354 &528471307
@@ -2567,6 +2565,7 @@ MonoBehaviour:
   zoomSpeed: 0.25
   zoomRange: {x: 2, y: 100}
   rotateSpeed: 0.2
+  minAzimuth: 10
 --- !u!1001 &952950345
 PrefabInstance:
   m_ObjectHideFlags: 0

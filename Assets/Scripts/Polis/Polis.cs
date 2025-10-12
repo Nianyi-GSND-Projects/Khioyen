@@ -173,6 +173,18 @@ namespace LongLiveKhioyen
 			navMeshSurface.RemoveData();
 			navMeshSurface.BuildNavMesh();
 		}
+
+		Vector3 ClosestWalkablePosition(Vector3 reference)
+		{
+			int areaMask = 1 << NavMesh.GetAreaFromName("Walkable");
+			NavMeshHit hit;
+			if(NavMesh.SamplePosition(reference, out hit, 0.1f, areaMask))
+				return hit.position;
+			if(NavMesh.SamplePosition(reference, out hit, ControlledData.size.magnitude, areaMask))
+				return hit.position;
+			Debug.LogWarning("Failed to find closest walkable position on the NavMesh.");
+			return transform.position;
+		}
 		#endregion
 
 		#region Grid
@@ -184,6 +196,7 @@ namespace LongLiveKhioyen
 		{
 			return new(map.x, 0, map.y);
 		}
+		public Bounds Bounds => new(default, new(ControlledData.size.x, 0, ControlledData.size.y));
 		#endregion
 
 		#region Building
@@ -265,7 +278,7 @@ namespace LongLiveKhioyen
 		#endregion
 		#endregion
 
-		#region Mode
+		#region Control mode
 		public enum Mode { Mayor, Wander }
 		Mode currentMode = Mode.Mayor;
 		public Mode CurrentMode => currentMode;
@@ -298,6 +311,7 @@ namespace LongLiveKhioyen
 			currentMode = mode;
 		}
 
+		[Header("Control Mode")]
 		public Transform anchor;
 		public Vector3 AnchorPosition
 		{
@@ -334,22 +348,18 @@ namespace LongLiveKhioyen
 		}
 
 		#region Mayor mode
-		[Header("Mayor Mode")]
-		public InputGroup mayorInput;
 		[SerializeField] CinemachineVirtualCamera mayorCamera;
 
 		void SetMayorMode(bool enabled)
 		{
 			mayorCamera.enabled = enabled;
 			if(enabled)
-				mayorCamera.LookAt.position = Vector3.ProjectOnPlane(player.transform.position, Vector3.up);
+				AnchorPosition = Vector3.ProjectOnPlane(player.transform.position, Vector3.up);
 		}
 		#endregion
 
 		#region Wander mode
-		[Header("Wander Mode")]
-		public InputGroup wanderInput;
-		public AbstractCharacterController player;
+		[SerializeField] AbstractCharacterController player;
 		[SerializeField] CinemachineVirtualCamera wanderCamera;
 
 		void SetWanderMode(bool enabled)
@@ -359,7 +369,8 @@ namespace LongLiveKhioyen
 			player.GetComponent<NavMeshAgent>().enabled = enabled;
 			if(enabled)
 			{
-				player.Teleport(mayorCamera.LookAt.position);
+				AnchorPosition = ClosestWalkablePosition(AnchorPosition);
+				player.Teleport(AnchorPosition);
 				player.FaceTowards(Camera.main.transform.forward);
 			}
 		}
