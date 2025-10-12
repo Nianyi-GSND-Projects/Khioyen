@@ -38,7 +38,7 @@ namespace LongLiveKhioyen
 		#region Scene transition
 		public void DepartFromPolis()
 		{
-			Debug.Log($"Departing rom polis \"{Data.lastPoleis}\".");
+			Debug.Log($"Departing from polis \"{Data.lastPoleis}\".");
 			// TODO
 			GameManager.SwitchScene("World Map");
 		}

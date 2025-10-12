@@ -49,15 +49,21 @@ namespace LongLiveKhioyen
 			/* Poleis */
 			foreach(var polisData in Data.poleis)
 			{
-				var model = Instantiate(Resources.Load<GameObject>("World Map/Polis_miniature-dummy"));
-				var polisMiniature = model.GetComponent<PolisMiniature>();
-				polisMiniature.data = polisData;
+				var polisMiniature = SpawnPolisMiniature(polisData);
 				polisMiniatures.Add(polisMiniature);
-
-				model.transform.SetParent(transform, false);
-				model.transform.localPosition = new Vector3(polisData.position.x, 0, polisData.position.y) * data.world.data3D.scale;
-				model.transform.localEulerAngles = Vector3.up * polisData.orientation;
 			}
+		}
+
+		PolisMiniature SpawnPolisMiniature(PolisData polisData)
+		{
+			GameObject go = new();
+			go.transform.SetParent(transform, false);
+			go.transform.localPosition = new Vector3(polisData.position.x, 0, polisData.position.y) * data.world.data3D.scale;
+			go.transform.localEulerAngles = Vector3.up * polisData.orientation;
+
+			var pm = go.AddComponent<PolisMiniature>();
+			pm.data = polisData;
+			return pm;
 		}
 		#endregion
 	}
