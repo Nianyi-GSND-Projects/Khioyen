@@ -28,6 +28,7 @@ namespace LongLiveKhioyen
 
 			Vector3 size = new(definition.size.x, 0, definition.size.y);
 			Vector3 center = new Vector3(definition.center.x, 0, definition.center.y) - size * .5f;
+			size.y = 1;
 
 			// For building selection.
 			var collider = gameObject.AddComponent<BoxCollider>();
