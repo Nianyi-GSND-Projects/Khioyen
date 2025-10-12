@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Door
-    second: {fileID: 2100000, guid: 7115ed9f9e58b4e41b973c7095fbda5a, type: 2}
+    second: {fileID: 2100000, guid: e8de0adcc760fdf49a85b92de2e4054e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -38,7 +38,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Tent Top
-    second: {fileID: 2100000, guid: e8de0adcc760fdf49a85b92de2e4054e, type: 2}
+    second: {fileID: 2100000, guid: 7115ed9f9e58b4e41b973c7095fbda5a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

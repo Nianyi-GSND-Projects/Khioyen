@@ -5,7 +5,6 @@ using System.Linq;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using static System.Collections.Specialized.BitVector32;
 
 namespace LongLiveKhioyen
 {
@@ -280,6 +279,7 @@ namespace LongLiveKhioyen
 		#region Building
 		readonly List<Building> buildings = new();
 		Building[,] buildingOccupancy;
+		public System.Action onBuildingOccupancyChanged;
 
 		Building currentSelection;
 		public Building SelectedBuilding
@@ -307,22 +307,29 @@ namespace LongLiveKhioyen
 			}
 		}
 
-		public void SpawnBuilding(BuildingPlacement placement)
+		Building SpawnBuilding(BuildingPlacement placement)
 		{
 			if(!GameManager.FindBuildingDefinitionByType(placement.id, out var definition))
 			{
 				Debug.LogWarning($"Skipping spawning building of ID \"{placement.id}\", cannot find its definition.");
-				return;
+				return null;
 			}
 
 			var building = new GameObject().AddComponent<Building>();
 			PositionBuilding(building.transform, definition, placement);
 			buildings.Add(building);
 			building.definition = definition;
-			building.placement = placement;
+			building.onInitialized += () =>
+			{
+				building.UnderConstruction = placement.underConstruction;
+				if(placement.underConstruction)
+					building.RemainingConstructionTime = placement.remainingConstructionTime;
+			};
 
 			foreach(var pos in YieldBuildingOccupancy(definition, placement))
 				buildingOccupancy[pos.x, pos.y] = building;
+
+			return building;
 		}
 
 		[ContextMenu("PrintOccupancy")]
@@ -397,11 +404,18 @@ namespace LongLiveKhioyen
 			return true;
 		}
 
+		public void PositionBuilding(Transform building, BuildingDefinition definition, BuildingPlacement placement)
+		{
+			building.SetParent(transform, false);
+			Vector2 planar = (Vector2)definition.size - definition.center - definition.pivot;
+			building.localPosition = MapToLocal(placement.position) + new Vector3(planar.x, 0, planar.y);
+			building.localEulerAngles = Vector3.up * (placement.orientation * 90);
+		}
+
 		public void ConstructBuilding(string type, Vector2Int mapPosition, int orientation)
 		{
 			if(!GameManager.FindBuildingDefinitionByType(type, out var definition))
 				return;
-
 			BuildingPlacement placement = new()
 			{
 				id = type,
@@ -411,14 +425,6 @@ namespace LongLiveKhioyen
 				remainingConstructionTime = definition.constructionTime,
 			};
 			SpawnBuilding(placement);
-		}
-
-		public void PositionBuilding(Transform building, BuildingDefinition definition, BuildingPlacement placement)
-		{
-			building.SetParent(transform, false);
-			Vector2 planar = (Vector2)definition.size - definition.center - definition.pivot;
-			building.localPosition = MapToLocal(placement.position) + new Vector3(planar.x, 0, planar.y);
-			building.localEulerAngles = Vector3.up * (placement.orientation * 90);
 		}
 		#endregion
 		#endregion

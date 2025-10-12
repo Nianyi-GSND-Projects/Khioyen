@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 namespace LongLiveKhioyen
 {
@@ -19,6 +18,7 @@ namespace LongLiveKhioyen
 			SelectedBuildingType = null;
 			ShowCostPreview = false;
 			Polis.onEconomyDataChanged += OnEconomyDataChanged;
+			Polis.onBuildingOccupancyChanged += UpdatePreviewModel;
 		}
 
 		void OnDisable()
@@ -40,12 +40,12 @@ namespace LongLiveKhioyen
 		protected void OnRotateBuilding()
 		{
 			orientation = (orientation + 1) % 4;
-			UpdatePreviewModelPose();
+			UpdatePreviewModel();
 		}
 
 		protected void OnDrag()
 		{
-			UpdatePreviewModelPose();
+			UpdatePreviewModel();
 		}
 		#endregion
 
@@ -112,14 +112,14 @@ namespace LongLiveKhioyen
 				{
 					orientation = selectedBuildingType.defaultOrientation;
 					preview = new GameObject("Construction Preview").AddComponent<ConstructPreview>();
-					preview.SetBuildingType(selectedBuildingType);
+					preview.Definition = selectedBuildingType;
 					preview.transform.SetParent(Polis.transform, false);
-					UpdatePreviewModelPose();
+					preview.onInitialized += UpdatePreviewModel;
 				}
 			}
 		}
 
-		void UpdatePreviewModelPose()
+		void UpdatePreviewModel()
 		{
 			if(preview == null)
 				return;

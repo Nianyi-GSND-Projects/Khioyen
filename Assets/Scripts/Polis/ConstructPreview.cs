@@ -5,8 +5,7 @@ namespace LongLiveKhioyen
 	public class ConstructPreview : MonoBehaviour
 	{
 		public GameObject model;
-		Material validMaterial, invalidMaterial;
-		bool valid = true;
+		public System.Action onInitialized;
 
 		protected void Awake()
 		{
@@ -14,13 +13,18 @@ namespace LongLiveKhioyen
 			invalidMaterial = Resources.Load<Material>("Materials/Polis/Construction_preview-invalid");
 		}
 
-		public void SetBuildingType(BuildingDefinition definition)
+		protected void Start()
 		{
-			model = Instantiate(definition.ModelTemplate);
-			model.transform.SetParent(transform, false);
+			onInitialized?.Invoke();
+		}
 
-			Visible = Visible;
-			Valid = Valid;
+		public BuildingDefinition Definition
+		{
+			set
+			{
+				model = Instantiate(value.ModelTemplate);
+				model.transform.SetParent(transform, false);
+			}
 		}
 
 		public bool Visible
@@ -29,6 +33,8 @@ namespace LongLiveKhioyen
 			set => model.SetActive(value);
 		}
 
+		Material validMaterial, invalidMaterial;
+		bool valid = true;
 		public bool Valid
 		{
 			get => valid;
