@@ -270,6 +270,11 @@ namespace LongLiveKhioyen
 			));
 		}
 		public Bounds Bounds => new(default, new(Size.x, 0, Size.y));
+
+		public bool IsValidMapPosition(Vector2Int pos)
+		{
+			return pos.x >= 0 && pos.y >= 0 && pos.x < Size.x && pos.y < Size.y;
+		}
 		#endregion
 
 		#region Building
@@ -378,6 +383,18 @@ namespace LongLiveKhioyen
 					yield return origin + deltaWorld;
 				}
 			}
+		}
+
+		public bool ValidateBuildingPlacement(BuildingDefinition definition, BuildingPlacement placement)
+		{
+			foreach(var pos in YieldBuildingOccupancy(definition, placement))
+			{
+				if(!IsValidMapPosition(pos))
+					return false;
+				if(buildingOccupancy[pos.x, pos.y] != null)
+					return false;
+			}
+			return true;
 		}
 
 		public void ConstructBuilding(string type, Vector2Int mapPosition, int orientation)

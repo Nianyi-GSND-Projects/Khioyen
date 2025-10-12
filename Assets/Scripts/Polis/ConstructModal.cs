@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using static UnityEditor.PlayerSettings;
 
 namespace LongLiveKhioyen
 {
@@ -27,9 +28,9 @@ namespace LongLiveKhioyen
 
 		void OnEconomyDataChanged()
 		{
-			if(selectedBuildingType != null)
+			if(SelectedBuildingType != null)
 			{
-				if(!(selectedBuildingType.cost <= Polis.Economy))
+				if(!(SelectedBuildingType.cost <= Polis.Economy))
 					SelectedBuildingType = null;
 			}
 		}
@@ -73,7 +74,7 @@ namespace LongLiveKhioyen
 
 		void OnConstructionCardSelected(ConstructOptionCard card)
 		{
-			SelectedBuildingType = card.buildingDefinition.id;
+			SelectedBuildingType = card.buildingDefinition;
 		}
 
 		void OnConstructionCardHovered(ConstructOptionCard card)
@@ -90,44 +91,63 @@ namespace LongLiveKhioyen
 
 		#region Selection
 		BuildingDefinition selectedBuildingType, hoveredBuildingType;
-		GameObject previewModel;
-		public string SelectedBuildingType
+		ConstructPreview preview;
+		public BuildingDefinition SelectedBuildingType
 		{
-			get => selectedBuildingType?.id;
+			get => selectedBuildingType;
 			set
 			{
-				if(previewModel != null)
-				{
-					Destroy(previewModel);
-					previewModel = null;
-				}
-
-				if(!GameManager.FindBuildingDefinitionByType(value, out selectedBuildingType))
+				if(value == selectedBuildingType)
 					return;
 
-				orientation = selectedBuildingType.defaultOrientation;
-				previewModel = Instantiate(selectedBuildingType.ModelTemplate);
-				previewModel.transform.SetParent(Polis.transform, false);
-				UpdatePreviewModelPose();
+				if(preview != null)
+				{
+					Destroy(preview.gameObject);
+					preview = null;
+				}
+
+				selectedBuildingType = value;
+
+				if(selectedBuildingType != null)
+				{
+					orientation = selectedBuildingType.defaultOrientation;
+					preview = new GameObject("Construction Preview").AddComponent<ConstructPreview>();
+					preview.SetBuildingType(selectedBuildingType);
+					preview.transform.SetParent(Polis.transform, false);
+					UpdatePreviewModelPose();
+				}
 			}
 		}
 
 		void UpdatePreviewModelPose()
 		{
-			if(previewModel == null)
+			if(preview == null)
 				return;
 
-			if(!Polis.ScreenToGround(mayorMode.PointerScreenPosition, out var groundPos))
+			Vector3 groundPos;
+			Vector2Int mapPos = default;
+			bool PositionMakesSense()
 			{
-				previewModel.SetActive(false);
+				if(!Polis.ScreenToGround(mayorMode.PointerScreenPosition, out groundPos))
+					return false;
+				if(!Polis.IsValidMapPosition(mapPos = Polis.WorldToMapInt(groundPos)))
+					return false;
+				return true;
+			}
+			if(!PositionMakesSense())
+			{
+				preview.Visible = false;
 				return;
 			}
+			preview.Visible = true;
 
-			Polis.PositionBuilding(previewModel.transform, selectedBuildingType, new()
+			BuildingPlacement placement = new()
 			{
-				position = Polis.WorldToMapInt(groundPos),
+				position = mapPos,
 				orientation = orientation,
-			});
+			};
+			preview.Valid = Polis.ValidateBuildingPlacement(SelectedBuildingType, placement);
+			Polis.PositionBuilding(preview.transform, SelectedBuildingType, placement);
 		}
 		#endregion
 
@@ -153,19 +173,32 @@ namespace LongLiveKhioyen
 		#region Actions
 		public void TryPlaceBuilding()
 		{
-			if(selectedBuildingType == null)
+			if(SelectedBuildingType == null)
 				return;
 			if(!Polis.ScreenToGround(mayorMode.PointerScreenPosition, out Vector3 groundPosition))
 				return;
-			if(!Polis.TryCostResource(selectedBuildingType.cost))
+
+			BuildingPlacement placement = new()
+			{
+				position = Polis.WorldToMapInt(groundPosition),
+				orientation = orientation,
+			};
+			if(!Polis.ValidateBuildingPlacement(SelectedBuildingType, placement))
+			{
+				Debug.LogWarning($"Cannot place {SelectedBuildingType.id} at {placement.position}, obstructed.");
+				return;
+			}
+
+			if(!Polis.TryCostResource(SelectedBuildingType.cost))
 			{
 				Debug.LogWarning(
-					$"Not enough resources to build a {selectedBuildingType.name}!\n" +
-					$"Required: {selectedBuildingType.cost}, current: {Polis.Economy}."
+					$"Not enough resources to build {SelectedBuildingType.id}!\n" +
+					$"Required: {SelectedBuildingType.cost}, current: {Polis.Economy}."
 				);
 				return;
 			}
-			Polis.ConstructBuilding(selectedBuildingType.id, Polis.WorldToMapInt(groundPosition), orientation);
+
+			Polis.ConstructBuilding(SelectedBuildingType.id, placement.position, orientation);
 		}
 		#endregion
 	}
