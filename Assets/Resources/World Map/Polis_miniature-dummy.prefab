@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8214789976440976888}
   - component: {fileID: 6286672615700018844}
   m_Layer: 0
-  m_Name: Dummy Polis Miniature
+  m_Name: Polis_miniature-dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -49,7 +49,7 @@ namespace LongLiveKhioyen
 			/* Poleis */
 			foreach(var polisData in Data.poleis)
 			{
-				var model = Instantiate(Resources.Load<GameObject>("World Map/Dummy Polis Miniature"));
+				var model = Instantiate(Resources.Load<GameObject>("World Map/Polis_miniature-dummy"));
 				var polisMiniature = model.GetComponent<PolisMiniature>();
 				polisMiniature.data = polisData;
 				polisMiniatures.Add(polisMiniature);
