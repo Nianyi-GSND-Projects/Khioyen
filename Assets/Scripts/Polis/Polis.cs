@@ -45,22 +45,28 @@ namespace LongLiveKhioyen
 			SwitchToMode(Mode.Mayor);
 			IsInConstructModal = false;
 
-			// TODO: Procedural polis generation.
+			/* Procedural polis generation */
 
-			/* Orientation */
+			// Orientation
 			transform.rotation = Quaternion.Euler(0, Data.orientation, 0);
 			gameObject.isStatic = true;
 
-			/* Ground */
+			// Ground
 			groundMesh = ConstructGroundMesh();
 			ground.GetComponent<MeshFilter>().sharedMesh = groundMesh;
 			ground.GetComponent<MeshCollider>().sharedMesh = groundMesh;
 
-			/* Walls */
+			// Walls
 			ConstructWalls();
 
-			/* Buildings */
-			SpawnBuildingsFromGameData();
+			// Buildings.
+			buildingOccupancy = new Building[ControlledData.size.x, ControlledData.size.y];
+			foreach(var placement in ControlledData.buildings)
+				SpawnBuilding(placement);
+
+			// Initialize Navmesh.
+			navMeshSurface.RemoveData();
+			navMeshSurface.BuildNavMesh();
 		}
 
 		void OnDestroy()
@@ -68,15 +74,6 @@ namespace LongLiveKhioyen
 			Destroy(groundMesh);
 
 			instance = null;
-		}
-
-		void Update()
-		{
-			if(isNavMeshDirty)
-			{
-				isNavMeshDirty = false;
-				UpdateGroundNavMesh();
-			}
 		}
 		#endregion
 
@@ -162,7 +159,7 @@ namespace LongLiveKhioyen
 		{
 			var sectionTemplate = Resources.Load<GameObject>("Models/Polis/Wall_section");
 			var cornerTemplate = Resources.Load<GameObject>("Models/Polis/Wall_corner");
-			var root = new GameObject().transform;
+			var root = new GameObject("Walls").transform;
 			root.SetParent(transform, false);
 			var cs = ControlledData.size;
 			var ps = new WallConstructionParams[] {
@@ -230,14 +227,6 @@ namespace LongLiveKhioyen
 			return RayToGround(ray, out ground);
 		}
 
-		bool isNavMeshDirty = true;
-
-		void UpdateGroundNavMesh()
-		{
-			navMeshSurface.RemoveData();
-			navMeshSurface.BuildNavMesh();
-		}
-
 		Vector3 ClosestWalkablePosition(Vector3 reference)
 		{
 			int areaMask = 1 << NavMesh.GetAreaFromName("Walkable");
@@ -265,6 +254,7 @@ namespace LongLiveKhioyen
 
 		#region Building
 		readonly List<Building> buildings = new();
+		Building[,] buildingOccupancy;
 
 		Building currentSelection;
 		public Building SelectedBuilding
@@ -292,27 +282,82 @@ namespace LongLiveKhioyen
 			}
 		}
 
-		void SpawnBuildingsFromGameData()
+		public void SpawnBuilding(BuildingPlacement placement)
 		{
-			foreach(var placement in ControlledData.buildings)
-				SpawnBuilding(placement);
-		}
-
-		public void SpawnBuilding(ControlledPolisData.BuildingPlacement placement)
-		{
-			if(!GameManager.FindBuildingDefinitionByType(placement.type, out var definition))
+			if(!GameManager.FindBuildingDefinitionByType(placement.id, out var definition))
 			{
-				Debug.LogWarning($"Skipping spawning building of ID \"{placement.type}\", cannot find its definition.");
+				Debug.LogWarning($"Skipping spawning building of ID \"{placement.id}\", cannot find its definition.");
 				return;
 			}
 
 			var building = new GameObject().AddComponent<Building>();
-			PositionBuilding(building.transform, definition.pivot, placement.position, placement.orientation);
+			PositionBuilding(building.transform, definition, placement);
 			buildings.Add(building);
 			building.definition = definition;
 			building.placement = placement;
 
-			isNavMeshDirty = true;
+			foreach(var pos in YieldBuildingOccupancy(definition, placement))
+				buildingOccupancy[pos.x, pos.y] = building;
+		}
+
+		[ContextMenu("PrintOccupancy")]
+		void PrintOccupancy()
+		{
+			string res = "";
+			for(int y = 0; y < ControlledData.size.y; ++y)
+			{
+				for(int x = 0; x < ControlledData.size.x; ++x)
+				{
+					Building b = buildingOccupancy[x, y];
+					res += b == null ? "." : b.definition.id[0];
+				}
+				res += "\n";
+			}
+			Debug.Log(res);
+		}
+
+		IEnumerable<Vector2Int> YieldBuildingOccupancy(BuildingDefinition definition, BuildingPlacement placement)
+		{
+			// GPT gen
+
+			// Local helper to rotate a grid vector by k quarter turns around +Y (same as Transform.Rotate(0, k*90, 0)).
+			// Mapping follows Unity's left-handed transform convention:
+			//   0: (x, y) -> ( x,  y)
+			//   1: (x, y) -> ( y, -x)
+			//   2: (x, y) -> (-x, -y)
+			//   3: (x, y) -> (-y,  x)
+			static Vector2Int Rot90(Vector2Int v, int quarterTurns)
+			{
+				quarterTurns = ((quarterTurns % 4) + 4) % 4; // normalize to {0,1,2,3}
+				return quarterTurns switch
+				{
+					0 => v,
+					1 => new Vector2Int(v.y, -v.x),
+					2 => new Vector2Int(-v.x, -v.y),
+					3 => new Vector2Int(-v.y, v.x),
+					_ => v // unreachable
+				};
+			}
+
+			var size = definition.size;          // rectangle size in cells at orientation=0
+			var pivot = definition.pivot;         // rotation pivot in local (orientation=0) cell coords
+			var origin = placement.position;       // world/grid coords where the pivot is placed
+			int rot = placement.orientation & 3;
+
+			// Enumerate every cell of the footprint (orientation=0 local space),
+			// rotate the offset around the pivot, then translate to world/grid space.
+			for(int ly = 0; ly < size.y; ly++)
+			{
+				for(int lx = 0; lx < size.x; lx++)
+				{
+					// Local cell (lx, ly) relative to pivot
+					var deltaLocal = new Vector2Int(lx - pivot.x, ly - pivot.y);
+
+					// Rotate around pivot and translate by 'origin'
+					var deltaWorld = Rot90(deltaLocal, rot);
+					yield return origin + deltaWorld;
+				}
+			}
 		}
 
 		public void ConstructBuilding(string type, Vector2Int mapPosition, int orientation)
@@ -320,9 +365,9 @@ namespace LongLiveKhioyen
 			if(!GameManager.FindBuildingDefinitionByType(type, out var definition))
 				return;
 
-			ControlledPolisData.BuildingPlacement placement = new()
+			BuildingPlacement placement = new()
 			{
-				type = type,
+				id = type,
 				position = mapPosition,
 				orientation = orientation,
 				underConstruction = definition.constructionTime > 0,
@@ -331,13 +376,14 @@ namespace LongLiveKhioyen
 			SpawnBuilding(placement);
 		}
 
-		public void PositionBuilding(Transform building, Vector3 pivot, Vector2Int mapPosition, int orientation)
+		public void PositionBuilding(Transform building, BuildingDefinition definition, BuildingPlacement placement)
 		{
 			building.SetParent(transform, false);
+			Vector2 planar = (Vector2)definition.size - definition.center - definition.pivot - (Vector2)ControlledData.size * .5f;
 			building.localPosition = grid.CellToLocalInterpolated(
-				MapToGrid(mapPosition) - pivot + Vector3.one
+				MapToGrid(placement.position) + new Vector3(planar.x, 0, planar.y)
 			);
-			building.localEulerAngles = Vector3.up * (orientation * 90);
+			building.localEulerAngles = Vector3.up * (placement.orientation * 90);
 		}
 		#endregion
 		#endregion

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Juyan
   m_EditorClassIdentifier: 
   id: juyan
-  name: "\u5C45\u5EF6"
   position: {x: 0, y: 0}
   orientation: 22.5
   isControlled: 1
@@ -25,13 +24,13 @@ MonoBehaviour:
       money: 200
       knowledge: 0
     buildings:
-    - type: water-well
-      position: {x: 0, y: 0}
+    - id: water-well
+      position: {x: 19, y: 19}
       orientation: 2
       underConstruction: 0
       remainingConstructionTime: 0
-    - type: barracks
-      position: {x: 5, y: 3}
+    - id: barracks
+      position: {x: 24, y: 22}
       orientation: 2
       underConstruction: 0
       remainingConstructionTime: 0

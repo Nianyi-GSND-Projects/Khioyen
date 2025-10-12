@@ -15,12 +15,11 @@ MonoBehaviour:
   id: barracks
   tags: []
   figure: {fileID: 21300000, guid: 51e0c1c1bb4924d41bab2ecec79e8956, type: 3}
-  model: {fileID: 884995026640950202, guid: 6728b3212da0b054e883561e0d319c24, type: 3}
   defaultOrientation: 2
-  pivot: {x: 0.5, y: 0, z: 0.5}
+  pivot: {x: 1, y: 1}
+  size: {x: 3, y: 3}
   obstructive: 1
-  center: {x: 0, y: 1, z: -0.2}
-  size: {x: 3, y: 2, z: 2.6}
+  center: {x: 1.5, y: 1.5}
   constructionTime: 10
   cost:
     food: 200

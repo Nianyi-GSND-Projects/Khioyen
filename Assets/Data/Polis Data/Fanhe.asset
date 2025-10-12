@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Fanhe
   m_EditorClassIdentifier: 
   id: fanhe
-  name: "\u756A\u548C"
   position: {x: 10000, y: 3000}
   orientation: 10
   isControlled: 1
@@ -25,8 +24,8 @@ MonoBehaviour:
       money: 50
       knowledge: 0
     buildings:
-    - type: water-well
-      position: {x: 5, y: 5}
+    - id: water-well
+      position: {x: 12, y: 12}
       orientation: 0
       underConstruction: 0
       remainingConstructionTime: 0

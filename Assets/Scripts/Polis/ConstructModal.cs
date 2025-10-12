@@ -124,7 +124,11 @@ namespace LongLiveKhioyen
 			}
 
 			var gridPosition = Polis.grid.WorldToCell(groundPos);
-			Polis.PositionBuilding(previewModel.transform, selectedBuildingType.pivot, Polis.GridToMap(gridPosition), orientation);
+			Polis.PositionBuilding(previewModel.transform, selectedBuildingType, new()
+			{
+				position = Polis.GridToMap(gridPosition),
+				orientation = orientation,
+			});
 		}
 		#endregion
 

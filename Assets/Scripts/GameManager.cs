@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +17,7 @@ namespace LongLiveKhioyen
 			ReadSavegamePaths();
 
 			/* Built-in resources */
-			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Data/Initial Building Definition Sheet"));
+			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Data/Building Definitions"));
 			if(buildingDefinitionSheet == null)
 			{
 				Debug.LogError("Cannot construct buildings, cannot fetch the initial building definition sheet.");

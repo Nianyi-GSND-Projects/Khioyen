@@ -15,12 +15,11 @@ MonoBehaviour:
   id: water-well
   tags: []
   figure: {fileID: 21300000, guid: 61ac40b257b3a994f841856ad38b2b6b, type: 3}
-  model: {fileID: 884995026640950202, guid: ea65c588aff6967459dd86664741216f, type: 3}
   defaultOrientation: 0
-  pivot: {x: 0.5, y: 0, z: 0.5}
+  pivot: {x: 0, y: 0}
+  size: {x: 1, y: 1}
   obstructive: 1
-  center: {x: 0, y: 1, z: 0}
-  size: {x: 0.6, y: 2, z: 0.6}
+  center: {x: 0.5, y: 0.5}
   constructionTime: 2
   cost:
     food: 20
