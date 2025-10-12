@@ -48,7 +48,7 @@ namespace LongLiveKhioyen
 			/* Procedural polis generation */
 
 			// Orientation
-			transform.rotation = Quaternion.Euler(0, Data.orientation, 0);
+			transform.rotation = Quaternion.Euler(0, data.orientation, 0);
 			gameObject.isStatic = true;
 
 			// Ground
@@ -60,8 +60,8 @@ namespace LongLiveKhioyen
 			ConstructWalls();
 
 			// Buildings.
-			buildingOccupancy = new Building[ControlledData.size.x, ControlledData.size.y];
-			foreach(var placement in ControlledData.buildings)
+			buildingOccupancy = new Building[Size.x, Size.y];
+			foreach(var placement in data?.controlledData.buildings)
 				SpawnBuilding(placement);
 
 			// Initialize Navmesh.
@@ -79,8 +79,13 @@ namespace LongLiveKhioyen
 
 		#region Data
 		PolisData data;
-		public PolisData Data => data;
-		public ControlledPolisData ControlledData => data?.controlledData;
+		public string Id => data.id;
+		public Vector2Int Size => data.controlledData.size;
+		public Economy Economy
+		{
+			get => data.controlledData.economy;
+			set => data.controlledData.economy = value;
+		}
 
 		#region Economy
 		public System.Action onEconomyDataChanged;
@@ -92,7 +97,7 @@ namespace LongLiveKhioyen
 
 		public bool CheckResourceAffordance(Economy cost)
 		{
-			return cost <= ControlledData.economy;
+			return cost <= Economy;
 		}
 
 		public bool TryCostResource(Economy cost, bool actuallyCost = true)
@@ -101,7 +106,7 @@ namespace LongLiveKhioyen
 				return false;
 			if(actuallyCost)
 			{
-				ControlledData.economy = ControlledData.economy - cost;
+				Economy = Economy - cost;
 				StartCoroutine(nameof(EmitOnEconomyDataChangedOnNextFrame));
 			}
 			return true;
@@ -119,20 +124,20 @@ namespace LongLiveKhioyen
 		#region Ground
 		Mesh ConstructGroundMesh()
 		{
-			Mesh mesh = new() { name = $"Ground mesh ({Data.id})" };
+			Mesh mesh = new() { name = $"Ground mesh ({Id})" };
 			Dictionary<(int, int), (int, Vector2)> vertices = new();
-			float mx = ControlledData.size.x * -.5f, my = ControlledData.size.y * -.5f;
-			for(int x = -1; x <= ControlledData.size.x + 1; ++x)
+			float mx = Size.x * -.5f, my = Size.y * -.5f;
+			for(int x = -1; x <= Size.x + 1; ++x)
 			{
-				for(int y = -1; y <= ControlledData.size.y + 1; ++y)
+				for(int y = -1; y <= Size.y + 1; ++y)
 					vertices[(x, y)] = (vertices.Count, new(x + mx, y + my));
 			}
 			mesh.vertices = vertices.Values.Select(pair => new Vector3(pair.Item2.x, 0, pair.Item2.y)).ToArray();
 			mesh.uv = vertices.Values.Select(pair => pair.Item2).ToArray();
 			List<int> indices = new();
-			for(int x = -1; x < ControlledData.size.x + 1; ++x)
+			for(int x = -1; x < Size.x + 1; ++x)
 			{
-				for(int y = -1; y < ControlledData.size.y + 1; ++y)
+				for(int y = -1; y < Size.y + 1; ++y)
 				{
 					indices.Add(vertices[(x, y)].Item1);
 					indices.Add(vertices[(x, y + 1)].Item1);
@@ -161,29 +166,28 @@ namespace LongLiveKhioyen
 			var cornerTemplate = Resources.Load<GameObject>("Models/Polis/Wall_corner");
 			var root = new GameObject("Walls").transform;
 			root.SetParent(transform, false);
-			var cs = ControlledData.size;
 			var ps = new WallConstructionParams[] {
 				new() {
-					length = cs.x,
-					offset = new Vector3(-cs.x + 1, 0, -cs.y - 1) * .5f,
+					length = Size.x,
+					offset = new Vector3(-Size.x + 1, 0, -Size.y - 1) * .5f,
 					space = Vector3.right,
 					orientation = 0,
 				},
 				new() {
-					length = cs.y,
-					offset = new Vector3(+cs.x + 1, 0, -cs.y + 1) * .5f,
+					length = Size.y,
+					offset = new Vector3(+Size.x + 1, 0, -Size.y + 1) * .5f,
 					space = Vector3.forward,
 					orientation = 3,
 				},
 				new() {
-					length = cs.x,
-					offset = new Vector3(+cs.x - 1, 0, +cs.y + 1) * .5f,
+					length = Size.x,
+					offset = new Vector3(+Size.x - 1, 0, +Size.y + 1) * .5f,
 					space = Vector3.left,
 					orientation = 2,
 				},
 				new() {
-					length = cs.y,
-					offset = new Vector3(-cs.x - 1, 0, +cs.y - 1) * .5f,
+					length = Size.y,
+					offset = new Vector3(-Size.x - 1, 0, +Size.y - 1) * .5f,
 					space = Vector3.back,
 					orientation = 1,
 				},
@@ -233,7 +237,7 @@ namespace LongLiveKhioyen
 			NavMeshHit hit;
 			if(NavMesh.SamplePosition(reference, out hit, 0.1f, areaMask))
 				return hit.position;
-			if(NavMesh.SamplePosition(reference, out hit, ControlledData.size.magnitude, areaMask))
+			if(NavMesh.SamplePosition(reference, out hit, Size.magnitude, areaMask))
 				return hit.position;
 			Debug.LogWarning("Failed to find closest walkable position on the NavMesh.");
 			return transform.position;
@@ -245,8 +249,8 @@ namespace LongLiveKhioyen
 		{
 			Vector3Int gridPos = grid.WorldToCell(world);
 			return new(
-				gridPos.x + ControlledData.size.x * .5f,
-				gridPos.z + ControlledData.size.y * .5f
+				gridPos.x + Size.x * .5f,
+				gridPos.z + Size.y * .5f
 			);
 		}
 		public Vector2Int WorldToMapInt(Vector3 world)
@@ -260,12 +264,12 @@ namespace LongLiveKhioyen
 		public Vector3 MapToLocal(Vector2 map)
 		{
 			return grid.CellToLocalInterpolated(new(
-				map.x - ControlledData.size.x * .5f,
+				map.x - Size.x * .5f,
 				0,
-				map.y - ControlledData.size.y * .5f
+				map.y - Size.y * .5f
 			));
 		}
-		public Bounds Bounds => new(default, new(ControlledData.size.x, 0, ControlledData.size.y));
+		public Bounds Bounds => new(default, new(Size.x, 0, Size.y));
 		#endregion
 
 		#region Building
@@ -320,9 +324,9 @@ namespace LongLiveKhioyen
 		void PrintOccupancy()
 		{
 			string res = "";
-			for(int y = 0; y < ControlledData.size.y; ++y)
+			for(int y = 0; y < Size.y; ++y)
 			{
-				for(int x = 0; x < ControlledData.size.x; ++x)
+				for(int x = 0; x < Size.x; ++x)
 				{
 					Building b = buildingOccupancy[x, y];
 					res += b == null ? "." : b.definition.id[0];

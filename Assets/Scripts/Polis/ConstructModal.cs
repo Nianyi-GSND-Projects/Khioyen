@@ -29,7 +29,7 @@ namespace LongLiveKhioyen
 		{
 			if(selectedBuildingType != null)
 			{
-				if(!(selectedBuildingType.cost <= Polis.ControlledData.economy))
+				if(!(selectedBuildingType.cost <= Polis.Economy))
 					SelectedBuildingType = null;
 			}
 		}
@@ -161,7 +161,7 @@ namespace LongLiveKhioyen
 			{
 				Debug.LogWarning(
 					$"Not enough resources to build a {selectedBuildingType.name}!\n" +
-					$"Required: {selectedBuildingType.cost}, current: {Polis.ControlledData.economy}."
+					$"Required: {selectedBuildingType.cost}, current: {Polis.Economy}."
 				);
 				return;
 			}

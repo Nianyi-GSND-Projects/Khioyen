@@ -47,11 +47,11 @@ namespace LongLiveKhioyen
 
 		void UpdateTopBar()
 		{
-			localizedPolisName.TableEntryReference = polis.Data.id;
+			localizedPolisName.TableEntryReference = polis.Id;
 			localizedPolisName.RefreshString();
-			foodValue.text = polis.ControlledData.economy.food.ToString();
-			moneyValue.text = polis.ControlledData.economy.money.ToString();
-			knowledgeValue.text = polis.ControlledData.economy.knowledge.ToString();
+			foodValue.text = polis.Economy.food.ToString();
+			moneyValue.text = polis.Economy.money.ToString();
+			knowledgeValue.text = polis.Economy.knowledge.ToString();
 		}
 		#endregion
 
