@@ -206,6 +206,7 @@ namespace LongLiveKhioyen
 				{
 					currentSelection.Selected = true;
 					// TODO: 打开信息面板 / 属性编辑器
+					Debug.Log($"Seleted {currentSelection}.", currentSelection);
 				}
 				else
 				{
@@ -297,6 +298,29 @@ namespace LongLiveKhioyen
 			currentMode = mode;
 		}
 
+		public Transform anchor;
+		public Vector3 AnchorPosition
+		{
+			get => anchor.position;
+			set => anchor.position = value;
+		}
+		public Vector3 AnchorEulers
+		{
+			get => anchor.eulerAngles;
+			set => anchor.eulerAngles = value;
+		}
+		public float MayorDistance
+		{
+			get => -mayorCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
+			set
+			{
+				var composer = mayorCamera.GetCinemachineComponent<CinemachineTransposer>();
+				var offset = composer.m_FollowOffset;
+				offset.z = -value;
+				composer.m_FollowOffset = offset;
+			}
+		}
+
 		public ConstructModal constructModal;
 		public bool IsInConstructModal
 		{
@@ -312,7 +336,7 @@ namespace LongLiveKhioyen
 		#region Mayor mode
 		[Header("Mayor Mode")]
 		public InputGroup mayorInput;
-		public CinemachineVirtualCamera mayorCamera;
+		[SerializeField] CinemachineVirtualCamera mayorCamera;
 
 		void SetMayorMode(bool enabled)
 		{
@@ -326,7 +350,7 @@ namespace LongLiveKhioyen
 		[Header("Wander Mode")]
 		public InputGroup wanderInput;
 		public AbstractCharacterController player;
-		public CinemachineVirtualCamera wanderCamera;
+		[SerializeField] CinemachineVirtualCamera wanderCamera;
 
 		void SetWanderMode(bool enabled)
 		{

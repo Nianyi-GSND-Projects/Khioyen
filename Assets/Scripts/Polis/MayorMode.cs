@@ -93,18 +93,15 @@ namespace LongLiveKhioyen
 				return;
 			if(!Polis.ScreenToGround(pointerScreenPosition, out var from))
 				return;
-			Polis.mayorCamera.LookAt.position += (to - from) * panSpeed;
+			Polis.AnchorPosition += (to - from) * panSpeed;
 		}
 
 		void Zoom(float scrollY)
 		{
-			var follow = Polis.mayorCamera.Follow;
-
-			float z = -follow.localPosition.z;
+			float z = Polis.MayorDistance;
 			z *= Mathf.Exp(-scrollY * zoomSpeed);
 			z = Mathf.Clamp(z, zoomRange.x, zoomRange.y);
-
-			follow.localPosition = Vector3.back * z;
+			Polis.MayorDistance = z;
 		}
 
 		void Rotate(Vector2 screenDelta)
@@ -112,11 +109,10 @@ namespace LongLiveKhioyen
 			screenDelta.y *= -1;
 			screenDelta *= rotateSpeed;
 
-			var root = Polis.mayorCamera.LookAt;
-			var euler = root.localEulerAngles;
+			var euler = Polis.AnchorEulers;
 			euler.x = Mathf.Clamp(euler.x + screenDelta.y, 0, 90);
 			euler.y += screenDelta.x;
-			root.localEulerAngles = euler;
+			Polis.AnchorEulers = euler;
 		}
 
 		protected void Interact(Vector2 screenPos)
