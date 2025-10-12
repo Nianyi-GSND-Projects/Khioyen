@@ -59,6 +59,9 @@ namespace LongLiveKhioyen
 
 		protected void OnPrimaryClick(InputValue value)
 		{
+			if(isPointerOverGameObjects)
+				return;
+
 			var raw = value.isPressed;
 			isPrimaryButtonDown = raw;
 
@@ -126,7 +129,10 @@ namespace LongLiveKhioyen
 		protected void Interact(Vector2 screenPos)
 		{
 			if(Polis.IsInConstructModal)
+			{
+				Polis.constructModal.TryPlaceBuilding();
 				return;
+			}
 
 			var ray = Camera.main.ScreenPointToRay(screenPos);
 			if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))

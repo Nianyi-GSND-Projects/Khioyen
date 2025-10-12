@@ -241,13 +241,29 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Grid
-		public Vector2Int GridToMap(Vector3Int grid)
+		public Vector2 WorldToMap(Vector3 world)
 		{
-			return new(grid.x, grid.z);
+			Vector3Int gridPos = grid.WorldToCell(world);
+			return new(
+				gridPos.x + ControlledData.size.x * .5f,
+				gridPos.z + ControlledData.size.y * .5f
+			);
 		}
-		public Vector3Int MapToGrid(Vector2Int map)
+		public Vector2Int WorldToMapInt(Vector3 world)
 		{
-			return new(map.x, 0, map.y);
+			return Vector2Int.FloorToInt(WorldToMap(world));
+		}
+		public Vector3 MapToWorld(Vector2 map)
+		{
+			return transform.localToWorldMatrix.MultiplyPoint(MapToLocal(map));
+		}
+		public Vector3 MapToLocal(Vector2 map)
+		{
+			return grid.CellToLocalInterpolated(new(
+				map.x - ControlledData.size.x * .5f,
+				0,
+				map.y - ControlledData.size.y * .5f
+			));
 		}
 		public Bounds Bounds => new(default, new(ControlledData.size.x, 0, ControlledData.size.y));
 		#endregion
@@ -379,10 +395,8 @@ namespace LongLiveKhioyen
 		public void PositionBuilding(Transform building, BuildingDefinition definition, BuildingPlacement placement)
 		{
 			building.SetParent(transform, false);
-			Vector2 planar = (Vector2)definition.size - definition.center - definition.pivot - (Vector2)ControlledData.size * .5f;
-			building.localPosition = grid.CellToLocalInterpolated(
-				MapToGrid(placement.position) + new Vector3(planar.x, 0, planar.y)
-			);
+			Vector2 planar = (Vector2)definition.size - definition.center - definition.pivot;
+			building.localPosition = MapToLocal(placement.position) + new Vector3(planar.x, 0, planar.y);
 			building.localEulerAngles = Vector3.up * (placement.orientation * 90);
 		}
 		#endregion

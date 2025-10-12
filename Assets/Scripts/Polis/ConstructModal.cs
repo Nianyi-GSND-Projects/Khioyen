@@ -123,10 +123,9 @@ namespace LongLiveKhioyen
 				return;
 			}
 
-			var gridPosition = Polis.grid.WorldToCell(groundPos);
 			Polis.PositionBuilding(previewModel.transform, selectedBuildingType, new()
 			{
-				position = Polis.GridToMap(gridPosition),
+				position = Polis.WorldToMapInt(groundPos),
 				orientation = orientation,
 			});
 		}
@@ -152,12 +151,7 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Actions
-		protected void Interact()
-		{
-			TryPlaceBuilding();
-		}
-
-		void TryPlaceBuilding()
+		public void TryPlaceBuilding()
 		{
 			if(selectedBuildingType == null)
 				return;
@@ -171,8 +165,7 @@ namespace LongLiveKhioyen
 				);
 				return;
 			}
-			var gridPosition = Polis.grid.WorldToCell(groundPosition);
-			Polis.ConstructBuilding(selectedBuildingType.id, Polis.GridToMap(gridPosition), orientation);
+			Polis.ConstructBuilding(selectedBuildingType.id, Polis.WorldToMapInt(groundPosition), orientation);
 		}
 		#endregion
 	}
