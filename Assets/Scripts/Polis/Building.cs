@@ -12,9 +12,9 @@ namespace LongLiveKhioyen
 
 		void Start()
 		{
-			name = definition.name;
+			name = definition.id;
 
-			model = Instantiate(definition.model);
+			model = Instantiate(definition.ModelTemplate);
 			model.name = "Model";
 			model.transform.SetParent(transform, false);
 

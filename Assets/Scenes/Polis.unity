@@ -2565,7 +2565,7 @@ MonoBehaviour:
   zoomSpeed: 0.25
   zoomRange: {x: 2, y: 100}
   rotateSpeed: 0.2
-  minAzimuth: 10
+  minAzimuth: 15
 --- !u!1001 &952950345
 PrefabInstance:
   m_ObjectHideFlags: 0

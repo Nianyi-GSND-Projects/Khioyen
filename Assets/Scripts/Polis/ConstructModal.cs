@@ -105,11 +105,8 @@ namespace LongLiveKhioyen
 				if(!GameManager.FindBuildingDefinitionByType(value, out selectedBuildingType))
 					return;
 
-				if(selectedBuildingType.model == null)
-					return;
-
 				orientation = selectedBuildingType.defaultOrientation;
-				previewModel = Instantiate(selectedBuildingType.model);
+				previewModel = Instantiate(selectedBuildingType.ModelTemplate);
 				previewModel.transform.SetParent(Polis.transform, false);
 				UpdatePreviewModelPose();
 			}

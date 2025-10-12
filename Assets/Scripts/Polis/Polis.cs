@@ -1,10 +1,11 @@
-using UnityEngine;
-using UnityEngine.AI;
-using Unity.AI.Navigation;
 using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
+using Unity.AI.Navigation;
+using UnityEngine;
+using UnityEngine.AI;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LongLiveKhioyen
 {
@@ -35,7 +36,6 @@ namespace LongLiveKhioyen
 				Debug.LogWarning($"Cannot initialize polis \"{data.id}\", because it is not controlled.");
 				return;
 			}
-			name = $"{data.id} (Polis)";
 
 			player.gameObject.SetActive(false);
 		}
@@ -55,6 +55,9 @@ namespace LongLiveKhioyen
 			groundMesh = ConstructGroundMesh();
 			ground.GetComponent<MeshFilter>().sharedMesh = groundMesh;
 			ground.GetComponent<MeshCollider>().sharedMesh = groundMesh;
+
+			/* Walls */
+			ConstructWalls();
 
 			/* Buildings */
 			SpawnBuildingsFromGameData();
@@ -122,17 +125,17 @@ namespace LongLiveKhioyen
 			Mesh mesh = new() { name = $"Ground mesh ({Data.id})" };
 			Dictionary<(int, int), (int, Vector2)> vertices = new();
 			float mx = ControlledData.size.x * -.5f, my = ControlledData.size.y * -.5f;
-			for(int x = 0; x <= ControlledData.size.x; ++x)
+			for(int x = -1; x <= ControlledData.size.x + 1; ++x)
 			{
-				for(int y = 0; y <= ControlledData.size.y; ++y)
+				for(int y = -1; y <= ControlledData.size.y + 1; ++y)
 					vertices[(x, y)] = (vertices.Count, new(x + mx, y + my));
 			}
 			mesh.vertices = vertices.Values.Select(pair => new Vector3(pair.Item2.x, 0, pair.Item2.y)).ToArray();
 			mesh.uv = vertices.Values.Select(pair => pair.Item2).ToArray();
 			List<int> indices = new();
-			for(int x = 0; x < ControlledData.size.x; ++x)
+			for(int x = -1; x < ControlledData.size.x + 1; ++x)
 			{
-				for(int y = 0; y < ControlledData.size.y; ++y)
+				for(int y = -1; y < ControlledData.size.y + 1; ++y)
 				{
 					indices.Add(vertices[(x, y)].Item1);
 					indices.Add(vertices[(x, y + 1)].Item1);
@@ -146,6 +149,67 @@ namespace LongLiveKhioyen
 			mesh.RecalculateNormals();
 			mesh.RecalculateBounds();
 			return mesh;
+		}
+
+		struct WallConstructionParams
+		{
+			public int length;
+			public Vector3 offset;
+			public Vector3 space;
+			public int orientation;
+		}
+		void ConstructWalls()
+		{
+			var sectionTemplate = Resources.Load<GameObject>("Models/Polis/Wall_section");
+			var cornerTemplate = Resources.Load<GameObject>("Models/Polis/Wall_corner");
+			var root = new GameObject().transform;
+			root.SetParent(transform, false);
+			var cs = ControlledData.size;
+			var ps = new WallConstructionParams[] {
+				new() {
+					length = cs.x,
+					offset = new Vector3(-cs.x + 1, 0, -cs.y - 1) * .5f,
+					space = Vector3.right,
+					orientation = 0,
+				},
+				new() {
+					length = cs.y,
+					offset = new Vector3(+cs.x + 1, 0, -cs.y + 1) * .5f,
+					space = Vector3.forward,
+					orientation = 3,
+				},
+				new() {
+					length = cs.x,
+					offset = new Vector3(+cs.x - 1, 0, +cs.y + 1) * .5f,
+					space = Vector3.left,
+					orientation = 2,
+				},
+				new() {
+					length = cs.y,
+					offset = new Vector3(-cs.x - 1, 0, +cs.y - 1) * .5f,
+					space = Vector3.back,
+					orientation = 1,
+				},
+			};
+			void MakeWall(GameObject template, Vector3 pos, int orientation)
+			{
+				var model = Instantiate(template);
+				model.transform.SetParent(root, false);
+				model.transform.SetLocalPositionAndRotation(
+					pos,
+					Quaternion.Euler(Vector3.up * (90 * orientation))
+				);
+				var obstacle = model.AddComponent<NavMeshObstacle>();
+				obstacle.carving = true;
+				obstacle.size = new Vector3(1, 4, 1);
+				obstacle.center = Vector3.up * 2;
+			}
+			foreach(var p in ps)
+			{
+				for(int i = 0; i < p.length; ++i)
+					MakeWall(sectionTemplate, i * p.space + p.offset, p.orientation);
+				MakeWall(cornerTemplate, -1 * p.space + p.offset, p.orientation);
+			}
 		}
 
 		public bool RayToGround(Ray ray, out Vector3 ground)
