@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace LongLiveKhioyen
 {
@@ -10,14 +8,7 @@ namespace LongLiveKhioyen
 	{
 		public WorldData world;
 		public List<PolisData> poleis = new();
-		public string lastPoleis;
-
-		public GameData() { }
-		public GameData(GameData source) {
-			world = JsonUtility.FromJson<WorldData>(JsonUtility.ToJson(source.world));
-			poleis = source.poleis.Select(p => ScriptableObject.Instantiate(p)).ToList();
-			lastPoleis = source.lastPoleis;
-		}
+		public string lastPolis;
 	}
 
 	[Serializable]

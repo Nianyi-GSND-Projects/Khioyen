@@ -22,7 +22,55 @@ MonoBehaviour:
         scale: 0.0001
         mapAddress: 
     poleis:
-    - {fileID: 11400000, guid: 34bb9abc2e2b17b4abebde3028a9ae26, type: 2}
-    - {fileID: 11400000, guid: aece4e0b33aa00f4e8f491ab9e80d217, type: 2}
-    - {fileID: 11400000, guid: 6fdc3c4f1af894940ae27c5cc0700b0e, type: 2}
-    lastPoleis: juyan
+    - id: juyan
+      position: {x: 0, y: 0}
+      orientation: 22.5
+      isControlled: 1
+      isHostile: 0
+      controlledData:
+        size: {x: 30, y: 30}
+        economy:
+          food: 1000
+          money: 800
+          knowledge: 0
+        buildings:
+        - id: water-well
+          position: {x: 14, y: 14}
+          orientation: 2
+          underConstruction: 0
+          remainingConstructionTime: 0
+        - id: barracks
+          position: {x: 19, y: 17}
+          orientation: 2
+          underConstruction: 0
+          remainingConstructionTime: 0
+    - id: fanhe
+      position: {x: -5000, y: 1000}
+      orientation: 15
+      isControlled: 1
+      isHostile: 0
+      controlledData:
+        size: {x: 20, y: 20}
+        economy:
+          food: 300
+          money: 100
+          knowledge: 0
+        buildings:
+        - id: water-well
+          position: {x: 9, y: 9}
+          orientation: 2
+          underConstruction: 0
+          remainingConstructionTime: 0
+    - id: dunhuang
+      position: {x: 5000, y: -3000}
+      orientation: 0
+      isControlled: 1
+      isHostile: 0
+      controlledData:
+        size: {x: 40, y: 40}
+        economy:
+          food: 1500
+          money: 1000
+          knowledge: 0
+        buildings: []
+    lastPolis: juyan

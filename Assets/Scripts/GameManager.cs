@@ -14,7 +14,8 @@ namespace LongLiveKhioyen
 		{
 			/* Local data */
 			ReadSettings();
-			ReadSavegamePaths();
+			RefreshSavegames();
+			Debug.Log(string.Join(",", savegameFilenames));
 
 			/* Built-in resources */
 			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Data/Building Definitions"));
@@ -29,7 +30,7 @@ namespace LongLiveKhioyen
 #if DEBUG
 			// Use initial game data if not starting from the menu scene.
 			if(SceneManager.GetActiveScene().buildIndex != 0)
-				CreateNewGameInstance();
+				StartNewGame();
 #endif
 		}
 		#endregion
@@ -55,7 +56,7 @@ namespace LongLiveKhioyen
 			if(Directory.Exists(settingsPath))
 				Directory.Delete(settingsPath, true);
 			if(!File.Exists(settingsPath))
-				File.Create(settingsPath);
+				File.Create(settingsPath).Close();
 		}
 
 		static void ReadSettings()
@@ -100,8 +101,9 @@ namespace LongLiveKhioyen
 
 		#region Savegames
 		static readonly string savegamesDir = Path.Combine(Application.persistentDataPath, "savegames");
-		static readonly List<string> savegamePaths = new();
-		static readonly Action onSavegamesChanged;
+		static readonly List<string> savegameFilenames = new();
+		public static IList<string> SavegameFilenames => savegameFilenames;
+		public static Action onSavegamesChanged;
 
 		static void EnsureSavegamesDir()
 		{
@@ -111,20 +113,33 @@ namespace LongLiveKhioyen
 				Directory.CreateDirectory(savegamesDir);
 		}
 
-		static void ReadSavegamePaths()
+		static string SavegameFileNameToPath(string filename)
+		{
+			return Path.Join(savegamesDir, filename);
+		}
+
+		public static void RefreshSavegames()
 		{
 			EnsureSavegamesDir();
+			savegameFilenames.Clear();
 			foreach(string path in Directory.EnumerateFiles(savegamesDir))
 			{
-				if(savegamePaths.Contains(path))
-					continue;
-				savegamePaths.Add(path);
+				var filename = Path.GetRelativePath(savegamesDir, path);
+				RecordSavegameFileName(filename);
 			}
 			onSavegamesChanged?.Invoke();
 		}
 
-		public static Savegame ReadSavegame(string path)
+		static void RecordSavegameFileName(string filename)
 		{
+			if(savegameFilenames.Contains(filename))
+				return;
+			savegameFilenames.Add(filename);
+		}
+
+		public static Savegame ReadSavegame(string filename)
+		{
+			var path = SavegameFileNameToPath(filename);
 			try
 			{
 				var savegame = JsonUtility.FromJson<Savegame>(File.ReadAllText(path));
@@ -138,13 +153,16 @@ namespace LongLiveKhioyen
 			}
 		}
 
-		public static void WriteSavegame(string path, Savegame savegame)
+		public static void WriteSavegame(string filename, Savegame savegame)
 		{
+			var path = SavegameFileNameToPath(filename);
 			try
 			{
 				if(!File.Exists(path))
-					File.Create(path);
+					File.Create(path).Close();
 				File.WriteAllText(path, JsonUtility.ToJson(savegame));
+				Debug.Log($"Wrote savegame to {path}.");
+				RecordSavegameFileName(filename);
 				onSavegamesChanged?.Invoke();
 			}
 			catch(Exception e)
@@ -171,6 +189,7 @@ namespace LongLiveKhioyen
 
 		#region Game instance
 		public static GameInstance Instance => GameInstance.Instance;
+		public static GameData LoadedGameData { get; private set; }
 
 		public static void StartNewGame()
 		{
@@ -180,16 +199,35 @@ namespace LongLiveKhioyen
 				return;
 			}
 
-			CreateNewGameInstance();
-
-			SwitchScene("Polis");
+			StartGameInstanceWithData(Utilities.DeepCopy(Resources.Load<GameDataSO>("Data/Initial Game Data").gameData));
 		}
 
-		private static void CreateNewGameInstance()
+		public static void LoadGame(string filename)
+		{
+			if(!savegameFilenames.Contains(filename))
+			{
+				Debug.LogError($"No savegame named {filename} exists, cannot load game.");
+				return;
+			}
+			try
+			{
+				var savegame = ReadSavegame(filename);
+				StartGameInstanceWithData(savegame.data);
+			}
+			catch(Exception e)
+			{
+				Debug.LogError($"Failed to load savegame from {filename}.");
+				Debug.LogError(e);
+				return;
+			}
+		}
+
+		static void StartGameInstanceWithData(GameData data)
 		{
 			GameObject go = new("Game Instance");
 			go.AddComponent<GameInstance>();
-			Instance.Data = Resources.Load<GameDataSO>("Data/Initial Game Data").gameData;
+			LoadedGameData = data;
+			SwitchScene("Polis");
 		}
 
 		public static void StopCurrentGame()
@@ -200,11 +238,9 @@ namespace LongLiveKhioyen
 				return;
 			}
 
-			// TODO: Save the game.
-
 			// Destroy the current game instance.
 			UnityEngine.Object.Destroy(Instance);
-
+			LoadedGameData = null;
 			SwitchScene("Start Menu");
 		}
 		#endregion
@@ -221,7 +257,7 @@ namespace LongLiveKhioyen
 			if(pauseMenu != null)
 				return;
 
-			pauseMenu = UnityEngine.Object.Instantiate(Resources.Load<GameObject>("UI/Pause Menu")).GetComponent<PauseMenu>();
+			pauseMenu = UnityEngine.Object.Instantiate(Resources.Load<GameObject>("UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
 			Time.timeScale = 0.0f;
 		}
 

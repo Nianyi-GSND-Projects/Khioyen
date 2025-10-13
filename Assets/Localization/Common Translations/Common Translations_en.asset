@@ -82,6 +82,18 @@ MonoBehaviour:
     m_Localized: Resume
     m_Metadata:
       m_Items: []
+  - m_Id: 2079906811568128
+    m_Localized: Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2094307606224896
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2213779717447680
+    m_Localized: New save
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

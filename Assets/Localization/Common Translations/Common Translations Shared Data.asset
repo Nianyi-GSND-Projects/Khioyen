@@ -79,6 +79,18 @@ MonoBehaviour:
     m_Key: resume
     m_Metadata:
       m_Items: []
+  - m_Id: 2079906811568128
+    m_Key: save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2094307606224896
+    m_Key: cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2213779717447680
+    m_Key: new-save
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

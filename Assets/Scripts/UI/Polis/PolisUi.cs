@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
-using UnityEngine.Localization.Settings;
-using UnityEngine.Localization.Tables;
 using UnityEngine.UI;
 
 namespace LongLiveKhioyen
@@ -11,6 +9,11 @@ namespace LongLiveKhioyen
 	{
 		#region Life cycle
 		void Awake()
+		{
+			Polis.Instance.onInitialized += Initialize;
+		}
+
+		void Initialize()
 		{
 			localizedPolisName = new("Polis Names", "");
 			localizedPolisName.StringChanged += s => polisName.text = s;

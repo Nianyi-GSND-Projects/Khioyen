@@ -6,8 +6,8 @@ using System.Linq;
 
 namespace LongLiveKhioyen
 {
-	[CreateAssetMenu(menuName = "Long Live Khioyen/Polis Data")]
-	public class PolisData : ScriptableObject
+	[Serializable]
+	public class PolisData
 	{
 		public string id;
 		public Vector2 position;

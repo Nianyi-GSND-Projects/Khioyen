@@ -1,5 +1,4 @@
 using Cinemachine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Navigation;
@@ -13,34 +12,29 @@ namespace LongLiveKhioyen
 		static Polis instance;
 		public static Polis Instance => instance;
 
-		#region Unity life cycle
+		#region Life cycle
+		public System.Action onInitialized;
+
 		void Awake()
 		{
 			instance = this;
-
-			var gameData = GameInstance.Instance?.Data;
-			if(gameData == null)
-			{
-				Debug.LogWarning("Cannot initialize polis, no game currently running.");
-				return;
-			}
-			data = gameData.poleis.Find(p => p.id == gameData.lastPoleis);
-			if(data == null)
-			{
-				Debug.LogWarning("Cannot initialize polis, failed to find the last polis by ID.");
-				return;
-			}
-			if(!data.isControlled || data.controlledData == null)
-			{
-				Debug.LogWarning($"Cannot initialize polis \"{data.id}\", because it is not controlled.");
-				return;
-			}
-
-			player.gameObject.SetActive(false);
 		}
 
 		void Start()
 		{
+			GameInstance.Instance.ExecuteWhenInitialized(Initialize);
+		}
+
+		void Initialize()
+		{
+			var data = GetPolisData();
+			if(data == null)
+				player.gameObject.SetActive(false);
+
+			Id = data.id;
+			Size = data.controlledData.size;
+			Economy = data.controlledData.economy;
+
 			SwitchToMode(Mode.Mayor);
 			IsInConstructModal = false;
 
@@ -66,6 +60,30 @@ namespace LongLiveKhioyen
 			// Initialize Navmesh.
 			navMeshSurface.RemoveData();
 			navMeshSurface.BuildNavMesh();
+
+			onInitialized?.Invoke();
+		}
+
+		PolisData GetPolisData()
+		{
+			var gameData = GameManager.LoadedGameData;
+			if(gameData == null)
+			{
+				Debug.LogWarning("Cannot initialize polis, no game currently running.");
+				return null;
+			}
+			var data = gameData.poleis.Find(p => p.id == gameData.lastPolis);
+			if(data == null)
+			{
+				Debug.LogWarning("Cannot initialize polis, failed to find the last polis by ID.");
+				return null;
+			}
+			if(!data.isControlled || data.controlledData == null)
+			{
+				Debug.LogWarning($"Cannot initialize polis \"{data.id}\", because it is not controlled.");
+				return null;
+			}
+			return data;
 		}
 
 		void OnDestroy()
@@ -77,14 +95,18 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Data
-		PolisData data;
-		public string Id => data.id;
-		public Vector2Int Size => data.controlledData.size;
-		public Economy Economy
+		public string Id { get; private set; }
+		public Vector2Int Size { get; private set; }
+		public Economy Economy { get; private set; }
+
+		#region Serialization
+		public void WriteData(PolisData data)
 		{
-			get => data.controlledData.economy;
-			set => data.controlledData.economy = value;
+			var c = data.controlledData;
+			c.economy = Economy;
+			// buildings
 		}
+		#endregion
 
 		#region Economy
 		public System.Action onEconomyDataChanged;

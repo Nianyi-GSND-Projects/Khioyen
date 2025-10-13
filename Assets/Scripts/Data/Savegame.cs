@@ -6,7 +6,7 @@ namespace LongLiveKhioyen
 	public class Savegame
 	{
 		public string name;
-		public DateTime creationTime;
+		public DateTime lastUpdatedTime;
 		public string version;
 		public GameData data;
 	}
