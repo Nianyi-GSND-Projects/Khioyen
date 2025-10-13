@@ -38,7 +38,7 @@ namespace LongLiveKhioyen
 				created = value;
 				newSaveGroup.gameObject.SetActive(!created);
 				infoGroup.gameObject.SetActive(created);
-				title.text = created ? FileName : string.Empty;
+				title.text = created ? saveName : string.Empty;
 			}
 		}
 

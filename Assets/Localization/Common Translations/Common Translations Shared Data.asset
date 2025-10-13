@@ -51,10 +51,6 @@ MonoBehaviour:
     m_Key: new-game
     m_Metadata:
       m_Items: []
-  - m_Id: 1498157899776
-    m_Key: load-game
-    m_Metadata:
-      m_Items: []
   - m_Id: 1507725107200
     m_Key: settings
     m_Metadata:
@@ -84,7 +80,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2094307606224896
-    m_Key: cancel
+    m_Key: return
     m_Metadata:
       m_Items: []
   - m_Id: 2213779717447680

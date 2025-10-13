@@ -46,5 +46,10 @@ namespace LongLiveKhioyen
 		{
 			SwitchGroup(mainGroup);
 		}
+
+		public void QuitGame()
+		{
+			GameManager.StopCurrentGame();
+		}
 	}
 }

@@ -1165,7 +1165,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1531025530602613064, guid: 302c858005a075240bc22454fc7595b9, type: 3}
       propertyPath: m_Name
-      value: Cancel
+      value: Return
       objectReference: {fileID: 0}
     - target: {fileID: 7930717403736776959, guid: 302c858005a075240bc22454fc7595b9, type: 3}
       propertyPath: m_text

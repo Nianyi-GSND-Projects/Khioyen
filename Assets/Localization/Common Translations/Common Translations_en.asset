@@ -54,10 +54,6 @@ MonoBehaviour:
     m_Localized: New Game
     m_Metadata:
       m_Items: []
-  - m_Id: 1498157899776
-    m_Localized: Load Game
-    m_Metadata:
-      m_Items: []
   - m_Id: 1507725107200
     m_Localized: Settings
     m_Metadata:
@@ -87,7 +83,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2094307606224896
-    m_Localized: Cancel
+    m_Localized: Return
     m_Metadata:
       m_Items: []
   - m_Id: 2213779717447680
