@@ -88,11 +88,6 @@ namespace LongLiveKhioyen
 
 		#region Economy
 		public System.Action onEconomyDataChanged;
-		IEnumerator EmitOnEconomyDataChangedOnNextFrame()
-		{
-			yield return new WaitForEndOfFrame();
-			onEconomyDataChanged?.Invoke();
-		}
 
 		public bool CheckResourceAffordance(Economy cost)
 		{
@@ -106,7 +101,7 @@ namespace LongLiveKhioyen
 			if(actuallyCost)
 			{
 				Economy = Economy - cost;
-				StartCoroutine(nameof(EmitOnEconomyDataChangedOnNextFrame));
+				onEconomyDataChanged?.Invoke();
 			}
 			return true;
 		}
@@ -330,22 +325,6 @@ namespace LongLiveKhioyen
 				buildingOccupancy[pos.x, pos.y] = building;
 
 			return building;
-		}
-
-		[ContextMenu("PrintOccupancy")]
-		void PrintOccupancy()
-		{
-			string res = "";
-			for(int y = 0; y < Size.y; ++y)
-			{
-				for(int x = 0; x < Size.x; ++x)
-				{
-					Building b = buildingOccupancy[x, y];
-					res += b == null ? "." : b.definition.id[0];
-				}
-				res += "\n";
-			}
-			Debug.Log(res);
 		}
 
 		IEnumerable<Vector2Int> YieldBuildingOccupancy(BuildingDefinition definition, BuildingPlacement placement)
