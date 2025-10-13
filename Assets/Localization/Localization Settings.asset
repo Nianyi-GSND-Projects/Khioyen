@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Localization Settings
   m_EditorClassIdentifier: 
   m_StartupSelectors:
-  - rid: 7866834333827596288
   - rid: 7866834333827596289
   - rid: 7866834333827596290
+  - rid: 7866834333827596288
   m_AvailableLocales:
     rid: 7866834333827596291
   m_AssetDatabase:
@@ -69,9 +69,9 @@ MonoBehaviour:
         m_CustomTablePostprocessor:
           rid: -2
         m_AsynchronousBehaviour: 0
-        m_UseFallback: 0
+        m_UseFallback: 1
         m_MissingTranslationState: 1
-        m_NoTranslationFoundMessage: No translation found for '{key}' in {table.TableCollectionName}
+        m_NoTranslationFoundMessage: '#{key}'
         m_SmartFormat:
           rid: 7866834333827596294
     - rid: 7866834333827596294

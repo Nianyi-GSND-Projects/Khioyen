@@ -16,26 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 3024ea10cfeb60c44b894712486e78d4
-  m_SerializeEntries:
-  - m_GUID: 9deb4688232947749895c02ea2c1def7
-    m_Address: Polis Names_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bfb38d1c982862945bd3161acedecb3b
-    m_Address: Common Translations_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e96a6d3cc0346d64b84ce109a7b9b2c3
-    m_Address: Building Names_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: d89340cf63263bf4a95bfa60d5c9de98, type: 2}
   m_SchemaSet:

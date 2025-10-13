@@ -19,15 +19,15 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 23700660224
-    m_Localized: Khioyen
+    m_Localized: Juyan
     m_Metadata:
       m_Items: []
   - m_Id: 142269440000
-    m_Localized: Phian'ghwa
+    m_Localized: Fanhe
     m_Metadata:
       m_Items: []
   - m_Id: 225991501504512
-    m_Localized: Twen'ghwang
+    m_Localized: Dunhuang
     m_Metadata:
       m_Items: []
   references:

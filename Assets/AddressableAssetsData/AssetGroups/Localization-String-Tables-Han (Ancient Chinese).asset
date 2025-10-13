@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Han (Ancient Chinese)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-String-Tables-Han (Ancient Chinese)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2d2e0046ef68e8c43bedc62a0cd59bed
+  m_SerializeEntries:
+  - m_GUID: 25eed8d0f4628c449933ef986d4ba594
+    m_Address: Building Names_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53d6697c44234d04789582286cc59224
+    m_Address: Polis Names_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76212bf54a238dc4f965adfacc0232be
+    m_Address: Common Translations_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: d89340cf63263bf4a95bfa60d5c9de98, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: fed9e8a881d57774189568af9f3c9596, type: 2}
+    - {fileID: 11400000, guid: 454733ff7ebdde444ac31c6b481d03d8, type: 2}

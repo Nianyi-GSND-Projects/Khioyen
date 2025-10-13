@@ -17,14 +17,32 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 28c49b5ebf4cb824a90ef9c5ab6942d5
   m_SerializeEntries:
+  - m_GUID: 1737a424ed3a97943abe10d5f1eea110
+    m_Address: Chinese (Traditional)
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f6e846f5517bf04780797bffc5c229e
-    m_Address: English (en)
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73f0c1e065d54ba4c9544c07dab1d9c2
+    m_Address: Han (Ancient Chinese)
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9711e21e982cc4049b5c3e05129b8dce
+    m_Address: English (Foreignized)
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d41f97ef8c7e1164783c356e2d359f9a
-    m_Address: Chinese (Simplified) (zh-Hans)
+    m_Address: Chinese (Simplified)
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale

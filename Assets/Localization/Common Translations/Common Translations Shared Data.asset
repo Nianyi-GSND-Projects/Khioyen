@@ -15,6 +15,10 @@ MonoBehaviour:
   m_TableCollectionName: Common Translations
   m_TableCollectionNameGuidString: 982ba5300d876504087b211f8323e292
   m_Entries:
+  - m_Id: 1540226768896
+    m_Key: game-title
+    m_Metadata:
+      m_Items: []
   - m_Id: 798644461568
     m_Key: view-mode
     m_Metadata:
@@ -60,11 +64,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1522723938304
-    m_Key: exit
+    m_Key: "exit\t"
     m_Metadata:
       m_Items: []
-  - m_Id: 1540226768896
-    m_Key: game-title
+  - m_Id: 2457221588541440
+    m_Key: savegames
     m_Metadata:
       m_Items: []
   - m_Id: 3418142498816
@@ -75,16 +79,20 @@ MonoBehaviour:
     m_Key: resume
     m_Metadata:
       m_Items: []
-  - m_Id: 2079906811568128
-    m_Key: save
+  - m_Id: 2473283445022720
+    m_Key: quit-game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2213779717447680
+    m_Key: new-save
     m_Metadata:
       m_Items: []
   - m_Id: 2094307606224896
     m_Key: return
     m_Metadata:
       m_Items: []
-  - m_Id: 2213779717447680
-    m_Key: new-save
+  - m_Id: 2079906811568128
+    m_Key: save
     m_Metadata:
       m_Items: []
   - m_Id: 2441400971649024
@@ -93,10 +101,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2441478717267968
     m_Key: load
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2457221588541440
-    m_Key: savegame
     m_Metadata:
       m_Items: []
   m_Metadata:

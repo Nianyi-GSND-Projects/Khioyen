@@ -1469,7 +1469,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1531025530602613064, guid: 302c858005a075240bc22454fc7595b9, type: 3}
       propertyPath: m_Name
-      value: Exit
+      value: Quit
       objectReference: {fileID: 0}
     - target: {fileID: 2288653731526659348, guid: 302c858005a075240bc22454fc7595b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1644,7 +1644,7 @@ MonoBehaviour:
           m_TableReference:
             m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
           m_TableEntryReference:
-            m_KeyId: 1522723938304
+            m_KeyId: 2473283445022720
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0

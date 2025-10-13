@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 798644461568
-    m_Localized: View Mode
+    m_Localized: View mode
     m_Metadata:
       m_Items: []
   - m_Id: 848921583616
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1540226768896
-    m_Localized: Longlive Khioyen
+    m_Localized: Longlive Juyan
     m_Metadata:
       m_Items: []
   - m_Id: 3418142498816
@@ -99,7 +99,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2457221588541440
-    m_Localized: Savegame
+    m_Localized: Savegames
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2473283445022720
+    m_Localized: Quit
     m_Metadata:
       m_Items: []
   references:
