@@ -65,7 +65,6 @@ namespace LongLiveKhioyen
 
 		public void UpdateVisualState()
 		{
-
 			if(Placement.underConstruction)
 			{
 				foreach(var renderer in legacyMaterials.Keys)
@@ -76,6 +75,8 @@ namespace LongLiveKhioyen
 				foreach(var (renderer, mats) in legacyMaterials)
 					renderer.sharedMaterials = mats;
 			}
+
+			dirty = false;
 		}
 
 		public bool UnderConstruction
@@ -96,7 +97,6 @@ namespace LongLiveKhioyen
 				Placement.remainingConstructionTime = Mathf.Max(0, value);
 				if(Placement.remainingConstructionTime == 0)
 					UnderConstruction = false;
-				dirty = true;
 			}
 		}
 

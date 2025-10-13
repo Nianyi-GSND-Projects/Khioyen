@@ -91,6 +91,18 @@ MonoBehaviour:
     m_Key: new-save
     m_Metadata:
       m_Items: []
+  - m_Id: 2441400971649024
+    m_Key: delete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2441478717267968
+    m_Key: load
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2457221588541440
+    m_Key: savegame
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

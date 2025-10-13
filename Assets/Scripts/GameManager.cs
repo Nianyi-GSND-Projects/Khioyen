@@ -1,8 +1,9 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace LongLiveKhioyen
 {
@@ -187,22 +188,59 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
+		#region Pause/resume
+		static bool InputEnabled
+		{
+			get => UnityEngine.Object.FindObjectOfType<PlayerInput>(true)?.enabled ?? false;
+			set
+			{
+				var pi = UnityEngine.Object.FindObjectOfType<PlayerInput>();
+				if(pi)
+					pi.enabled = value;
+			}
+		}
+
+		public static bool Paused
+		{
+			set
+			{
+				if(value)
+				{
+					Time.timeScale = 0.0f;
+					InputEnabled = false;
+				}
+				else
+				{
+					Time.timeScale = 1.0f;
+					InputEnabled = true;
+				}
+			}
+		}
+		#endregion
+
 		#region Game instance
-		public static GameInstance Instance => GameInstance.Instance;
+		public static bool IsGameRunning => GameInstance.Instance != null;
 
 		public static void StartNewGame()
 		{
-			if(Instance != null)
+			if(IsGameRunning)
 			{
 				Debug.LogError("A game instance is already running, cannot start new game.");
 				return;
 			}
 
-			StartGameInstanceWithData(Utilities.DeepCopy(Resources.Load<GameDataSO>("Data/Initial Game Data").gameData));
+			GameData data = Utilities.DeepCopy(Resources.Load<GameDataSO>("Data/Initial Game Data").gameData);
+			StartGameInstanceWithData(data);
 		}
 
 		public static void LoadGame(string filename)
 		{
+			if(IsGameRunning)
+			{
+				Debug.LogError("A game instance is already running, cannot load game.");
+				return;
+			}
+
 			if(!savegameFilenames.Contains(filename))
 			{
 				Debug.LogError($"No savegame named {filename} exists, cannot load game.");
@@ -223,22 +261,30 @@ namespace LongLiveKhioyen
 
 		static void StartGameInstanceWithData(GameData data)
 		{
+			if(IsGameRunning)
+			{
+				Debug.LogError("A game instance is already running. Stopping it to start a new game.");
+				StopCurrentGame();
+			}
+
 			GameObject go = new("Game Instance");
 			go.AddComponent<GameInstance>();
 			GameInstance.Instance.Data = data;
+			Paused = false;
 			SwitchScene("Polis");
 		}
 
 		public static void StopCurrentGame()
 		{
-			if(Instance == null)
+			if(!IsGameRunning)
 			{
-				Debug.LogError("No game instance is currently running, cannot stop current game.");
+				Debug.LogWarning("No game instance is currently running, cannot stop current game.");
 				return;
 			}
 
 			// Destroy the current game instance.
-			UnityEngine.Object.Destroy(Instance);
+			UnityEngine.Object.Destroy(GameInstance.Instance);
+			Paused = false;
 			SwitchScene("Start Menu");
 		}
 		#endregion

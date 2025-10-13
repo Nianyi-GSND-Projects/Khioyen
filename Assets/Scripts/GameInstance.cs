@@ -117,16 +117,6 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Pause
-		bool InputEnabled
-		{
-			get => FindObjectOfType<PlayerInput>(true)?.enabled ?? false;
-			set
-			{
-				var pi = FindObjectOfType<PlayerInput>();
-				if(pi)
-					pi.enabled = value;
-			}
-		}
 
 		PauseMenu pauseMenu;
 		public void OpenPauseMenu()
@@ -140,8 +130,7 @@ namespace LongLiveKhioyen
 				return;
 
 			pauseMenu = Instantiate(Resources.Load<GameObject>("UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
-			Time.timeScale = 0.0f;
-			InputEnabled = false;
+			GameManager.Paused = true;
 		}
 
 		public void ClosePauseMenu()
@@ -151,8 +140,7 @@ namespace LongLiveKhioyen
 
 			Destroy(pauseMenu.gameObject);
 			pauseMenu = null;
-			Time.timeScale = 1.0f;
-			InputEnabled = true;
+			GameManager.Paused = false;
 		}
 		#endregion
 	}
