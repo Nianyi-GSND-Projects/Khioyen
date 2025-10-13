@@ -7,8 +7,8 @@ namespace LongLiveKhioyen
 	public class GameData
 	{
 		public WorldData world;
-		public List<PolisData> poleis = new();
 		public string lastPolis;
+		public List<PolisData> poleis = new();
 	}
 
 	[Serializable]

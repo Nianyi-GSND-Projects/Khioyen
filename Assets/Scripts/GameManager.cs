@@ -15,7 +15,6 @@ namespace LongLiveKhioyen
 			/* Local data */
 			ReadSettings();
 			RefreshSavegames();
-			Debug.Log(string.Join(",", savegameFilenames));
 
 			/* Built-in resources */
 			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Data/Building Definitions"));
@@ -160,14 +159,15 @@ namespace LongLiveKhioyen
 			{
 				if(!File.Exists(path))
 					File.Create(path).Close();
-				File.WriteAllText(path, JsonUtility.ToJson(savegame));
+				string json = JsonUtility.ToJson(savegame, true);
+				File.WriteAllText(path, json);
 				Debug.Log($"Wrote savegame to {path}.");
 				RecordSavegameFileName(filename);
 				onSavegamesChanged?.Invoke();
 			}
 			catch(Exception e)
 			{
-				Debug.LogWarning($"Failed to write savegame \"{savegame.name}\" to {path}.");
+				Debug.LogWarning($"Failed to write savegame \"{filename}\" to {path}.");
 				Debug.LogError(e);
 			}
 		}
@@ -189,7 +189,6 @@ namespace LongLiveKhioyen
 
 		#region Game instance
 		public static GameInstance Instance => GameInstance.Instance;
-		public static GameData LoadedGameData { get; private set; }
 
 		public static void StartNewGame()
 		{
@@ -226,7 +225,7 @@ namespace LongLiveKhioyen
 		{
 			GameObject go = new("Game Instance");
 			go.AddComponent<GameInstance>();
-			LoadedGameData = data;
+			GameInstance.Instance.Data = data;
 			SwitchScene("Polis");
 		}
 
@@ -240,35 +239,7 @@ namespace LongLiveKhioyen
 
 			// Destroy the current game instance.
 			UnityEngine.Object.Destroy(Instance);
-			LoadedGameData = null;
 			SwitchScene("Start Menu");
-		}
-		#endregion
-
-		#region Pause menu
-		static PauseMenu pauseMenu;
-		public static void OpenPauseMenu()
-		{
-			if(Instance == null)
-			{
-				Debug.LogWarning("Pause menu can only be opened when a game instance is running.");
-				return;
-			}
-			if(pauseMenu != null)
-				return;
-
-			pauseMenu = UnityEngine.Object.Instantiate(Resources.Load<GameObject>("UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
-			Time.timeScale = 0.0f;
-		}
-
-		public static void ClosePauseMenu()
-		{
-			if(pauseMenu == null)
-				return;
-
-			UnityEngine.Object.Destroy(pauseMenu.gameObject);
-			pauseMenu = null;
-			Time.timeScale = 1.0f;
 		}
 		#endregion
 	}

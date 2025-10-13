@@ -30,7 +30,7 @@ namespace LongLiveKhioyen
 
 		public void OpenPauseMenu()
 		{
-			GameManager.OpenPauseMenu();
+			GameInstance.Instance.OpenPauseMenu();
 		}
 
 		public void DepartFromPolis()

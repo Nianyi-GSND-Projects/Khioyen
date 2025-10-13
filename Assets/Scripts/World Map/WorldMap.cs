@@ -18,7 +18,7 @@ namespace LongLiveKhioyen
 
 		void Awake()
 		{
-			if(GameManager.LoadedGameData == null)
+			if(GameInstance.Instance.Data == null)
 			{
 				Debug.LogWarning("Cannot initialize polis, no game currently running.");
 				return;
@@ -27,7 +27,7 @@ namespace LongLiveKhioyen
 
 			Construct();
 			// Positions the player army to the front door of last polis.
-			var lastPolis = polisMiniatures.Find(m => m.data.id == GameManager.LoadedGameData.lastPolis);
+			var lastPolis = polisMiniatures.Find(m => m.data.id == GameInstance.Instance.Data.lastPolis);
 			if(lastPolis == null)
 			{
 				Debug.LogWarning("No last polis found.");
@@ -44,7 +44,7 @@ namespace LongLiveKhioyen
 		void Construct()
 		{
 			/* Poleis */
-			foreach(var polisData in GameManager.LoadedGameData.poleis)
+			foreach(var polisData in GameInstance.Instance.Data.poleis)
 			{
 				var polisMiniature = SpawnPolisMiniature(polisData);
 				polisMiniatures.Add(polisMiniature);
@@ -55,7 +55,7 @@ namespace LongLiveKhioyen
 		{
 			GameObject go = new();
 			go.transform.SetParent(transform, false);
-			go.transform.localPosition = new Vector3(polisData.position.x, 0, polisData.position.y) * GameManager.LoadedGameData.world.data3D.scale;
+			go.transform.localPosition = new Vector3(polisData.position.x, 0, polisData.position.y) * GameInstance.Instance.Data.world.data3D.scale;
 			go.transform.localEulerAngles = Vector3.up * polisData.orientation;
 
 			var pm = go.AddComponent<PolisMiniature>();

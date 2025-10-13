@@ -98,9 +98,12 @@ namespace LongLiveKhioyen
 			if(!Polis.ScreenToGround(pointerScreenPosition, out var from))
 				return;
 			Vector3 pos = Polis.AnchorPosition + (to - from) * panSpeed;
-			Vector3 boundedPos = Polis.transform.worldToLocalMatrix.MultiplyPoint(pos);
-			boundedPos = Polis.Bounds.ClosestPoint(boundedPos);
-			boundedPos = Polis.transform.localToWorldMatrix.MultiplyPoint(boundedPos);
+			Bounds bounds = new(default, new(Polis.Size.x, 0, Polis.Size.y));
+			Vector3 boundedPos = Polis.transform.localToWorldMatrix.MultiplyPoint(
+				bounds.ClosestPoint(
+					Polis.transform.worldToLocalMatrix.MultiplyPoint(pos)
+				)
+			);
 			pos.x = boundedPos.x;
 			pos.z = boundedPos.z;
 			Polis.AnchorPosition = pos;

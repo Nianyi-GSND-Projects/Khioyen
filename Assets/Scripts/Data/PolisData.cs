@@ -75,7 +75,7 @@ namespace LongLiveKhioyen
 	}
 
 	[Serializable]
-	public struct BuildingPlacement
+	public class BuildingPlacement
 	{
 		public string id;  // The building ID stored in the definition sheet.
 		public Vector2Int position;

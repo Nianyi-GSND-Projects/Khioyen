@@ -34,7 +34,7 @@ namespace LongLiveKhioyen
 
 		public void ClosePauseMenu()
 		{
-			GameManager.ClosePauseMenu();
+			GameInstance.Instance.ClosePauseMenu();
 		}
 
 		public void OpenSaveGroup()

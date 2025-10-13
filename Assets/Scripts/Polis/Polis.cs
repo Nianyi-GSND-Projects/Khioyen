@@ -1,9 +1,9 @@
+using UnityEngine;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
 using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.AI.Navigation;
-using UnityEngine;
-using UnityEngine.AI;
 
 namespace LongLiveKhioyen
 {
@@ -27,13 +27,9 @@ namespace LongLiveKhioyen
 
 		void Initialize()
 		{
-			var data = GetPolisData();
-			if(data == null)
+			Data = GetPolisData();
+			if(Data == null)
 				player.gameObject.SetActive(false);
-
-			Id = data.id;
-			Size = data.controlledData.size;
-			Economy = data.controlledData.economy;
 
 			SwitchToMode(Mode.Mayor);
 			IsInConstructModal = false;
@@ -41,7 +37,7 @@ namespace LongLiveKhioyen
 			/* Procedural polis generation */
 
 			// Orientation
-			transform.rotation = Quaternion.Euler(0, data.orientation, 0);
+			transform.rotation = Quaternion.Euler(0, Data.orientation, 0);
 			gameObject.isStatic = true;
 
 			// Ground
@@ -54,7 +50,7 @@ namespace LongLiveKhioyen
 
 			// Buildings.
 			buildingOccupancy = new Building[Size.x, Size.y];
-			foreach(var placement in data?.controlledData.buildings)
+			foreach(var placement in Data?.controlledData.buildings)
 				SpawnBuilding(placement);
 
 			// Initialize Navmesh.
@@ -64,15 +60,24 @@ namespace LongLiveKhioyen
 			onInitialized?.Invoke();
 		}
 
+		void OnDestroy()
+		{
+			Destroy(groundMesh);
+
+			instance = null;
+		}
+		#endregion
+
+		#region Data
+		public PolisData Data { get; private set; }
 		PolisData GetPolisData()
 		{
-			var gameData = GameManager.LoadedGameData;
-			if(gameData == null)
+			if(GameInstance.Instance.Data == null)
 			{
 				Debug.LogWarning("Cannot initialize polis, no game currently running.");
 				return null;
 			}
-			var data = gameData.poleis.Find(p => p.id == gameData.lastPolis);
+			var data = GameInstance.Instance.Data.poleis.Find(p => p.id == GameInstance.Instance.Data.lastPolis);
 			if(data == null)
 			{
 				Debug.LogWarning("Cannot initialize polis, failed to find the last polis by ID.");
@@ -86,27 +91,13 @@ namespace LongLiveKhioyen
 			return data;
 		}
 
-		void OnDestroy()
+		public string Id => Data.id;
+		public Vector2Int Size => Data.controlledData.size;
+		public Economy Economy
 		{
-			Destroy(groundMesh);
-
-			instance = null;
+			get => Data.controlledData.economy;
+			set => Data.controlledData.economy = value;
 		}
-		#endregion
-
-		#region Data
-		public string Id { get; private set; }
-		public Vector2Int Size { get; private set; }
-		public Economy Economy { get; private set; }
-
-		#region Serialization
-		public void WriteData(PolisData data)
-		{
-			var c = data.controlledData;
-			c.economy = Economy;
-			// buildings
-		}
-		#endregion
 
 		#region Economy
 		public System.Action onEconomyDataChanged;
@@ -285,7 +276,6 @@ namespace LongLiveKhioyen
 				map.y - Size.y * .5f
 			));
 		}
-		public Bounds Bounds => new(default, new(Size.x, 0, Size.y));
 
 		public bool IsValidMapPosition(Vector2Int pos)
 		{
@@ -335,13 +325,8 @@ namespace LongLiveKhioyen
 			var building = new GameObject().AddComponent<Building>();
 			PositionBuilding(building.transform, definition, placement);
 			buildings.Add(building);
-			building.definition = definition;
-			building.onInitialized += () =>
-			{
-				building.UnderConstruction = placement.underConstruction;
-				if(placement.underConstruction)
-					building.RemainingConstructionTime = placement.remainingConstructionTime;
-			};
+			building.Placement = placement;
+			building.Definition = definition;
 
 			foreach(var pos in YieldBuildingOccupancy(definition, placement))
 				buildingOccupancy[pos.x, pos.y] = building;
@@ -426,6 +411,7 @@ namespace LongLiveKhioyen
 				remainingConstructionTime = definition.constructionTime,
 			};
 			SpawnBuilding(placement);
+			Data.controlledData.buildings.Add(placement);
 		}
 		#endregion
 		#endregion

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace LongLiveKhioyen
 {
@@ -46,24 +47,25 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Serialization/deserialization
-		public string LastPolis { get; private set; }
+		public GameData Data { get; set; }
+		public string LastPolis
+		{
+			get => Data.lastPolis;
+			private set => Data.lastPolis = value;
+		}
 
 		void Initialize()
 		{
-			LastPolis = GameManager.LoadedGameData.lastPolis;
+			LastPolis = Data.lastPolis;
 			initialized = true;
 		}
 
 		Savegame MakeSavegame()
 		{
-			GameData data = Utilities.DeepCopy(GameManager.LoadedGameData);
-			data.lastPolis = LastPolis;
 			return new()
 			{
-				name = "Khioyen - Test name",
 				lastUpdatedTime = System.DateTime.Now,
-				version = "0.0.0",
-				data = data,
+				data = Data,
 			};
 		}
 
@@ -95,18 +97,13 @@ namespace LongLiveKhioyen
 
 		public void DepartFromPolis()
 		{
-			var polis = Polis.Instance;
-			Debug.Log($"Departing from polis \"{polis.Id}\".");
-
-			var data = GameManager.LoadedGameData.poleis.Find(d => d.id == polis.Id);
-			polis.WriteData(data);
-
+			Debug.Log($"Departing from polis \"{Polis.Instance.Id}\".");
 			CurrentMode = Mode.WorldMap;
 		}
 
 		public void EnterPolis(string polisId)
 		{
-			var polis = GameManager.LoadedGameData.poleis.Find(p => p.id == polisId);
+			var polis = Data.poleis.Find(p => p.id == polisId);
 			if(polis == null)
 			{
 				Debug.LogWarning($"Cannot enter polis \"{polisId}\", failed to find.");
@@ -116,6 +113,46 @@ namespace LongLiveKhioyen
 
 			LastPolis = polis.id;
 			CurrentMode = Mode.Polis;
+		}
+		#endregion
+
+		#region Pause
+		bool InputEnabled
+		{
+			get => FindObjectOfType<PlayerInput>(true)?.enabled ?? false;
+			set
+			{
+				var pi = FindObjectOfType<PlayerInput>();
+				if(pi)
+					pi.enabled = value;
+			}
+		}
+
+		PauseMenu pauseMenu;
+		public void OpenPauseMenu()
+		{
+			if(Instance == null)
+			{
+				Debug.LogWarning("Pause menu can only be opened when a game instance is running.");
+				return;
+			}
+			if(pauseMenu != null)
+				return;
+
+			pauseMenu = Instantiate(Resources.Load<GameObject>("UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
+			Time.timeScale = 0.0f;
+			InputEnabled = false;
+		}
+
+		public void ClosePauseMenu()
+		{
+			if(pauseMenu == null)
+				return;
+
+			Destroy(pauseMenu.gameObject);
+			pauseMenu = null;
+			Time.timeScale = 1.0f;
+			InputEnabled = true;
 		}
 		#endregion
 	}
