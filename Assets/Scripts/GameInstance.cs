@@ -129,7 +129,7 @@ namespace LongLiveKhioyen
 			if(pauseMenu != null)
 				return;
 
-			pauseMenu = Instantiate(Resources.Load<GameObject>("UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
+			pauseMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
 			GameManager.Paused = true;
 		}
 

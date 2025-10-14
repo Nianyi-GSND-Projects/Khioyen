@@ -4,47 +4,29 @@ using System.Collections.Generic;
 
 namespace LongLiveKhioyen
 {
+	[RequireComponent(typeof(ManyPanelUi))]
 	public class PauseMenu : MonoBehaviour
 	{
-		public CanvasGroup mainGroup, saveGroup;
-		IEnumerable<CanvasGroup> UiGroups
-		{
-			get
-			{
-				yield return mainGroup;
-				yield return saveGroup;
-			}
-		}
-
-		void SwitchGroup(CanvasGroup target)
-		{
-			foreach(var group in UiGroups)
-				group.gameObject.SetActive(group == target);
-		}
-
+		ManyPanelUi panels;
+		public CanvasGroup mainPanel, savePanel, settingsPanel;
 		public Button saveButton;
+
+		protected void Awake()
+		{
+			panels = GetComponent<ManyPanelUi>();
+		}
 
 		protected void OnEnable()
 		{
-			OpenMainGroup();
+			panels.SwitchToPanel(mainPanel);
 
 			var isInPolis = GameInstance.Instance.CurrentMode == GameInstance.Mode.Polis;
 			saveButton.interactable = isInPolis;
 		}
 
-		public void ClosePauseMenu()
+		public void Close()
 		{
 			GameInstance.Instance.ClosePauseMenu();
-		}
-
-		public void OpenSaveGroup()
-		{
-			SwitchGroup(saveGroup);
-		}
-
-		public void OpenMainGroup()
-		{
-			SwitchGroup(mainGroup);
 		}
 
 		public void QuitGame()

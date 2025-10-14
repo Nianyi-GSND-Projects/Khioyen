@@ -15,6 +15,10 @@ MonoBehaviour:
   m_TableCollectionName: Common Translations
   m_TableCollectionNameGuidString: 982ba5300d876504087b211f8323e292
   m_Entries:
+  - m_Id: 2509500500893696
+    m_Key: locale-name
+    m_Metadata:
+      m_Items: []
   - m_Id: 1540226768896
     m_Key: game-title
     m_Metadata:
@@ -101,6 +105,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2441478717267968
     m_Key: load
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2511126775160832
+    m_Key: language
     m_Metadata:
       m_Items: []
   m_Metadata:

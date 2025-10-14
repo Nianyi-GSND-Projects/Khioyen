@@ -1,22 +1,27 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System;
 
 namespace LongLiveKhioyen
 {
+	[RequireComponent(typeof(ManyPanelUi))]
 	public class StartMenu : MonoBehaviour
 	{
-		[Serializable]
-		public struct Buttons {
-			public Button newGame, loadGame, settings, credits, exit;
-		}
-		public Buttons buttons;
+		ManyPanelUi panels;
+		public CanvasGroup mainPanel;
 
-		#region Functions
+		protected void Awake()
+		{
+			panels = GetComponent<ManyPanelUi>();
+			panels.SwitchToPanel(mainPanel);
+		}
+
 		public void StartNewGame()
 		{
 			GameManager.StartNewGame();
 		}
-		#endregion
+
+		public void ExitGame()
+		{
+			GameManager.ExitGame();
+		}
 	}
 }

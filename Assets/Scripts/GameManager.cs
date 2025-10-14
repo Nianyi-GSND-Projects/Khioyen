@@ -216,6 +216,14 @@ namespace LongLiveKhioyen
 				}
 			}
 		}
+
+		public static void ExitGame()
+		{
+			Application.Quit();
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+#endif
+		}
 		#endregion
 
 		#region Game instance

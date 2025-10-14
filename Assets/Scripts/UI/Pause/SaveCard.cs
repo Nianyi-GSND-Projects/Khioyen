@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using System.Collections.Generic;
 
 namespace LongLiveKhioyen
 {
@@ -11,7 +10,7 @@ namespace LongLiveKhioyen
 		public string saveName;
 		public string FileName => $"{saveName}.json";
 		public Button button;
-		public CanvasGroup newSaveGroup, infoGroup;
+		public GameObject newSaveGroup, infoGroup;
 		public TMP_Text title;
 
 		#region Life cycle
@@ -36,8 +35,8 @@ namespace LongLiveKhioyen
 			set
 			{
 				created = value;
-				newSaveGroup.gameObject.SetActive(!created);
-				infoGroup.gameObject.SetActive(created);
+				newSaveGroup.SetActive(!created);
+				infoGroup.SetActive(created);
 				title.text = created ? saveName : string.Empty;
 			}
 		}
