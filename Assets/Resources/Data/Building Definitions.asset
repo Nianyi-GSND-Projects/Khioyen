@@ -15,3 +15,8 @@ MonoBehaviour:
   buildingDefinitions:
   - {fileID: 11400000, guid: 7c702b7289dfe044087d2ab98919ead1, type: 2}
   - {fileID: 11400000, guid: a8d06e473cf79994bac5948c420bb7c5, type: 2}
+  - {fileID: 11400000, guid: 2551c9657e4cc6f439187088ebbc760e, type: 2}
+  - {fileID: 11400000, guid: e61604884ca183243a2a4b6739c25d77, type: 2}
+  - {fileID: 11400000, guid: 48d5065f857af2f4faf365e88c65dec8, type: 2}
+  - {fileID: 11400000, guid: d3d51aa4b5b988248a1a7bcf836a032e, type: 2}
+  - {fileID: 11400000, guid: 39e4d7396ec8ee54c9cf664bee4ed8a2, type: 2}

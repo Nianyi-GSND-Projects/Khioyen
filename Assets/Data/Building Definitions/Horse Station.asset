@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a291e6bdf3089f241a4ab811eecfdaf5, type: 3}
+  m_Name: Horse Station
+  m_EditorClassIdentifier: 
+  id: horse-station
+  tags: []
+  figure: {fileID: 0}
+  defaultOrientation: 0
+  pivot: {x: 1, y: 0}
+  size: {x: 3, y: 2}
+  obstructive: 1
+  center: {x: 1.5, y: 1}
+  constructionTime: 0
+  cost:
+    food: 0
+    money: 0
+    knowledge: 0
