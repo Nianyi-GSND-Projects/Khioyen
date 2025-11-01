@@ -308,7 +308,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:f13dff47dce6df843bf91890895542b0
           m_TableEntryReference:
             m_KeyId: 3418142498816
             m_Key: 
@@ -625,7 +625,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 1507725107200
             m_Key: 
@@ -942,7 +942,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2195994219694102423, guid: 0eac13c33bb596c4db852e971e7865f0, type: 3}
       propertyPath: m_Size
-      value: 0.9999693
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2903698486766311274, guid: 0eac13c33bb596c4db852e971e7865f0, type: 3}
       propertyPath: m_Pivot.x
@@ -1254,7 +1254,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2457221588541440
             m_Key: 
@@ -1472,7 +1472,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:f13dff47dce6df843bf91890895542b0
           m_TableEntryReference:
             m_KeyId: 3445292228608
             m_Key: 
@@ -1828,7 +1828,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:f13dff47dce6df843bf91890895542b0
           m_TableEntryReference:
             m_KeyId: 2473283445022720
             m_Key: 

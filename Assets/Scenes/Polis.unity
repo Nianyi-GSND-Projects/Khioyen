@@ -426,7 +426,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 927967436800
             m_Key: 
@@ -709,7 +709,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2438463608658274574, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Name
-      value: "Training Ground \u6821\u573A"
+      value: "Drillfield \u6821\u573A"
       objectReference: {fileID: 0}
     - target: {fileID: 3173642577713359654, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Interactable
@@ -937,7 +937,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 944585269248
             m_Key: 
@@ -2574,7 +2574,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 866436997120
             m_Key: 
@@ -4724,7 +4724,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 897533566976
             m_Key: 
@@ -4783,7 +4783,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 915552296960
             m_Key: 
@@ -5210,7 +5210,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 798644461568
             m_Key: 
@@ -5262,7 +5262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2438463608658274574, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Name
-      value: "Depot \u5E9C\u5E93"
+      value: "Storehouse \u5E9C\u5E93"
       objectReference: {fileID: 0}
     - target: {fileID: 3173642577713359654, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Interactable
@@ -5419,7 +5419,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 880647299072
             m_Key: 
@@ -5837,7 +5837,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: b3d823ed7a37fa540936729356890ee9, type: 3}
     - target: {fileID: 2438463608658274574, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Name
-      value: "Depart \u51FA\u5F81"
+      value: "Expedition \u51FA\u5F81"
       objectReference: {fileID: 0}
     - target: {fileID: 3173642577713359654, guid: 52bdc4b80d0010d499daf96ebdd32efe, type: 3}
       propertyPath: m_Colors.m_DisabledColor.a
@@ -6023,7 +6023,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b3acb308542a76d4ba67e72ee4d971ab
           m_TableEntryReference:
             m_KeyId: 848921583616
             m_Key: 

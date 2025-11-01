@@ -20,7 +20,7 @@ namespace LongLiveKhioyen
 			{
 				locale = value;
 				text.text = LocalizationSettings.StringDatabase.GetLocalizedString(
-					"Common Translations",
+					"Common",
 					"locale-name",
 					locale
 				);

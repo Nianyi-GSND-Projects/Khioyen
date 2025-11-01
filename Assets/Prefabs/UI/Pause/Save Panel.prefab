@@ -186,7 +186,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2457221588541440
             m_Key: 
@@ -583,7 +583,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:299d8e9e8c7adbc4ca0bf783de658bd5
           m_TableEntryReference:
             m_KeyId: 2441478717267968
             m_Key: 
@@ -785,7 +785,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:299d8e9e8c7adbc4ca0bf783de658bd5
           m_TableEntryReference:
             m_KeyId: 2079906811568128
             m_Key: 
@@ -976,7 +976,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:299d8e9e8c7adbc4ca0bf783de658bd5
           m_TableEntryReference:
             m_KeyId: 2441400971649024
             m_Key: 
@@ -1530,7 +1530,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2094307606224896
             m_Key: 

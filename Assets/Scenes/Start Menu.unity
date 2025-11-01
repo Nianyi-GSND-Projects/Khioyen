@@ -383,7 +383,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 1507725107200
             m_Key: 
@@ -788,7 +788,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2094307606224896
             m_Key: 
@@ -1164,7 +1164,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:6707f14b564bfdd42a273924209eae36
           m_TableEntryReference:
             m_KeyId: 1522723938304
             m_Key: 
@@ -1561,7 +1561,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:6707f14b564bfdd42a273924209eae36
           m_TableEntryReference:
             m_KeyId: 1515421655040
             m_Key: 
@@ -1979,7 +1979,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2457221588541440
             m_Key: 
@@ -2170,7 +2170,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:6707f14b564bfdd42a273924209eae36
           m_TableEntryReference:
             m_KeyId: 1515421655040
             m_Key: 
@@ -2806,7 +2806,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:6707f14b564bfdd42a273924209eae36
           m_TableEntryReference:
             m_KeyId: 1479442915328
             m_Key: 

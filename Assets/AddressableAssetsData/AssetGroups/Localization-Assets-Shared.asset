@@ -17,6 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: dd279a61ebfa268419788e3d13ebe76b
   m_SerializeEntries:
+  - m_GUID: 299d8e9e8c7adbc4ca0bf783de658bd5
+    m_Address: Assets/Localization/Tables/Settings Panel/Settings Panel Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6707f14b564bfdd42a273924209eae36
+    m_Address: Assets/Localization/Tables/Start Menu/New Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 982ba5300d876504087b211f8323e292
     m_Address: Assets/Localization/Common Translations Shared Data.asset
     m_ReadOnly: 1
@@ -27,8 +37,28 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3acb308542a76d4ba67e72ee4d971ab
+    m_Address: Assets/Localization/Tables/Polis/Polis Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b844f0112ba864b4dab4a217fcf20ff5
+    m_Address: Assets/Localization/Tables/UI Common/UI Common Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e72d650480b761f409b5e964a8ef7385
+    m_Address: Assets/Localization/Tables/Settings Panel/Settings Panel Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eaf765579db7db64ba3156b3171ec01c
     m_Address: Assets/Localization/Building Names/Building Names Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f13dff47dce6df843bf91890895542b0
+    m_Address: Assets/Localization/Tables/Pause Menu/Pause Menu Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

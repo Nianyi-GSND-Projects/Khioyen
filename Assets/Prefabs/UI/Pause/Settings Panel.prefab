@@ -186,7 +186,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 1507725107200
             m_Key: 
@@ -305,6 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localeList: {fileID: 830906582767147452}
+  localeOptions: []
 --- !u!1 &3934785408598520355
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,7 +597,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:e72d650480b761f409b5e964a8ef7385
           m_TableEntryReference:
             m_KeyId: 2511126775160832
             m_Key: 
@@ -1122,7 +1123,7 @@ MonoBehaviour:
       data:
         m_Localized:
           m_TableReference:
-            m_TableCollectionName: GUID:982ba5300d876504087b211f8323e292
+            m_TableCollectionName: GUID:b844f0112ba864b4dab4a217fcf20ff5
           m_TableEntryReference:
             m_KeyId: 2094307606224896
             m_Key: 

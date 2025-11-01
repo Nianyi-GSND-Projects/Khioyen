@@ -17,8 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 2d2e0046ef68e8c43bedc62a0cd59bed
   m_SerializeEntries:
+  - m_GUID: 1878babd108ca9b45967c7ebbb4cf41d
+    m_Address: Settings Panel_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 25eed8d0f4628c449933ef986d4ba594
     m_Address: Building Names_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4376ec998903edc4bab17a9ef2e0659b
+    m_Address: Save Panel_han
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-han
@@ -30,11 +42,35 @@ MonoBehaviour:
     - Locale-han
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 76212bf54a238dc4f965adfacc0232be
-    m_Address: Common Translations_han
+    m_Address: Common_han
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-han
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0d550e1a6dfece48a53bd7a9f4e5362
+    m_Address: Start Menu_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1085da6a0abef7488de3804a6d04a78
+    m_Address: Polis_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4256c1ded8531d41afa251aa6dbd28c
+    m_Address: UI Common_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdb15000a730a814a8758fa586b2a99f
+    m_Address: Pause Menu_han
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-han
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: d89340cf63263bf4a95bfa60d5c9de98, type: 2}

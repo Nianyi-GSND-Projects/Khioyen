@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: Polis
+  m_EditorClassIdentifier: 
+  m_SharedTableData: {fileID: 11400000, guid: b3acb308542a76d4ba67e72ee4d971ab, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: 96690a06424eb6c43994fd52f187d495, type: 2}
+  - {fileID: 11400000, guid: e00df5f81b02a6541900979b6fb17afa, type: 2}
+  - {fileID: 11400000, guid: 958c8b32fc8afcb4cbde0d3ce683321c, type: 2}
+  - {fileID: 11400000, guid: a1085da6a0abef7488de3804a6d04a78, type: 2}
+  - {fileID: 11400000, guid: 42e1911e8320efc438fed8b8db6b5f42, type: 2}
+  m_Extensions: []
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds: []

@@ -17,8 +17,44 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: dfc4bad085c31f243aa4a16a7fe230f9
   m_SerializeEntries:
+  - m_GUID: 0b5a53fcaed4e5f429360fc0707702ba
+    m_Address: UI Common_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26c12605da87caf46a23d0975d7c6fca
+    m_Address: Settings Panel_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c457e261fa7dea48a7033ede81af1e9
+    m_Address: Start Menu_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68331319be96a494e949d53b6982003e
+    m_Address: Save Panel_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7286f3dbee988984ea438a15006830c5
     m_Address: Building Names_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 958c8b32fc8afcb4cbde0d3ce683321c
+    m_Address: Polis_zh-Hant
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hant
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d384fd04e3462914699ad6dd3761fcde
+    m_Address: Pause Menu_zh-Hant
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hant
@@ -30,7 +66,7 @@ MonoBehaviour:
     - Locale-zh-Hant
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7622aa9d1c73074a8ae7ceab37c46b9
-    m_Address: Common Translations_zh-Hant
+    m_Address: Common_zh-Hant
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hant

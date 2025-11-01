@@ -17,12 +17,36 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e47308337d554f04e91cba043331df9b
   m_SerializeEntries:
+  - m_GUID: 224b1e5a31ff8b143a7486c52969c29c
+    m_Address: UI Common_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2a50c5182bf9ab84698815992ab87fe9
-    m_Address: Common Translations_zh-Hans
+    m_Address: Common_zh-Hans
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hans
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 478eec961060ec0458bce06f0d4662d5
+    m_Address: Settings Panel_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 491e49ef53d6db0419241c6861bb2037
+    m_Address: Save Panel_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f5ceb28315d01046af25ce773d62ef4
+    m_Address: Start Menu_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b53f92e8c19dd664ca75e8244f197f69
     m_Address: Building Names_zh-Hans
@@ -32,6 +56,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd76a101f62f4904aa28268f43bb8df7
     m_Address: Polis Names_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e00df5f81b02a6541900979b6fb17afa
+    m_Address: Polis_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e76c24bc27ee40544915f62a1f14ec37
+    m_Address: Pause Menu_zh-Hans
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hans

@@ -17,6 +17,42 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8ff9cf9518ba2d848b8c0c79a3f842b2
   m_SerializeEntries:
+  - m_GUID: 12a7cad887f3d834fbc22778977432f8
+    m_Address: Save Panel_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3709cba9b96e6214bb29431ecdab2ec8
+    m_Address: Start Menu_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42e1911e8320efc438fed8b8db6b5f42
+    m_Address: Polis_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5edfc7cf54e43df4b9b9df9dab8bbcfd
+    m_Address: Pause Menu_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c21e19f8c385198448646cfa00f07ffc
+    m_Address: Settings Panel_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9c5a1e9ea998af4a9b6088555446e52
+    m_Address: UI Common_en-for
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en-for
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ee3c5ef5ca0d9de4584598e89354b8b7
     m_Address: Polis Names_en-for
     m_ReadOnly: 1
@@ -24,7 +60,7 @@ MonoBehaviour:
     - Locale-en-for
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fefcf8fddc7300f47b07f59164599f02
-    m_Address: Common Translations_en-for
+    m_Address: Common_en-for
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en-for
