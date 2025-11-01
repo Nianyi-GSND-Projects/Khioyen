@@ -10,6 +10,11 @@ namespace LongLiveKhioyen
 	public static class GameManager
 	{
 		#region Life cycle
+#if DEBUG && UNITY_EDITOR
+		/// <summary>是否处于刚从非正常路径启动的 debug session 中。</summary>
+		static bool abruptDebug = false;
+#endif
+
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
 		static void OnGameStart()
 		{
@@ -27,10 +32,13 @@ namespace LongLiveKhioyen
 
 			/* Scene */
 			SceneManager.activeSceneChanged += OnSceneChanged;
-#if DEBUG
+#if DEBUG && UNITY_EDITOR
 			// Use initial game data if not starting from the menu scene.
 			if(SceneManager.GetActiveScene().buildIndex != 0)
+			{
+				abruptDebug = true;
 				StartNewGame();
+			}
 #endif
 		}
 		#endregion
@@ -279,7 +287,15 @@ namespace LongLiveKhioyen
 			go.AddComponent<GameInstance>();
 			GameInstance.Instance.Data = data;
 			Paused = false;
+#if DEBUG && UNITY_EDITOR
+			if(!abruptDebug)
+			{
+				abruptDebug = false;
+				SwitchScene("Polis");
+			}
+#else
 			SwitchScene("Polis");
+#endif
 		}
 
 		public static void StopCurrentGame()
