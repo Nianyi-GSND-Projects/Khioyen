@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -19,21 +18,28 @@ namespace LongLiveKhioyen
 			}
 		}
 
-		[Min(0)] public float maxInteractDistance = 10;
+		PolisMiniature focusedMiniature;
+
+		protected void OnTriggerEnter(Collider other)
+		{
+			if(!other.TryGetComponent<PolisMiniature>(out var miniature))
+				return;
+			focusedMiniature = miniature;
+		}
+
+		protected void OnTriggerExit(Collider other)
+		{
+			if(!other.TryGetComponent<PolisMiniature>(out var miniature))
+				return;
+			if(miniature == focusedMiniature)
+				focusedMiniature = null;
+		}
 
 		public void InteractWithNearbyPolis()
 		{
-			var polisMiniatures = FindObjectsByType<PolisMiniature>(FindObjectsSortMode.None)
-				.Select(p => new KeyValuePair<PolisMiniature, float>(p, Vector3.Distance(p.transform.position, transform.position)))
-				.Where(p => p.Value <= maxInteractDistance)
-				.ToList();
-			if(polisMiniatures.Count == 0)
+			if(focusedMiniature == null)
 				return;
-			polisMiniatures.Sort((a, b) => (int)Mathf.Sign(a.Value - b.Value));
-
-			var polisMiniature = polisMiniatures[0].Key;
-			var polis = polisMiniature.data;
-
+			var polis = focusedMiniature.data;
 			GameInstance.Instance.EnterPolis(polis.id);
 		}
 	}

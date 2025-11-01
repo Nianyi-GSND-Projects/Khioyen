@@ -51,14 +51,27 @@ namespace LongLiveKhioyen
 			}
 		}
 
+		static GameObject controlledPolisMiniatureTemplate, hostilePolisMiniatureTemplate;
+
 		PolisMiniature SpawnPolisMiniature(PolisData polisData)
 		{
-			GameObject go = new();
+			if(!controlledPolisMiniatureTemplate)
+				controlledPolisMiniatureTemplate = Resources.Load<GameObject>("Prefabs/World Map/Polis_miniature-controlled");
+			if(!hostilePolisMiniatureTemplate)
+				hostilePolisMiniatureTemplate = Resources.Load<GameObject>("Prefabs/World Map/Polis_miniature-hostile");
+
+			GameObject go;
+			if(polisData.isControlled)
+				go = Instantiate(controlledPolisMiniatureTemplate);
+			else if(polisData.isHostile)
+				go = Instantiate(hostilePolisMiniatureTemplate);
+			else throw new System.NotSupportedException();
+
 			go.transform.SetParent(transform, false);
 			go.transform.localPosition = new Vector3(polisData.position.x, 0, polisData.position.y) * GameInstance.Instance.Data.world.data3D.scale;
 			go.transform.localEulerAngles = Vector3.up * polisData.orientation;
 
-			var pm = go.AddComponent<PolisMiniature>();
+			var pm = go.GetComponent<PolisMiniature>();
 			pm.data = polisData;
 			return pm;
 		}
