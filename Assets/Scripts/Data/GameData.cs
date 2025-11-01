@@ -9,6 +9,7 @@ namespace LongLiveKhioyen
 		public WorldData world;
 		public string lastPolis;
 		public List<PolisData> poleis = new();
+		public float gameTime;
 	}
 
 	[Serializable]

@@ -27,7 +27,6 @@ namespace LongLiveKhioyen
 
 		void Initialize()
 		{
-			Data = GetPolisData();
 			if(Data == null)
 				player.gameObject.SetActive(false);
 
@@ -69,27 +68,7 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Data
-		public PolisData Data { get; private set; }
-		PolisData GetPolisData()
-		{
-			if(GameInstance.Instance.Data == null)
-			{
-				Debug.LogWarning("Cannot initialize polis, no game currently running.");
-				return null;
-			}
-			var data = GameInstance.Instance.Data.poleis.Find(p => p.id == GameInstance.Instance.LastPolis);
-			if(data == null)
-			{
-				Debug.LogWarning("Cannot initialize polis, failed to find the last polis by ID.");
-				return null;
-			}
-			if(!data.isControlled || data.controlledData == null)
-			{
-				Debug.LogWarning($"Cannot initialize polis \"{data.id}\", because it is not controlled.");
-				return null;
-			}
-			return data;
-		}
+		public PolisData Data => GameInstance.Instance.LastPolis;
 
 		public string Id => Data.id;
 		public Vector2Int Size => Data.controlledData.size;

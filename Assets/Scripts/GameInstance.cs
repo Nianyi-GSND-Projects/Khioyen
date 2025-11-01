@@ -33,7 +33,9 @@ namespace LongLiveKhioyen
 		System.Action onInitialized;
 		void Start()
 		{
-			Initialize();
+			/* Initialize */
+			lastPolis = Data.poleis.Find(p => p.id == Data.lastPolis);
+			initialized = true;
 			onInitialized?.Invoke();
 		}
 
@@ -48,12 +50,6 @@ namespace LongLiveKhioyen
 
 		#region Serialization/deserialization
 		public GameData Data { get; set; }
-
-		void Initialize()
-		{
-			LastPolis = Data.lastPolis;
-			initialized = true;
-		}
 
 		Savegame MakeSavegame()
 		{
@@ -71,12 +67,17 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Scene transition
+		PolisData lastPolis;
 		/// <summary>最后进入过的城池。</summary>
 		/// <remarks>城池内/战斗场景的调度类可读取此值来知道初始化哪个城池。</remarks>
-		public string LastPolis
+		public PolisData LastPolis
 		{
-			get => Data.lastPolis;
-			private set => Data.lastPolis = value;
+			get => lastPolis;
+			private set
+			{
+				lastPolis = value;
+				Data.lastPolis = lastPolis.id;
+			}
 		}
 
 		public enum Mode { Polis, WorldMap, Battle }
@@ -114,14 +115,14 @@ namespace LongLiveKhioyen
 
 			if(polis.isControlled)
 			{
-				LastPolis = polis.id;
-				Debug.Log($"Entering polis \"{LastPolis}\".");
+				LastPolis = polis;
+				Debug.Log($"Entering polis \"{LastPolis.id}\".");
 				CurrentMode = Mode.Polis;
 			}
 			else if(polis.isHostile)
 			{
-				LastPolis = polis.id;
-				Debug.Log($"Attacking polis \"{LastPolis}\".");
+				LastPolis = polis;
+				Debug.Log($"Attacking polis \"{LastPolis.id}\".");
 				CurrentMode = Mode.Battle;
 			}
 			else throw new System.NotSupportedException();
@@ -130,14 +131,14 @@ namespace LongLiveKhioyen
 		/// <summary>从我方城池出征。</summary>
 		public void DepartFromPolis()
 		{
-			Debug.Log($"Departing from polis \"{LastPolis}\".");
+			Debug.Log($"Departing from polis \"{LastPolis.id}\".");
 			CurrentMode = Mode.WorldMap;
 		}
 
 		/// <summary>停止进攻敌方城池，回到大地图。</summary>
 		public void ExitBattle()
 		{
-			Debug.Log($"Exiting battle against polis \"{LastPolis}\".");
+			Debug.Log($"Exiting battle against polis \"{LastPolis.id}\".");
 			ApplyBattleResult(Battle.Instance.YieldResult());
 			CurrentMode = Mode.WorldMap;
 		}
@@ -150,7 +151,6 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Pause
-
 		PauseMenu pauseMenu;
 		public void OpenPauseMenu()
 		{
@@ -174,6 +174,14 @@ namespace LongLiveKhioyen
 			Destroy(pauseMenu.gameObject);
 			pauseMenu = null;
 			GameManager.Paused = false;
+		}
+		#endregion
+
+		#region Time
+		public float GameTime
+		{
+			get => Data.gameTime;
+			private set => Data.gameTime = value;
 		}
 		#endregion
 	}

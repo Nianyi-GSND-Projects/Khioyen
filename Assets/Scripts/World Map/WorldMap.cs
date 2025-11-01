@@ -13,30 +13,13 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Life cycle
-		bool initialized = false;
-		public bool Initialized => initialized;
-
 		void Awake()
 		{
-			if(GameInstance.Instance.Data == null)
-			{
-				Debug.LogWarning("Cannot initialize polis, no game currently running.");
-				return;
-			}
-			initialized = true;
-
 			Construct();
 			// Positions the player army to the front door of last polis.
-			var lastPolis = polisMiniatures.Find(m => m.data.id == GameInstance.Instance.Data.lastPolis);
-			if(lastPolis == null)
-			{
-				Debug.LogWarning("No last polis found.");
-			}
-			else
-			{
-				playerArmy.Controller.Teleport(lastPolis.transform.position + lastPolis.transform.forward * departureDistance);
-				playerArmy.Controller.FaceTowards(lastPolis.transform.forward);
-			}
+			var lastPolis = polisMiniatures.Find(pm => pm.data.id == GameInstance.Instance.LastPolis.id);
+			playerArmy.Controller.Teleport(lastPolis.transform.position + lastPolis.transform.forward * departureDistance);
+			playerArmy.Controller.FaceTowards(lastPolis.transform.forward);
 		}
 		#endregion
 
