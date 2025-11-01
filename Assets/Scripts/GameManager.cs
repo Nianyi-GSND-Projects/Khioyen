@@ -288,11 +288,10 @@ namespace LongLiveKhioyen
 			GameInstance.Instance.Data = data;
 			Paused = false;
 #if DEBUG && UNITY_EDITOR
-			if(!abruptDebug)
-			{
+			if(abruptDebug)
 				abruptDebug = false;
+			else
 				SwitchScene("Polis");
-			}
 #else
 			SwitchScene("Polis");
 #endif
