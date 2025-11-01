@@ -34,13 +34,7 @@ namespace LongLiveKhioyen
 			var polisMiniature = polisMiniatures[0].Key;
 			var polis = polisMiniature.data;
 
-			if(polis.isControlled)
-			{
-				GameInstance.Instance.EnterPolis(polis.id);
-			}
-			else if(polis.isHostile)
-			{
-			}
+			GameInstance.Instance.EnterPolis(polis.id);
 		}
 	}
 }

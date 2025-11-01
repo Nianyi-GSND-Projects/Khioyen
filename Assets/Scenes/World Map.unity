@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d973255ce89bba340b9ea93cfa1a14bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 839579920}
   moveSpeed: 30
   lateralSpeed: 100
 --- !u!1 &399805397
@@ -620,6 +621,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Horse
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 7a60784ff3c47bf449826ad230215072, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 663c4d2b7bfd41f41909babee1de7ae9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -628,6 +633,11 @@ PrefabInstance:
 --- !u!4 &839579919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7a60784ff3c47bf449826ad230215072, type: 3}
+  m_PrefabInstance: {fileID: 839579918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &839579920 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 7a60784ff3c47bf449826ad230215072, type: 3}
   m_PrefabInstance: {fileID: 839579918}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1537222681

@@ -77,7 +77,7 @@ namespace LongLiveKhioyen
 				Debug.LogWarning("Cannot initialize polis, no game currently running.");
 				return null;
 			}
-			var data = GameInstance.Instance.Data.poleis.Find(p => p.id == GameInstance.Instance.Data.lastPolis);
+			var data = GameInstance.Instance.Data.poleis.Find(p => p.id == GameInstance.Instance.LastPolis);
 			if(data == null)
 			{
 				Debug.LogWarning("Cannot initialize polis, failed to find the last polis by ID.");
