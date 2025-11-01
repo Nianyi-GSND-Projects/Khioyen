@@ -22,6 +22,7 @@ namespace LongLiveKhioyen
 
 		void OnDestroy()
 		{
+			_Finalize();
 			Destroy(gameObject);
 			if(instance == this)
 				instance = null;
@@ -33,10 +34,20 @@ namespace LongLiveKhioyen
 		System.Action onInitialized;
 		void Start()
 		{
-			/* Initialize */
-			lastPolis = Data.poleis.Find(p => p.id == Data.lastPolis);
+			Initialize();
 			initialized = true;
 			onInitialized?.Invoke();
+		}
+
+		void Initialize()
+		{
+			lastPolis = Data.poleis.Find(p => p.id == Data.lastPolis);
+			Paused = false;
+		}
+
+		void _Finalize()
+		{
+			Paused = false;
 		}
 
 		public void ExecuteWhenInitialized(System.Action action)
@@ -163,7 +174,7 @@ namespace LongLiveKhioyen
 				return;
 
 			pauseMenu = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Pause/Pause Menu")).GetComponent<PauseMenu>();
-			GameManager.Paused = true;
+			Paused = true;
 		}
 
 		public void ClosePauseMenu()
@@ -173,7 +184,21 @@ namespace LongLiveKhioyen
 
 			Destroy(pauseMenu.gameObject);
 			pauseMenu = null;
-			GameManager.Paused = false;
+			Paused = false;
+		}
+
+		public System.Action onPauseStateChanged;
+		public bool Paused
+		{
+			get => Time.timeScale == 0.0f;
+			set
+			{
+				if(value)
+					Time.timeScale = 0.0f;
+				else
+					Time.timeScale = 1.0f;
+				onPauseStateChanged?.Invoke();
+			}
 		}
 		#endregion
 

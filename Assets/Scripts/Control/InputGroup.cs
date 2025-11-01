@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace LongLiveKhioyen
 {
+	/// <summary>用来成组管理 action map 的启用性。</summary>
 	public class InputGroup : MonoBehaviour
 	{
-		public PlayerInput playerInput;
-		public List<string> actionMaps = new();
+		PlayerInput playerInput;
+		[SerializeField] List<string> actionMaps = new();
 
 		IEnumerable<InputActionMap> Maps()
 		{
@@ -20,16 +21,52 @@ namespace LongLiveKhioyen
 			}
 		}
 
+		bool inputEnabled;
+		public bool InputEnabled
+		{
+			get => inputEnabled;
+			set
+			{
+				inputEnabled = value;
+				OnExternalStateChanged();
+			}
+		}
+
+		void Awake()
+		{
+			playerInput = FindObjectOfType<PlayerInput>(true);
+			InputEnabled = isActiveAndEnabled;
+			GameInstance.Instance.onPauseStateChanged += OnExternalStateChanged;
+		}
+
+		void OnDestroy()
+		{
+			if(GameInstance.Instance)
+				GameInstance.Instance.onPauseStateChanged -= OnExternalStateChanged;
+		}
+
+		void OnExternalStateChanged()
+		{
+			if(!GameInstance.Instance || !playerInput)
+				return;
+			bool value = !GameInstance.Instance.Paused && InputEnabled;
+			foreach(var map in Maps())
+			{
+				if(value)
+					map.Enable();
+				else
+					map.Disable();
+			}
+		}
+
 		void OnEnable()
 		{
-			foreach(var map in Maps())
-				map.Enable();
+			OnExternalStateChanged();
 		}
 
 		void OnDisable()
 		{
-			foreach(var map in Maps())
-				map.Disable();
+			OnExternalStateChanged();
 		}
 	}
 }

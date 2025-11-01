@@ -196,44 +196,6 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
-		#region Pause/resume
-		static bool InputEnabled
-		{
-			get => UnityEngine.Object.FindObjectOfType<PlayerInput>(true)?.enabled ?? false;
-			set
-			{
-				var pi = UnityEngine.Object.FindObjectOfType<PlayerInput>();
-				if(pi)
-					pi.enabled = value;
-			}
-		}
-
-		public static bool Paused
-		{
-			set
-			{
-				if(value)
-				{
-					Time.timeScale = 0.0f;
-					InputEnabled = false;
-				}
-				else
-				{
-					Time.timeScale = 1.0f;
-					InputEnabled = true;
-				}
-			}
-		}
-
-		public static void ExitGame()
-		{
-			Application.Quit();
-#if UNITY_EDITOR
-			UnityEditor.EditorApplication.isPlaying = false;
-#endif
-		}
-		#endregion
-
 		#region Game instance
 		public static bool IsGameRunning => GameInstance.Instance != null;
 
@@ -286,7 +248,6 @@ namespace LongLiveKhioyen
 			GameObject go = new("Game Instance");
 			go.AddComponent<GameInstance>();
 			GameInstance.Instance.Data = data;
-			Paused = false;
 #if DEBUG && UNITY_EDITOR
 			if(abruptDebug)
 				abruptDebug = false;
@@ -307,8 +268,15 @@ namespace LongLiveKhioyen
 
 			// Destroy the current game instance.
 			UnityEngine.Object.Destroy(GameInstance.Instance);
-			Paused = false;
 			SwitchScene("Start Menu");
+		}
+
+		public static void ExitGame()
+		{
+			Application.Quit();
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+#endif
 		}
 		#endregion
 	}
