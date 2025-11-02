@@ -1,6 +1,6 @@
 using UnityEngine;
-using Unity.AI.Navigation;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 using Cinemachine;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,23 +47,43 @@ namespace LongLiveKhioyen
 			// Walls
 			ConstructWalls();
 
-			// Buildings.
+			// Buildings
 			buildingOccupancy = new Building[Size.x, Size.y];
 			foreach(var placement in Data?.controlledData.buildings)
 				SpawnBuilding(placement);
 
-			// Initialize Navmesh.
+			// Initialize Navmesh
 			navMeshSurface.RemoveData();
 			navMeshSurface.BuildNavMesh();
+
+			/* Time */
+
+			GameInstance.Instance.onGameTimeAdvanced += PassTime;
+
+			// Update accumulated status changes since last leaving
+			PassTime(GameInstance.Instance.GameTime - LastTime);
 
 			onInitialized?.Invoke();
 		}
 
 		void OnDestroy()
 		{
+			_Finalize();
+			instance = null;
+		}
+
+		void _Finalize()
+		{
 			Destroy(groundMesh);
 
-			instance = null;
+			if(GameInstance.Instance)
+				GameInstance.Instance.onGameTimeAdvanced -= PassTime;
+		}
+
+		void Update()
+		{
+			float dt = Time.deltaTime;
+			GameInstance.Instance.GameTime += dt;
 		}
 		#endregion
 
@@ -313,6 +333,11 @@ namespace LongLiveKhioyen
 			return building;
 		}
 
+		Building GetBuildingAt(int x, int y)
+		{
+			return buildingOccupancy[x, y];
+		}
+
 		IEnumerable<Vector2Int> YieldBuildingOccupancy(BuildingDefinition definition, BuildingPlacement placement)
 		{
 			// GPT gen
@@ -386,11 +411,21 @@ namespace LongLiveKhioyen
 				id = type,
 				position = mapPosition,
 				orientation = orientation,
-				underConstruction = definition.constructionTime > 0,
-				remainingConstructionTime = definition.constructionTime,
+				underConstruction = true,
 			};
 			SpawnBuilding(placement);
 			Data.controlledData.buildings.Add(placement);
+
+			PolisTask task = new()
+			{
+				type = PolisTaskType.construction,
+				parameters = new string[] {
+					mapPosition.x.ToString(),
+					mapPosition.y.ToString(),
+				},
+				remainingTime = definition.constructionTime,
+			};
+			AddTask(task);
 		}
 		#endregion
 		#endregion
@@ -492,6 +527,83 @@ namespace LongLiveKhioyen
 			}
 		}
 		#endregion
+		#endregion
+
+		#region Time
+		float LastTime
+		{
+			get => Data.controlledData.lastTime;
+			set => Data.controlledData.lastTime = value;
+		}
+
+		void PassTime(float amount)
+		{
+			while(amount > 0)
+			{
+				if(Tasks.Count == 0)
+				{
+					PassTime_Simple(amount);
+					return;
+				}
+				float a = Mathf.Min(amount, Tasks[0].remainingTime);
+				PassTime_Simple(a);
+				amount -= a;
+			}
+		}
+
+		void PassTime_Simple(float amount)
+		{
+			foreach(var task in Tasks)
+				task.remainingTime -= amount;
+			var toBeExecuted = Tasks.Where(t => t.remainingTime <= 0).ToArray();
+			foreach(var task in toBeExecuted)
+			{
+				ExecuteTask(task);
+				Tasks.Remove(task);
+			}
+			LastTime += amount;
+		}
+		#endregion
+
+		#region Tasks
+		List<PolisTask> Tasks => Data.controlledData.tasks;
+
+		public void AddTask(PolisTask task)
+		{
+			Tasks.Add(task);
+			Tasks.Sort((a, b) =>
+			{
+				float fa = a.remainingTime, fb = b.remainingTime;
+				if(fa == fb)
+					return 0;
+				if(fa < fb)
+					return -1;
+				return 1;
+			});
+		}
+
+		void ExecuteTask(PolisTask task)
+		{
+			switch(task.type)
+			{
+				case PolisTaskType.construction:
+					int x = int.Parse(task.parameters[0]), y = int.Parse(task.parameters[1]);
+					ExecuteConstructionTask(x, y);
+					break;
+				default: throw new System.NotSupportedException();
+			}
+		}
+
+		void ExecuteConstructionTask(int x, int y)
+		{
+			var building = GetBuildingAt(x, y);
+			if(building == null)
+			{
+				Debug.LogError($"No building at ({x}, {y}).");
+				return;
+			}
+			building.UnderConstruction = false;
+		}
 		#endregion
 	}
 }

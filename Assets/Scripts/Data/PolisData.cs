@@ -64,14 +64,12 @@ namespace LongLiveKhioyen
 	[Serializable]
 	public class ControlledPolisData
 	{
-		/* Geometry */
 		public Vector2Int size;
-
-		/* Resources */
 		public Economy economy;
-
-		/* Buildings */
+		public List<PolisTask> tasks;
 		public List<BuildingPlacement> buildings;
+		/// <summary>最后一次更新过此城池状态的游戏时间。</summary>
+		public float lastTime;
 	}
 
 	[Serializable]
@@ -82,7 +80,19 @@ namespace LongLiveKhioyen
 		[Range(0, 3)] public int orientation;  // By 90 degrees.
 
 		public bool underConstruction;
-		public float remainingConstructionTime;
+	}
+
+	[Serializable]
+	public class PolisTask
+	{
+		public string type;
+		public float remainingTime;
+		public string[] parameters;
+	}
+
+	public static class PolisTaskType
+	{
+		public const string construction = "construction";
 	}
 
 	[Serializable]

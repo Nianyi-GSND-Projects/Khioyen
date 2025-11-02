@@ -10,6 +10,8 @@ namespace LongLiveKhioyen
 		public WorldMapPlayerArmy playerArmy;
 		/** <summary>The distance the player army will spawn from last polis.</summary> */
 		[Min(0)] public float departureDistance = 10;
+
+		[SerializeField][Min(1)] float timeSpeed = 10;
 		#endregion
 
 		#region Life cycle
@@ -20,6 +22,12 @@ namespace LongLiveKhioyen
 			var lastPolis = polisMiniatures.Find(pm => pm.data.id == GameInstance.Instance.LastPolis.id);
 			playerArmy.Controller.Teleport(lastPolis.transform.position + lastPolis.transform.forward * departureDistance);
 			playerArmy.Controller.FaceTowards(lastPolis.transform.forward);
+		}
+
+		void Update()
+		{
+			float dt = Time.deltaTime;
+			GameInstance.Instance.GameTime += dt * timeSpeed;
 		}
 		#endregion
 

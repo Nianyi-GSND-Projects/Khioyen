@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -206,8 +207,16 @@ namespace LongLiveKhioyen
 		public float GameTime
 		{
 			get => Data.gameTime;
-			private set => Data.gameTime = value;
+			set
+			{
+				if(value <= Data.gameTime)
+					return;
+				float delta = value - Data.gameTime;
+				Data.gameTime = value;
+				onGameTimeAdvanced?.Invoke(delta);
+			}
 		}
+		public System.Action<float> onGameTimeAdvanced;
 		#endregion
 	}
 }

@@ -11,9 +11,6 @@ namespace LongLiveKhioyen
 		public BuildingDefinition Definition { get; set; }
 
 		#region Life cycle
-		public Action onInitialized;
-		public Action onConstructionStatusChange;
-
 		protected void Start()
 		{
 			name = Definition.id;
@@ -43,22 +40,11 @@ namespace LongLiveKhioyen
 				obstale.center = center;
 			}
 
-			onInitialized?.Invoke();
-		}
-
-		protected void Update()
-		{
-			if(UnderConstruction)
-				RemainingConstructionTime -= Time.deltaTime;
-
-			if(dirty)
-				UpdateVisualState();
+			UpdateVisualState();
 		}
 		#endregion
 
 		#region Visual state
-		bool dirty = true;
-
 		GameObject model;
 		readonly Dictionary<Renderer, Material[]> legacyMaterials = new();
 		Material constructionMaterial;
@@ -75,8 +61,6 @@ namespace LongLiveKhioyen
 				foreach(var (renderer, mats) in legacyMaterials)
 					renderer.sharedMaterials = mats;
 			}
-
-			dirty = false;
 		}
 
 		public bool UnderConstruction
@@ -85,18 +69,7 @@ namespace LongLiveKhioyen
 			set
 			{
 				Placement.underConstruction = value;
-				dirty = true;
-			}
-		}
-
-		public float RemainingConstructionTime
-		{
-			get => Placement.remainingConstructionTime;
-			set
-			{
-				Placement.remainingConstructionTime = Mathf.Max(0, value);
-				if(Placement.remainingConstructionTime == 0)
-					UnderConstruction = false;
+				UpdateVisualState();
 			}
 		}
 
