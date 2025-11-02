@@ -133,16 +133,18 @@ namespace LongLiveKhioyen
 			foreach(string path in Directory.EnumerateFiles(savegamesDir))
 			{
 				var filename = Path.GetRelativePath(savegamesDir, path);
-				RecordSavegameFileName(filename);
+				RecordSavegameFileName(filename, false);
 			}
 			onSavegamesChanged?.Invoke();
 		}
 
-		static void RecordSavegameFileName(string filename)
+		static void RecordSavegameFileName(string filename, bool invoke = true)
 		{
 			if(savegameFilenames.Contains(filename))
 				return;
 			savegameFilenames.Add(filename);
+			if(invoke)
+				onSavegamesChanged?.Invoke();
 		}
 
 		public static Savegame ReadSavegame(string filename)
@@ -172,11 +174,28 @@ namespace LongLiveKhioyen
 				File.WriteAllText(path, json);
 				Debug.Log($"Wrote savegame to {path}.");
 				RecordSavegameFileName(filename);
-				onSavegamesChanged?.Invoke();
 			}
 			catch(Exception e)
 			{
-				Debug.LogWarning($"Failed to write savegame \"{filename}\" to {path}.");
+				Debug.LogWarning($"Failed to write savegame to {path}.");
+				Debug.LogError(e);
+			}
+		}
+
+		public static void DeleteSavegame(string filename)
+		{
+			var path = SavegameFileNameToPath(filename);
+			try
+			{
+				if(!File.Exists(path))
+					return;
+				File.Delete(path);
+				Debug.Log($"Delete savegame at {path}.");
+				RefreshSavegames();
+			}
+			catch(Exception e)
+			{
+				Debug.LogWarning($"Failed to delete savegame at {path}.");
 				Debug.LogError(e);
 			}
 		}

@@ -68,6 +68,7 @@ namespace LongLiveKhioyen
 				card.UpdateInformation();
 				card.Interactable = i == 0 || card.Created || saveCards[i - 1].Created;
 			}
+			SelectedCard = SelectedCard;
 		}
 		#endregion
 
@@ -104,6 +105,7 @@ namespace LongLiveKhioyen
 
 		public void DeleteSelected()
 		{
+			GameManager.DeleteSavegame(SelectedCard.FileName);
 		}
 		#endregion
 	}
