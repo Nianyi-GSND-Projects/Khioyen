@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LongLiveKhioyen
 {
@@ -162,6 +160,49 @@ namespace LongLiveKhioyen
 		}
 		#endregion
 
+		#region Time
+		public float GameTime
+		{
+			get => Data.gameTime;
+			set
+			{
+				if(value <= Data.gameTime)
+					return;
+				float delta = value - Data.gameTime;
+				Data.gameTime = value;
+				onGameTimeAdvanced?.Invoke(delta);
+			}
+		}
+
+		float timeScale = 1.0f;
+		public float TimeScale
+		{
+			get => timeScale;
+			set
+			{
+				timeScale = value;
+				UpdateActualTimeScale();
+			}
+		}
+
+		public float ActualTimeScale
+		{
+			get => Time.timeScale;
+			private set
+			{
+				Time.timeScale = value;
+				onActualTimeScaleChanged?.Invoke();
+			}
+		}
+
+		public System.Action<float> onGameTimeAdvanced;
+		public System.Action onActualTimeScaleChanged;
+
+		void UpdateActualTimeScale()
+		{
+			ActualTimeScale = Paused ? 0 : TimeScale;
+		}
+
 		#region Pause
 		PauseMenu pauseMenu;
 		public void OpenPauseMenu()
@@ -189,34 +230,19 @@ namespace LongLiveKhioyen
 		}
 
 		public System.Action onPauseStateChanged;
+
+		bool paused = false;
 		public bool Paused
 		{
-			get => Time.timeScale == 0.0f;
+			get => paused;
 			set
 			{
-				if(value)
-					Time.timeScale = 0.0f;
-				else
-					Time.timeScale = 1.0f;
+				paused = value;
+				UpdateActualTimeScale();
 				onPauseStateChanged?.Invoke();
 			}
 		}
 		#endregion
-
-		#region Time
-		public float GameTime
-		{
-			get => Data.gameTime;
-			set
-			{
-				if(value <= Data.gameTime)
-					return;
-				float delta = value - Data.gameTime;
-				Data.gameTime = value;
-				onGameTimeAdvanced?.Invoke(delta);
-			}
-		}
-		public System.Action<float> onGameTimeAdvanced;
 		#endregion
 	}
 }
