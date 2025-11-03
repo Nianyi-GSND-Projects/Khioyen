@@ -43,20 +43,20 @@ namespace LongLiveKhioyen
 	public struct Economy
 	{
 		public float food;
+		public float material;
 		public float money;
-		public float knowledge;
 
-		public override string ToString()
+		public override readonly string ToString()
 		{
-			return $"(food:{food}, money:{money}, knowledge:{knowledge})";
+			return $"(food:{food}, money:{money}, knowledge:{material})";
 		}
 
 		static IEnumerable<(float, float)> ValuePairs(in Economy a, in Economy b)
 		{
 			return new (float, float)[] {
 				(a.food, b.food),
+				(a.material, b.material),
 				(a.money, b.money),
-				(a.knowledge, b.knowledge),
 			};
 		}
 		static bool Compare(in Economy a, in Economy b, Func<float, float, bool> comparer)
@@ -76,7 +76,7 @@ namespace LongLiveKhioyen
 			Economy result = a;
 			result.food -= b.food;
 			result.money -= b.money;
-			result.knowledge -= b.knowledge;
+			result.material -= b.material;
 			return result;
 		}
 	}

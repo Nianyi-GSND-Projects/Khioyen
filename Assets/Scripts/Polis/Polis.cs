@@ -92,13 +92,15 @@ namespace LongLiveKhioyen
 
 		public string Id => Data.id;
 		public Vector2Int Size => Data.size;
+		#endregion
+
+		#region Economy
 		public Economy Economy
 		{
 			get => Data.economy;
 			set => Data.economy = value;
 		}
 
-		#region Economy
 		public System.Action onEconomyDataChanged;
 
 		public bool CheckResourceAffordance(Economy cost)
@@ -112,12 +114,11 @@ namespace LongLiveKhioyen
 				return false;
 			if(actuallyCost)
 			{
-				Economy = Economy - cost;
+				Economy -= cost;
 				onEconomyDataChanged?.Invoke();
 			}
 			return true;
 		}
-		#endregion
 		#endregion
 
 		#region Construction

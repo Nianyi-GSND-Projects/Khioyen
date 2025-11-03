@@ -17,7 +17,7 @@ namespace LongLiveKhioyen
 		{
 			foodText.text = cost.food.ToString();
 			moneyText.text = cost.money.ToString();
-			knowledgeText.text = cost.knowledge.ToString();
+			knowledgeText.text = cost.material.ToString();
 		}
 	}
 }

@@ -45,16 +45,16 @@ namespace LongLiveKhioyen
 		public TMP_Text polisName;
 		LocalizedString localizedPolisName;
 		public TMP_Text foodValue;
+		public TMP_Text materialValue;
 		public TMP_Text moneyValue;
-		public TMP_Text knowledgeValue;
 
 		void UpdateTopBar()
 		{
 			localizedPolisName.TableEntryReference = polis.Id;
 			localizedPolisName.RefreshString();
 			foodValue.text = polis.Economy.food.ToString();
+			materialValue.text = polis.Economy.material.ToString();
 			moneyValue.text = polis.Economy.money.ToString();
-			knowledgeValue.text = polis.Economy.knowledge.ToString();
 		}
 		#endregion
 
