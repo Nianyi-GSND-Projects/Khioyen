@@ -94,6 +94,14 @@ namespace LongLiveKhioyen
 		public Vector2Int Size => Data.size;
 		#endregion
 
+		#region Population
+		public System.Action onPopulationChanged;
+
+		public int Population { get; private set; } = 10;  // Debug
+		public int BusyPopulation { get; private set; } = 5;
+		public int PopulationCap { get; private set; } = 12;
+		#endregion
+
 		#region Economy
 		public Economy Economy
 		{
@@ -101,7 +109,7 @@ namespace LongLiveKhioyen
 			set => Data.economy = value;
 		}
 
-		public System.Action onEconomyDataChanged;
+		public System.Action onEconomyChanged;
 
 		public bool CheckResourceAffordance(Economy cost)
 		{
@@ -115,7 +123,7 @@ namespace LongLiveKhioyen
 			if(actuallyCost)
 			{
 				Economy -= cost;
-				onEconomyDataChanged?.Invoke();
+				onEconomyChanged?.Invoke();
 			}
 			return true;
 		}

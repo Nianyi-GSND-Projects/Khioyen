@@ -23,7 +23,7 @@ namespace LongLiveKhioyen
 		protected void Awake()
 		{
 			group = GetComponent<CanvasGroup>();
-			Polis.onEconomyDataChanged += OnEconomyDataChanged;
+			Polis.onEconomyChanged += OnEconomyDataChanged;
 
 			localizedBuildingName = new("Building Names", "");
 			localizedBuildingName.StringChanged += s => text.text = s;
@@ -41,7 +41,7 @@ namespace LongLiveKhioyen
 		protected void OnDestroy()
 		{
 			if(Polis)
-				Polis.onEconomyDataChanged -= OnEconomyDataChanged;
+				Polis.onEconomyChanged -= OnEconomyDataChanged;
 		}
 
 		void OnEconomyDataChanged()

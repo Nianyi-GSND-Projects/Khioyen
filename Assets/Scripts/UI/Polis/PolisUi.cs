@@ -18,7 +18,8 @@ namespace LongLiveKhioyen
 			localizedPolisName = new("Polis Names", "");
 			localizedPolisName.StringChanged += s => polisName.text = s;
 
-			polis.onEconomyDataChanged += UpdateTopBar;
+			polis.onPopulationChanged += UpdateTopBar;
+			polis.onEconomyChanged += UpdateTopBar;
 			UpdateTopBar();
 
 			SwitchBottomPanel(normalPanel);
@@ -44,6 +45,7 @@ namespace LongLiveKhioyen
 		public CanvasGroup statusBar;
 		public TMP_Text polisName;
 		LocalizedString localizedPolisName;
+		public TMP_Text populationValue;
 		public TMP_Text foodValue;
 		public TMP_Text materialValue;
 		public TMP_Text moneyValue;
@@ -52,9 +54,10 @@ namespace LongLiveKhioyen
 		{
 			localizedPolisName.TableEntryReference = polis.Id;
 			localizedPolisName.RefreshString();
-			foodValue.text = polis.Economy.food.ToString();
-			materialValue.text = polis.Economy.material.ToString();
-			moneyValue.text = polis.Economy.money.ToString();
+			populationValue.text = $"{polis.Population}/{polis.Population - polis.BusyPopulation}/{polis.PopulationCap}";
+			foodValue.text = $"{(int)polis.Economy.food}";
+			materialValue.text = $"{(int)polis.Economy.material}";
+			moneyValue.text = $"{(int)polis.Economy.money}";
 		}
 		#endregion
 
