@@ -15,8 +15,28 @@ namespace LongLiveKhioyen
 
 		public bool isControlled;
 		public bool isHostile;
-		[ShowIf("isControlled")] public ControlledPolisData controlledData;
-		[ShowIf("isHostile")] public HostilePolisData hostileData;
+
+		public Vector2Int size;
+		public Economy economy;
+		/// <summary>最后一次更新过此城池状态的游戏时间。</summary>
+		public float lastTime;
+		public List<BuildingPlacement> buildings;
+
+		[SerializeField] List<PolisTask> tasks;
+		public IList<PolisTask> Tasks => tasks;
+		public void AddTask(PolisTask task)
+		{
+			tasks.Add(task);
+			tasks.Sort((a, b) =>
+			{
+				float fa = a.remainingTime, fb = b.remainingTime;
+				if(fa == fb)
+					return 0;
+				if(fa < fb)
+					return -1;
+				return 1;
+			});
+		}
 	}
 
 	[Serializable]
@@ -62,17 +82,6 @@ namespace LongLiveKhioyen
 	}
 
 	[Serializable]
-	public class ControlledPolisData
-	{
-		public Vector2Int size;
-		public Economy economy;
-		public List<PolisTask> tasks;
-		public List<BuildingPlacement> buildings;
-		/// <summary>最后一次更新过此城池状态的游戏时间。</summary>
-		public float lastTime;
-	}
-
-	[Serializable]
 	public class BuildingPlacement
 	{
 		public string id;  // The building ID stored in the definition sheet.
@@ -93,10 +102,6 @@ namespace LongLiveKhioyen
 	public static class PolisTaskType
 	{
 		public const string construction = "construction";
-	}
-
-	[Serializable]
-	public class HostilePolisData
-	{
+		public const string monthPassed = "month-passed";
 	}
 }

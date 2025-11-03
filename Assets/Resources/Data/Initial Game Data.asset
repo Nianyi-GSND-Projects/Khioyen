@@ -28,61 +28,59 @@ MonoBehaviour:
       orientation: 22.5
       isControlled: 1
       isHostile: 0
-      controlledData:
-        size: {x: 30, y: 30}
-        economy:
-          food: 1000
-          money: 800
-          knowledge: 0
-        buildings:
-        - id: water-well
-          position: {x: 14, y: 14}
-          orientation: 2
-          underConstruction: 0
-          remainingConstructionTime: 0
-        - id: barracks
-          position: {x: 19, y: 17}
-          orientation: 2
-          underConstruction: 0
-          remainingConstructionTime: 0
+      size: {x: 40, y: 40}
+      economy:
+        food: 1000
+        money: 800
+        knowledge: 0
+      lastTime: 0
+      buildings:
+      - id: water-well
+        position: {x: 19, y: 19}
+        orientation: 2
+        underConstruction: 0
+      - id: barracks
+        position: {x: 24, y: 23}
+        orientation: 2
+        underConstruction: 0
+      tasks: []
     - id: fanhe
       position: {x: -5000, y: 1000}
       orientation: 15
       isControlled: 1
       isHostile: 0
-      controlledData:
-        size: {x: 20, y: 20}
-        economy:
-          food: 300
-          money: 100
-          knowledge: 0
-        buildings:
-        - id: water-well
-          position: {x: 9, y: 9}
-          orientation: 2
-          underConstruction: 0
-          remainingConstructionTime: 0
+      size: {x: 20, y: 20}
+      economy:
+        food: 0
+        money: 0
+        knowledge: 0
+      lastTime: 0
+      buildings: []
+      tasks: []
     - id: dunhuang
       position: {x: 5000, y: -3000}
       orientation: 0
       isControlled: 1
       isHostile: 0
-      controlledData:
-        size: {x: 40, y: 40}
-        economy:
-          food: 1500
-          money: 1000
-          knowledge: 0
-        buildings: []
+      size: {x: 50, y: 50}
+      economy:
+        food: 0
+        money: 0
+        knowledge: 0
+      lastTime: 0
+      buildings: []
+      tasks: []
     - id: huns-debug
-      position: {x: 0, y: 10000}
+      position: {x: 0, y: 5000}
       orientation: 45
       isControlled: 0
       isHostile: 1
-      controlledData:
-        size: {x: 40, y: 40}
-        economy:
-          food: 1500
-          money: 1000
-          knowledge: 0
-        buildings: []
+      size: {x: 10, y: 10}
+      economy:
+        food: 0
+        money: 0
+        knowledge: 0
+      lastTime: 0
+      buildings: []
+      tasks: []
+    gameTime: 0

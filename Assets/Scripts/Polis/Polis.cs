@@ -49,7 +49,7 @@ namespace LongLiveKhioyen
 
 			// Buildings
 			buildingOccupancy = new Building[Size.x, Size.y];
-			foreach(var placement in Data?.controlledData.buildings)
+			foreach(var placement in Data.buildings)
 				SpawnBuilding(placement);
 
 			// Initialize Navmesh
@@ -83,19 +83,19 @@ namespace LongLiveKhioyen
 		void Update()
 		{
 			float dt = Time.deltaTime;
-			GameInstance.Instance.GameTime += dt;
+			GameInstance.Instance.AdvanceTime(dt);
 		}
 		#endregion
 
 		#region Data
-		public PolisData Data => GameInstance.Instance.LastPolis;
+		PolisData Data => GameInstance.Instance.LastPolis;
 
 		public string Id => Data.id;
-		public Vector2Int Size => Data.controlledData.size;
+		public Vector2Int Size => Data.size;
 		public Economy Economy
 		{
-			get => Data.controlledData.economy;
-			set => Data.controlledData.economy = value;
+			get => Data.economy;
+			set => Data.economy = value;
 		}
 
 		#region Economy
@@ -414,7 +414,7 @@ namespace LongLiveKhioyen
 				underConstruction = true,
 			};
 			SpawnBuilding(placement);
-			Data.controlledData.buildings.Add(placement);
+			Data.buildings.Add(placement);
 
 			PolisTask task = new()
 			{
@@ -532,8 +532,8 @@ namespace LongLiveKhioyen
 		#region Time
 		float LastTime
 		{
-			get => Data.controlledData.lastTime;
-			set => Data.controlledData.lastTime = value;
+			get => Data.lastTime;
+			set => Data.lastTime = value;
 		}
 
 		void PassTime(float amount)
@@ -566,20 +566,11 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Tasks
-		List<PolisTask> Tasks => Data.controlledData.tasks;
+		IList<PolisTask> Tasks => Data.Tasks;
 
 		public void AddTask(PolisTask task)
 		{
-			Tasks.Add(task);
-			Tasks.Sort((a, b) =>
-			{
-				float fa = a.remainingTime, fb = b.remainingTime;
-				if(fa == fb)
-					return 0;
-				if(fa < fb)
-					return -1;
-				return 1;
-			});
+			Data.AddTask(task);
 		}
 
 		void ExecuteTask(PolisTask task)
@@ -587,15 +578,18 @@ namespace LongLiveKhioyen
 			switch(task.type)
 			{
 				case PolisTaskType.construction:
-					int x = int.Parse(task.parameters[0]), y = int.Parse(task.parameters[1]);
-					ExecuteConstructionTask(x, y);
+					ExecuteConstructionTask(task);
+					break;
+				case PolisTaskType.monthPassed:
+					ExecuteMonthPassedTask(task);
 					break;
 				default: throw new System.NotSupportedException();
 			}
 		}
 
-		void ExecuteConstructionTask(int x, int y)
+		void ExecuteConstructionTask(PolisTask task)
 		{
+			int x = int.Parse(task.parameters[0]), y = int.Parse(task.parameters[1]);
 			var building = GetBuildingAt(x, y);
 			if(building == null)
 			{
@@ -603,6 +597,11 @@ namespace LongLiveKhioyen
 				return;
 			}
 			building.UnderConstruction = false;
+		}
+
+		void ExecuteMonthPassedTask(PolisTask task)
+		{
+			// TODO
 		}
 		#endregion
 	}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace LongLiveKhioyen
 {
@@ -164,14 +165,18 @@ namespace LongLiveKhioyen
 		public float GameTime
 		{
 			get => Data.gameTime;
-			set
+			private set => Data.gameTime = value;
+		}
+
+		public void AdvanceTime(float dt)
+		{
+			if(dt <= 0)
 			{
-				if(value <= Data.gameTime)
-					return;
-				float delta = value - Data.gameTime;
-				Data.gameTime = value;
-				onGameTimeAdvanced?.Invoke(delta);
+				Debug.LogWarning("Time must be advanced positively.");
+				return;
 			}
+			GameTime += dt;
+			onGameTimeAdvanced?.Invoke(dt);
 		}
 
 		float timeScale = 1.0f;
