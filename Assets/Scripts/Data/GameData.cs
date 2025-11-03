@@ -32,4 +32,6 @@ namespace LongLiveKhioyen
 		}
 		public WorldData2D data2D;
 	}
+	
+	
 }
