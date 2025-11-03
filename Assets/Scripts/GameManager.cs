@@ -22,6 +22,7 @@ namespace LongLiveKhioyen
 			RefreshSavegames();
 
 			/* Built-in resources */
+			InternalSettings = Resources.Load<InternalGameSettings>("Internal Game Settings");
 			buildingDefinitionSheet = UnityEngine.Object.Instantiate(Resources.Load<BuildingDefinitionSheet>("Data/Building Definitions"));
 			if(buildingDefinitionSheet == null)
 			{
@@ -43,6 +44,7 @@ namespace LongLiveKhioyen
 		#endregion
 
 		#region Built-in resources
+		public static InternalGameSettings InternalSettings { get; private set; }
 		static BuildingDefinitionSheet buildingDefinitionSheet;
 		public static List<BuildingDefinition> BuildingDefinitions => buildingDefinitionSheet?.buildingDefinitions;
 		public static bool FindBuildingDefinitionByType(string type, out BuildingDefinition definition)

@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace LongLiveKhioyen
 {
@@ -167,6 +166,13 @@ namespace LongLiveKhioyen
 			get => Data.gameTime;
 			private set => Data.gameTime = value;
 		}
+		public int CurrentMonth => ConvertToMonth(GameTime);
+		static float MonthLength => GameManager.InternalSettings.monthLength;
+
+		static int ConvertToMonth(float time)
+		{
+			return Mathf.FloorToInt(time / MonthLength);
+		}
 
 		public void AdvanceTime(float dt)
 		{
@@ -175,8 +181,35 @@ namespace LongLiveKhioyen
 				Debug.LogWarning("Time must be advanced positively.");
 				return;
 			}
-			GameTime += dt;
+
+			int targetMonth = ConvertToMonth(GameTime + dt);
+			float remaining = dt;
+			while(CurrentMonth != targetMonth)
+			{
+				float nextMonthStart = (CurrentMonth + 1) * MonthLength;
+				float advanced = nextMonthStart - GameTime;
+				GameTime = nextMonthStart;
+				remaining -= advanced;
+
+				PushMonthPassToPoleis();
+			}
+			GameTime += remaining;
+
 			onGameTimeAdvanced?.Invoke(dt);
+		}
+
+		void PushMonthPassToPoleis()
+		{
+			foreach(var poleis in Data.poleis)
+			{
+				PolisTask task = new()
+				{
+					type = PolisTaskType.monthPassed,
+					parameters = new string[] { CurrentMonth.ToString() },
+					remainingTime = GameTime - poleis.lastTime,
+				};
+				poleis.AddTask(task);
+			}
 		}
 
 		float timeScale = 1.0f;

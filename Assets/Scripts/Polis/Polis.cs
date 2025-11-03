@@ -601,6 +601,8 @@ namespace LongLiveKhioyen
 
 		void ExecuteMonthPassedTask(PolisTask task)
 		{
+			int startingMonth = int.Parse(task.parameters[0]);
+			Debug.Log($"Month passed in polis \"{Data.id}\". Starting month: {startingMonth}");
 			// TODO
 		}
 		#endregion
