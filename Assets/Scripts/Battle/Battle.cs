@@ -18,7 +18,7 @@ namespace LongLiveKhioyen
 	}
 	public class Battle : MonoBehaviour
 	{
-		
+		private HashSet<Vector2Int> availableMovePositions;
 		public GameObject HextilePrefab;
 		private Dictionary<Vector2Int,HexTile> hexTiles = new();
 		AudioSource audioSource;
@@ -48,15 +48,15 @@ namespace LongLiveKhioyen
 			transform.rotation = Quaternion.Euler(0, 0, 0);
 			gameObject.isStatic = true;
 			GenerateHexGrid();
-			//BattleMesh = ConstructBattleMesh();
 			arrangementOccupancy = new Battalion[Size.x, Size.y];
 			ArrangementSlot = new bool[Size.x, Size.y];
 			
 			//TODO:从出征队伍列表中读取部队
 			AnchorPosition = MapToWorld(new Vector2Int(data.battleSize.x/2, data.battleSize.y/2));
 			BattleTest();
-			//Map.GetComponent<MeshCollider>().sharedMesh = BattleMesh;
-			//Map.GetComponent<MeshFilter>().sharedMesh = BattleMesh;
+
+			
+			availableMovePositions = new HashSet<Vector2Int>();
 			onInitialized?.Invoke();
 		}
 
@@ -168,6 +168,7 @@ namespace LongLiveKhioyen
 				Debug.Log("No battalion selected.");
 				return;
 			}
+			
 			BattalionCompilation compilation = SelectedBattalion.Compilation;
 			arrangementOccupancy[compilation.position.x, compilation.position.y] = null;
 			compilation.position = mapPosition;
@@ -187,24 +188,27 @@ namespace LongLiveKhioyen
 			SelectedBattalion = null;
 			isBattalionSelected = false;
 			ClearAllHexHighlights();
+			availableMovePositions.Clear();
 		}
-		
+
+		public bool TestAvailableMovePositions(Vector2Int mapPosition)
+		{
+			return availableMovePositions.Contains(mapPosition);
+		}
 		public void SelectBattalion(Battalion battalion)
 		{
 			SelectedBattalion = battalion;
 			isBattalionSelected = true;
-			HighlightTilesInRange(battalion.Compilation.position, battalion.Definition.defaultFlexibility/10);
+			int moveRange = battalion.Definition.defaultFlexibility/10;
+			availableMovePositions = GetTilesInRange(SelectedBattalion.Compilation.position, moveRange);
+			HighlightTiles(availableMovePositions);
 		}
-		
 		
 		#endregion
 		
 		#region Battle
 
-		public void ShowAvailableMovementPosition()
-		{
-			
-		}
+
 		
 		#endregion
 		
@@ -272,20 +276,6 @@ namespace LongLiveKhioyen
 					hexTile.mapPosition = mapPos;
 					hexTiles.Add(mapPos, hexTile);
 				}
-			}
-		}
-		private int GetOrAddVertex(Vector3 vertex, Dictionary<Vector3, int> map, List<Vector3> list)
-		{
-			if (map.TryGetValue(vertex, out int index))
-			{
-				return index; 
-			}
-			else
-			{
-				int newIndex = list.Count;
-				map[vertex] = newIndex;
-				list.Add(vertex);
-				return newIndex; 
 			}
 		}
 		
@@ -560,14 +550,16 @@ namespace LongLiveKhioyen
     
 			return reachableTiles;
 		}
-		public void HighlightTilesInRange(Vector2Int startPos, int range)
+		public void HighlightTiles(HashSet<Vector2Int> positionsToHighlight)
 		{
-			HashSet<Vector2Int> tilesToHighlight = GetTilesInRange(startPos, range);
-			
-			foreach (Vector2Int position in tilesToHighlight)
-			{
+			if (positionsToHighlight == null) return;
 
-				hexTiles[position].Highlight();
+			foreach (Vector2Int position in positionsToHighlight)
+			{
+				if (hexTiles.TryGetValue(position, out HexTile tile))
+				{
+					tile.Highlight();
+				}
 			}
 		}
 		

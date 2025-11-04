@@ -206,11 +206,16 @@ namespace LongLiveKhioyen
 				Debug.LogWarning("No battalion selected." + Battle.WorldToMapInt(groundPosition));
 				return;
 			}
-
 			
 			if (!Battle.ValidateArrangementPlacement(Battle.WorldToMapInt(groundPosition)))
 			{
 				Debug.LogWarning($"Cannot move {Battle.SelectedBattalion.Compilation.battalionId} at {Battle.WorldToMapInt(groundPosition)}.");
+				return;
+			}
+
+			if (!Battle.TestAvailableMovePositions(Battle.WorldToMapInt(groundPosition)))
+			{
+				Debug.LogWarning($"Out of range!");
 				return;
 			}
 			Battle.MovingBattalion(Battle.WorldToMapInt(groundPosition));
