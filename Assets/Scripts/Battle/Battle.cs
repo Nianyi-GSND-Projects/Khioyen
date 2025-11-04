@@ -18,6 +18,9 @@ namespace LongLiveKhioyen
 	}
 	public class Battle : MonoBehaviour
 	{
+		
+		public GameObject HextilePrefab;
+		private Dictionary<Vector2Int,HexTile> hexTiles = new();
 		AudioSource audioSource;
 		static Battle instance;
 		public static Battle Instance => instance;
@@ -44,15 +47,16 @@ namespace LongLiveKhioyen
 			ChangeStage(Stage.Preparation);
 			transform.rotation = Quaternion.Euler(0, 0, 0);
 			gameObject.isStatic = true;
-			
-			BattleMesh = ConstructBattleMesh();
+			GenerateHexGrid();
+			//BattleMesh = ConstructBattleMesh();
 			arrangementOccupancy = new Battalion[Size.x, Size.y];
+			ArrangementSlot = new bool[Size.x, Size.y];
 			
 			//TODO:从出征队伍列表中读取部队
 			AnchorPosition = MapToWorld(new Vector2Int(data.battleSize.x/2, data.battleSize.y/2));
 			BattleTest();
-			Map.GetComponent<MeshCollider>().sharedMesh = BattleMesh;
-			Map.GetComponent<MeshFilter>().sharedMesh = BattleMesh;
+			//Map.GetComponent<MeshCollider>().sharedMesh = BattleMesh;
+			//Map.GetComponent<MeshFilter>().sharedMesh = BattleMesh;
 			onInitialized?.Invoke();
 		}
 
@@ -74,8 +78,8 @@ namespace LongLiveKhioyen
 		
 		#region Stages
 		
-		public bool isInArrangementModal = false;
-		public bool isInBattleModal = false;
+		public bool isInArrangementStage = false;
+		public bool isInBattleStage = false;
 		public bool isReserveTeamSelected = false;
 		public bool isBattalionSelected = false;
 		public void ChangeStage(Stage stage)
@@ -157,7 +161,7 @@ namespace LongLiveKhioyen
 			ClearReserveTeamSelection();
 		}
 		
-		public void MovingBattalionArrangement(Vector2Int mapPosition)
+		public void MovingBattalion(Vector2Int mapPosition)
 		{
 			if (!isBattalionSelected)
 			{
@@ -167,9 +171,8 @@ namespace LongLiveKhioyen
 			BattalionCompilation compilation = SelectedBattalion.Compilation;
 			arrangementOccupancy[compilation.position.x, compilation.position.y] = null;
 			compilation.position = mapPosition;
-			SelectedBattalion.transform.localPosition = MapToLocal(compilation.position) - new Vector3(0, 0, 0.5f);
+			SelectedBattalion.transform.localPosition = MapToLocal(compilation.position);
 			arrangementOccupancy[compilation.position.x, compilation.position.y] = SelectedBattalion;
-			
 			ClearBattalionSelection();
 		}
 
@@ -183,12 +186,25 @@ namespace LongLiveKhioyen
 		{
 			SelectedBattalion = null;
 			isBattalionSelected = false;
+			ClearAllHexHighlights();
 		}
+		
+		public void SelectBattalion(Battalion battalion)
+		{
+			SelectedBattalion = battalion;
+			isBattalionSelected = true;
+			HighlightTilesInRange(battalion.Compilation.position, battalion.Definition.defaultFlexibility/10);
+		}
+		
 		
 		#endregion
 		
 		#region Battle
-		
+
+		public void ShowAvailableMovementPosition()
+		{
+			
+		}
 		
 		#endregion
 		
@@ -224,74 +240,40 @@ namespace LongLiveKhioyen
 		#endregion
 		
 		#region Map Generation
-
-		Mesh BattleMesh;
 		public GameObject Map;
 		public Grid hexgrid;
 		public float Xscale;
 		public float Yscale;
 		public float SizeScale;
-		Mesh ConstructBattleMesh()
+
+		void GenerateHexGrid()
 		{
-			if (hexgrid == null)
+			Quaternion hexRotation = Quaternion.Euler(0, 30, 0);
+			if(HextilePrefab == null)
 			{
-				Debug.LogError("Hex Grid component is not assigned!");
-				return null;
+				Debug.LogError("Hextile prefab is not assigned!");
+				return;
 			}
-			Mesh mesh = new(){name = $"Battle mesh ({Id})"};
-			Dictionary<Vector3, int> vertexIndexMap = new Dictionary<Vector3, int>();
-			List<Vector3> vertices = new List<Vector3>();
-			List<int> indices = new List<int>();
-			float hexWidth = hexgrid.cellSize.x ;
-			float hexHeight = hexgrid.cellSize.y;
-			float hexOuterRadius = hexHeight / 2f * SizeScale; 
+			Transform mapContainer = new GameObject("HexMapContainer").transform;
+			mapContainer.SetParent(transform, false);
 			
 			for (int y = -1; y < Size.y+1; y++)
 			{
 				for (int x = -1; x < Size.x+1; x++)
 				{
-					Vector2Int cellCoord = new Vector2Int(x, y);
+					Vector2Int mapPos = new Vector2Int(x, y);
 
-					 //Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord) + new Vector3(-Size.x / 2.0f *Xscale,0,-Size.y / 2.0f *Yscale);
-					Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord);
-					Vector3[] corners = new Vector3[6];
-					for (int i = 0; i < 6; i++)
-					{
-						float angleDeg = 60 * i + 30; 
-						float angleRad = Mathf.Deg2Rad * angleDeg;
-						corners[i] = new Vector3(
-							hexCenter.x + hexOuterRadius * Mathf.Cos(angleRad),
-							0, 
-							hexCenter.z + hexOuterRadius * Mathf.Sin(angleRad)
-						);
-					}
+					Vector3 worldPos = MapToLocal(mapPos); 
 
-					int centerIndex = GetOrAddVertex(hexCenter, vertexIndexMap, vertices);
-					for (int i = 0; i < 6; i++)
-					{
-						int p1_index = GetOrAddVertex(corners[i], vertexIndexMap, vertices);
-						int p2_index = GetOrAddVertex(corners[(i + 1) % 6], vertexIndexMap, vertices);
-						indices.Add(centerIndex);
-						indices.Add(p2_index);
-						indices.Add(p1_index);
-					}
+					GameObject tileObject = Instantiate(HextilePrefab, worldPos, hexRotation, mapContainer);
+					tileObject.name = $"Hex Tile ({x}, {y})";
+            
+					HexTile hexTile = tileObject.GetComponent<HexTile>();
+					hexTile.mapPosition = mapPos;
+					hexTiles.Add(mapPos, hexTile);
 				}
 			}
-			mesh.vertices = vertices.ToArray();
-			mesh.SetIndices(indices, MeshTopology.Triangles, 0);
-			
-			Vector2[] uvs = new Vector2[vertices.Count];
-			for (int i = 0; i < vertices.Count; i++)
-			{
-				uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
-			}
-			mesh.uv = uvs;
-			
-			mesh.RecalculateNormals();
-			mesh.RecalculateBounds();
-			return mesh;
 		}
-		
 		private int GetOrAddVertex(Vector3 vertex, Dictionary<Vector3, int> map, List<Vector3> list)
 		{
 			if (map.TryGetValue(vertex, out int index))
@@ -355,6 +337,31 @@ namespace LongLiveKhioyen
 		#endregion
 		
 		#region Grid
+		
+		private readonly Vector2Int[][] neighborOffsets = new Vector2Int[][]
+		{
+			// 偶数行 (y % 2 == 0) 的邻居偏移
+			new Vector2Int[] 
+			{ 
+				new Vector2Int(0, 1),  // 右上
+				new Vector2Int(1, 0),  // 右
+				new Vector2Int(-1, -1), // 右下
+				new Vector2Int(0, -1), // 左下
+				new Vector2Int(-1, 0), // 左
+				new Vector2Int(-1, 1)   // 左上
+			},
+			// 奇数行 (y % 2 != 0) 的邻居偏移
+			new Vector2Int[] 
+			{ 
+				new Vector2Int(1, 1),   // 右上
+				new Vector2Int(1, 0),   // 右
+				new Vector2Int(1, -1),  // 右下
+				new Vector2Int(0, -1), // 左下
+				new Vector2Int(-1, 0),  // 左
+				new Vector2Int(0, 1)  // 左上
+			}
+		};
+		
 		public Vector2 WorldToMap(Vector3 world)
 		{
 			Vector3Int gridPos = hexgrid.WorldToCell(world);
@@ -391,12 +398,13 @@ namespace LongLiveKhioyen
 		
 		public bool ValidateArrangementPlacement(Vector2Int placement)
 		{
-			
 				if(!IsValidMapPosition(placement))
 					return false;
 				if(arrangementOccupancy[placement.x, placement.y] != null)
 					return false;
-			
+				// if (!ArrangementSlot[placement.x, placement.y])
+				// 	return false;
+				//TODO:可部署区域的生成
 			return true;
 		}
 		
@@ -405,6 +413,7 @@ namespace LongLiveKhioyen
 		#region Battalions
 		
 		Battalion[,] arrangementOccupancy;
+		bool[,] ArrangementSlot;
 		readonly List<Battalion> battalions = new();
 		public System.Action onArrangementOccupancyChanged;
 		public ReserveTeam currentReserveTeam;
@@ -482,7 +491,7 @@ namespace LongLiveKhioyen
 		public void PositionBattalion(Transform battalion, BattalionDefinition definition, BattalionCompilation compilation)
 		{
 			battalion.SetParent(transform, false);
-			battalion.localPosition = MapToLocal(compilation.position) - new Vector3(0, 0, 0.5f);
+			battalion.localPosition = MapToLocal(compilation.position);
 		}
 		#endregion
 		
@@ -512,7 +521,63 @@ namespace LongLiveKhioyen
 			GameInstance.Instance.ExitBattle();
 		}
 		
+		public HashSet<Vector2Int> GetTilesInRange(Vector2Int startPos, int range)
+		{
+			HashSet<Vector2Int> reachableTiles = new HashSet<Vector2Int>();
+			
+			if (!hexTiles.ContainsKey(startPos))
+			{
+				Debug.LogWarning($"尝试从一个不存在的格子 {startPos} 开始寻路。");
+				return reachableTiles;
+			}
+			
+			Queue<Vector2Int> frontier = new Queue<Vector2Int>();
+			frontier.Enqueue(startPos);
+			
+			Dictionary<Vector2Int, int> distanceTravelled = new Dictionary<Vector2Int, int>();
+			distanceTravelled[startPos] = 0;
+			
+			while (frontier.Count > 0)
+			{
+				Vector2Int currentPos = frontier.Dequeue();
+				
+				reachableTiles.Add(currentPos);
+				
+				if (distanceTravelled[currentPos] >= range) continue;
+				
+				int parity = currentPos.y & 1;
+				foreach (var offset in neighborOffsets[parity])
+				{
+					Vector2Int neighborPos = currentPos + offset;
+
+					if (hexTiles.ContainsKey(neighborPos) && !distanceTravelled.ContainsKey(neighborPos))
+					{
+						distanceTravelled[neighborPos] = distanceTravelled[currentPos] + 1;
+						frontier.Enqueue(neighborPos);
+					}
+				}
+			}
+    
+			return reachableTiles;
+		}
+		public void HighlightTilesInRange(Vector2Int startPos, int range)
+		{
+			HashSet<Vector2Int> tilesToHighlight = GetTilesInRange(startPos, range);
+			
+			foreach (Vector2Int position in tilesToHighlight)
+			{
+
+				hexTiles[position].Highlight();
+			}
+		}
 		
+		public void ClearAllHexHighlights()
+		{
+			foreach (HexTile tile in hexTiles.Values)
+			{
+				tile.UnHighlight();
+			}
+		}
 		#endregion
 	}
 }

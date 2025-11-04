@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f51e259bcc4a3854e8f00866073c78d5, type: 3}
-  m_Name: Sword
+  m_Name: Horse
   m_EditorClassIdentifier: 
   battalionId: 0
   tags: []
@@ -18,7 +18,7 @@ MonoBehaviour:
   defaultDiscipline: 10
   defaultAttack: 10
   defaultDefence: 10
-  defaultFlexibility: 10
+  defaultFlexibility: 20
   defaultStrategy: 10
   defaultMaxSolider: 500
   defaultMaxMorale: 10

@@ -54,6 +54,7 @@ namespace LongLiveKhioyen
             toBattleButton.gameObject.SetActive(false);
             ClosePanel(ArrangementPanel);
             ExitArrangementMode();
+            EnterBattleMode();
         }
 
         public void ClosePanel(CanvasGroup canvasGroup)
@@ -70,12 +71,15 @@ namespace LongLiveKhioyen
 
         public void EnterArrangementMode()
         {
-            battle.isInArrangementModal = true;
+            battle.isInArrangementStage = true;
         }
-        
+        public void EnterBattleMode()
+        {
+            battle.isInBattleStage = true;
+        }
         public void ExitArrangementMode()
         {
-            battle.isInArrangementModal = false;
+            battle.isInArrangementStage = false;
         }
         #endregion
     }

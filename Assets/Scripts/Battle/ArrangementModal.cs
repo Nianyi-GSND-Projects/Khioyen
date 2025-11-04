@@ -151,8 +151,6 @@ namespace LongLiveKhioyen
 				return;
 			}
 			
-			
-			
 			if (Battle.SelectedReserveTeam.placed == true)
 			{
 				Debug.LogWarning("Reserve team already placed." + Battle.WorldToMapInt(groundPosition));
@@ -192,7 +190,30 @@ namespace LongLiveKhioyen
 				Debug.LogWarning($"Cannot move {Battle.SelectedBattalion.Compilation.battalionId} at {Battle.WorldToMapInt(groundPosition)}.");
 				return;
 			}
-			Battle.MovingBattalionArrangement(Battle.WorldToMapInt(groundPosition));
+			Battle.MovingBattalion(Battle.WorldToMapInt(groundPosition));
+		}
+		
+		public void TryMoveBattalionBattle()
+		{
+			if (!Battle.ScreenToGround(arrangementMode.PointerScreenPosition, out Vector3 groundPosition))
+			{
+				Debug.LogWarning("Position not valid." + Battle.WorldToMapInt(groundPosition));
+				return;
+			}
+			
+			if (Battle.SelectedBattalion == null)
+			{
+				Debug.LogWarning("No battalion selected." + Battle.WorldToMapInt(groundPosition));
+				return;
+			}
+
+			
+			if (!Battle.ValidateArrangementPlacement(Battle.WorldToMapInt(groundPosition)))
+			{
+				Debug.LogWarning($"Cannot move {Battle.SelectedBattalion.Compilation.battalionId} at {Battle.WorldToMapInt(groundPosition)}.");
+				return;
+			}
+			Battle.MovingBattalion(Battle.WorldToMapInt(groundPosition));
 		}
 		#endregion
     }

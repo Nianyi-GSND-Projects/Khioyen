@@ -119,7 +119,7 @@ namespace LongLiveKhioyen
            if(!Battle.ScreenToGround(pointerScreenPosition, out var from))
                return;
            Vector3 pos = Battle.AnchorPosition + (to - from) * panSpeed;
-           Bounds bounds = new(default, new(Battle.Size.x, 0, Battle.Size.y));
+           Bounds bounds = new(default, new(Battle.Size.x * Battle.Xscale, 0, Battle.Size.y * Battle.Yscale));
            Vector3 boundedPos = Battle.transform.localToWorldMatrix.MultiplyPoint(
                bounds.ClosestPoint(
                    Battle.transform.worldToLocalMatrix.MultiplyPoint(pos)
@@ -156,7 +156,7 @@ namespace LongLiveKhioyen
            if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
                return;
            
-           if (Battle.isInArrangementModal)
+           if (Battle.isInArrangementStage)
            {
                if (Battle.isReserveTeamSelected)
                {
@@ -169,8 +169,21 @@ namespace LongLiveKhioyen
                else
                {
                    var hitBattalion = hit.collider.GetComponentInParent<Battalion>();
-                   Battle.SelectedBattalion = hitBattalion;
-                   Battle.isBattalionSelected = true;
+                   if(hitBattalion) Battle.SelectBattalion(hitBattalion);
+               }
+           }
+           else if (Battle.isInBattleStage)
+           {
+               if (Battle.isBattalionSelected)
+               {
+                   Battle.arrangementModal.TryMoveBattalionBattle();
+                   
+               }
+               else
+               {
+                   Battle.ClearAllHexHighlights();
+                   var hitBattalion = hit.collider.GetComponentInParent<Battalion>();
+                   if(hitBattalion) Battle.SelectBattalion(hitBattalion);
                }
            }
        }
@@ -181,7 +194,7 @@ namespace LongLiveKhioyen
            if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
                return;
            
-           if (Battle.isInArrangementModal)
+           if (Battle.isInArrangementStage)
            {
                if (Battle.isReserveTeamSelected)
                {
@@ -192,6 +205,14 @@ namespace LongLiveKhioyen
                    Battle.ClearBattalionSelection();
                }
                
+           }
+           else if (Battle.isInBattleStage)
+           {
+               if (Battle.isBattalionSelected)
+               {
+                   
+                   Battle.ClearBattalionSelection();
+               }
            }
        }
        #endregion
