@@ -21,20 +21,20 @@ namespace LongLiveKhioyen
 
 		public Vector2Int battleSize;
 		[Range(0, 359)] public float encounterOrientation;
+		public List<ReserveTeam> playerReserveTeams;
 		public List<BattalionCompilation> PlayerBattalions;
 		public List<BattalionCompilation> EnemyBattalions;
 		public List<BattalionCompilation> FriendlyBattalions;
-
 		public string playerCommanderId;
 
 		public BattleData()
 		{
 			battleType = BattleType.Encounter;
 			battleSize = new Vector2Int(10, 10);
+			playerReserveTeams = new ();
 			PlayerBattalions = new ();
-			PlayerBattalions.Add(new BattalionCompilation());
 			EnemyBattalions = new();
-			EnemyBattalions.Add(new BattalionCompilation());
+			FriendlyBattalions = new();
 		}
 	}
 	
@@ -53,25 +53,45 @@ namespace LongLiveKhioyen
 		}
 	}
 
+	
+	
 	public class BattalionCompilation
 	{
-		public string battalionId;
-		public string battalionCommanderId;
-		public int currentSolider;
-		public int currentMorale;
-		public int currentTraining;
-
+		public int battalionId;
+		public Vector2Int position;
+		
+		
+		public bool selected;
+		public bool actionDone;
+		
 		public List<string> currentInventory;
 		//TODO：道具堆叠的定义
 		
+		public BattalionDefinition battalionDefinition;
+		public BattalionCommander battalionCommander;
+		
+		public int currentSoliders;
+		public int currentMurale;
+		public int currentTraining;
+		
 		public BattalionCompilation()
 		{
-			battalionId = "sword";
-			battalionCommanderId = "null";
-			currentSolider = 500;
-			currentMorale = 100;
-			currentTraining = 100;
+			battalionId = 0;
 			currentInventory = new List<string>();
 		}
+		
 	}
+
+	public class ReserveTeam
+	{
+		public BattalionDefinition battalionDefinition;
+		public BattalionCommander battalionCommander;
+
+		public int currentSoliders;
+		public int currentMurale;
+		public int currentTraining;
+		
+		public bool placed = false;
+	}
+	
 }

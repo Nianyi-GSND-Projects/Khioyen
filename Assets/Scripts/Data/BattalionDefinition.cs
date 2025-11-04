@@ -18,8 +18,8 @@ namespace LongLiveKhioyen
         public string[] tags;
         public Sprite figure;
 
-        public GameObject ModelTemplate => Resources.Load<GameObject>($"Models/Battalions/{battalionId}");
-
+        //public GameObject ModelTemplate => Resources.Load<GameObject>($"Models/Battalions/{battalionId}");
+        public GameObject ModelTemplate => Resources.Load<GameObject>($"Models/Battalions/0");
         public int defaultDiscipline;
         public int defaultAttack;
         public int defaultDefence;

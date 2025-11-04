@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using System.Linq;
+using NUnit.Framework.Internal;
+using Unity.VisualScripting;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 namespace LongLiveKhioyen
 {
-	enum Stage
+	public enum Stage
 	{
 		Preparation,
 		Arrangement,
@@ -19,7 +21,7 @@ namespace LongLiveKhioyen
 		static Battle instance;
 		public static Battle Instance => instance;
 		public System.Action onInitialized;
-
+		public Stage currentStage;
 		#region Life cycle
 		void Awake()
 		{
@@ -37,23 +39,138 @@ namespace LongLiveKhioyen
 		}
 		void Initialize()
 		{
-			
+			ChangeStage(Stage.Preparation);
 			transform.rotation = Quaternion.Euler(0, 0, 0);
 			gameObject.isStatic = true;
 			
 			BattleMesh = ConstructBattleMesh();
+			arrangementOccupancy = new Battalion[Size.x, Size.y];
+			
+			//TODO:从出征队伍列表中读取部队
+			AnchorPosition = MapToWorld(new Vector2Int(data.battleSize.x/2, data.battleSize.y/2));
+			BattleTest();
 			Map.GetComponent<MeshCollider>().sharedMesh = BattleMesh;
 			Map.GetComponent<MeshFilter>().sharedMesh = BattleMesh;
-			
 			onInitialized?.Invoke();
 		}
+
+		
+		#endregion
+		
+		#region Test
+
+		public void BattleTest()
+		{
+			ReserveTeam testTeam = CreateDefaultReserveTeam();
+			if(testTeam == null) 
+				Debug.LogError("Create default reserve team failed.");
+			else 
+				data.playerReserveTeams.Add(testTeam);
+			//向战斗预备队中加入默认部队
+		}
+		#endregion
+		
+		#region Stages
+		
+		public bool isInArrangementModal = false;
+		public void ChangeStage(Stage stage)
+		{
+			OnExitStage(currentStage);
+			currentStage = stage;
+			OnEnterStage(currentStage);
+		}
+
+		
+		
+		void OnEnterStage(Stage stage)
+		{
+			switch (stage)
+			{
+				case Stage.Arrangement:
+					Debug.Log("OnEnter: 布置阶段");
+					break;
+				case Stage.Battle:
+					Debug.Log("OnEnter: 战斗阶段");
+					break;
+				case Stage.Settlement:
+					Debug.Log("OnEnter: 结算阶段");
+					break;
+			}
+		}
+		
+		void OnExitStage(Stage stage)
+		{
+			switch (stage)
+			{
+				case Stage.Arrangement:
+					Debug.Log("OnExit: 布置阶段");
+					break;
+				case Stage.Battle:
+					Debug.Log("OnExit: 战斗阶段");
+					break;
+			}
+		}
+		
+		#region Preparation
+		
+		
+		
+		#endregion
+		
+		#region Arrangement
+		
+		public ArrangementModal arrangementModal;
+		public void PlacingBattalion(ReserveTeam reserveTeam, Vector2Int mapPosition)
+		{
+			if (!data.playerReserveTeams.Contains(reserveTeam))
+			{
+				Debug.Log("Battalion name: " + reserveTeam.battalionDefinition.battalionId + "Don't exist in your reserve teams.");
+				return;
+			}
+
+			if (reserveTeam.placed)
+			{
+				Debug.Log("Battalion name: " + reserveTeam.battalionDefinition.battalionId + "already placed.");
+				return;
+			}
+
+			BattalionCompilation compilation = new()
+			{
+				//TODO:填入有意义数据
+				battalionId = 0,
+				position = mapPosition,
+				battalionDefinition = reserveTeam.battalionDefinition,
+				battalionCommander = reserveTeam.battalionCommander,
+				currentSoliders = reserveTeam.currentSoliders,
+				currentMurale = reserveTeam.currentMurale,
+				currentTraining = reserveTeam.currentTraining,
+			};
+			
+			SpawnBattalion(compilation);
+			data.PlayerBattalions.Add(compilation);
+			reserveTeam.placed = true;
+		}
+
+		
+		#endregion
+		
+		#region Battle
+
+		
+		#endregion
+		
+		#region Settlement
+
+		
+		#endregion
+		
 		#endregion
 		
 		#region Data
 		#region Battle data
 
 		// BattleData data => GameInstance.Instance.LastBattle;
-		BattleData data = new();
+		public BattleData data = new();
 		public Vector2Int Size => data.battleSize;
 		public string Id => data.id;
 		#endregion
@@ -102,8 +219,8 @@ namespace LongLiveKhioyen
 				{
 					Vector2Int cellCoord = new Vector2Int(x, y);
 
-					Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord) + new Vector3(-Size.x / 2.0f *Xscale,0,-Size.y / 2.0f *Yscale);
-					
+					 Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord) + new Vector3(-Size.x / 2.0f *Xscale,0,-Size.y / 2.0f *Yscale);
+					//Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord);
 					Vector3[] corners = new Vector3[6];
 					for (int i = 0; i < 6; i++)
 					{
@@ -209,24 +326,28 @@ namespace LongLiveKhioyen
 		{
 			Vector3Int gridPos = hexgrid.WorldToCell(world);
 			return new(
-				gridPos.x + Size.x * .5f * Xscale,
-				gridPos.z + Size.y * .5f * Yscale
+				gridPos.x ,
+				gridPos.y 
 			);
 		}
 		public Vector2Int WorldToMapInt(Vector3 world)
 		{
-			return Vector2Int.FloorToInt(WorldToMap(world));
+			//return Vector2Int.FloorToInt(WorldToMap(world));
+			Vector3Int gridPos = hexgrid.WorldToCell(world);
+			return new Vector2Int(gridPos.x, gridPos.y);
 		}
-		public Vector3 MapToWorld(Vector2 map)
+		public Vector3 MapToWorld(Vector2Int map)
 		{
-			return transform.localToWorldMatrix.MultiplyPoint(MapToLocal(map));
+			//return transform.localToWorldMatrix.MultiplyPoint(MapToLocal(map));
+			Vector3Int gridPos = new Vector3Int(map.x, map.y, 0);
+			return hexgrid.GetCellCenterWorld(gridPos);
 		}
 		public Vector3 MapToLocal(Vector2 map)
 		{
 			return hexgrid.CellToLocalInterpolated(new(
-				map.x - Size.x * .5f * Xscale,
-				0,
-				map.y - Size.y * .5f * Yscale
+				map.x,
+				map.y,
+				0
 			));
 		}
 
@@ -235,17 +356,103 @@ namespace LongLiveKhioyen
 			return pos.x >= 0 && pos.y >= 0 && pos.x < Size.x && pos.y < Size.y;
 		}
 		
+		public bool ValidateArrangementPlacement(Vector2Int placement)
+		{
+			
+				if(!IsValidMapPosition(placement))
+					return false;
+				if(arrangementOccupancy[placement.x, placement.y] != null)
+					return false;
+			
+			return true;
+		}
 		
 		#endregion
 		
+		#region Battalions
+		
+		Battalion[,] arrangementOccupancy;
+		readonly List<Battalion> battalions = new();
+		public System.Action onArrangementOccupancyChanged;
+		Battalion currentSelection;
+		public BattalionDefinition defaultReserveTeamDefinition;
+		public ReserveTeam CreateDefaultReserveTeam()
+		{
+			ReserveTeam newTeam = new ReserveTeam();
+
+			newTeam.battalionDefinition = defaultReserveTeamDefinition;
+			newTeam.battalionCommander = new ();
+			newTeam.currentSoliders = newTeam.battalionDefinition.defaultMaxSolider;
+			newTeam.currentMurale = newTeam.battalionDefinition.defaultMaxMorale;
+			newTeam.currentTraining = 100;
+			return newTeam;
+		}
+		
+		public Battalion SelectedBattalion
+		{
+			get => currentSelection;
+			set
+			{
+				if (currentSelection != null)
+					currentSelection.Selected = false;
+				
+				currentSelection = value;
+
+				if (currentSelection != null)
+				{
+					currentSelection.Selected = true;
+					//TODO: 打开行动面板
+				}
+			}
+		}
+
+		Battalion SpawnBattalion(BattalionCompilation compilation)
+		{
+			
+			var battalion = new GameObject().AddComponent<Battalion>();
+			PositionBattalion(battalion.transform, compilation.battalionDefinition,compilation);
+			
+			battalions.Add(battalion);
+			battalion.Compilation = compilation;
+			battalion.Definition = compilation.battalionDefinition;
+			arrangementOccupancy[compilation.position.x, compilation.position.y] = battalion;
+			return battalion;
+		}
+
+		public void PositionBattalion(Transform battalion, BattalionDefinition definition, BattalionCompilation compilation)
+		{
+			battalion.SetParent(transform, false);
+			battalion.localPosition = MapToLocal(compilation.position) - new Vector3(0, 0, 0.5f);
+		}
+		#endregion
+		
 		#region Functions
-		/// <summary>给 UI 控件暴露的接口方法。</summary>
+		
+		public void ProceedToNextStage()
+		{
+			switch(currentStage)
+			{
+				case Stage.Preparation:
+					ChangeStage(Stage.Arrangement);
+					break;
+				case Stage.Arrangement:
+					ChangeStage(Stage.Battle);
+					break;
+				case Stage.Battle:
+					ChangeStage(Stage.Settlement);
+					break;
+				default:
+					break;
+			}
+		}
 		
 		
 		public void ExitBattle()
 		{
 			GameInstance.Instance.ExitBattle();
 		}
+		
+		
 		#endregion
 	}
 }

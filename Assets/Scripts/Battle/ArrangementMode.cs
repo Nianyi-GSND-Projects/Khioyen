@@ -133,7 +133,13 @@ namespace LongLiveKhioyen
 
        protected void Interact(Vector2 screenPos)
        {
+           if (Battle.isInArrangementModal)
+           {
+               Battle.arrangementModal.TryPlaceReserveTeam();
+               return;
+           }
            var ray = Camera.main.ScreenPointToRay(screenPos);
+           
            if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
                return;
        }
