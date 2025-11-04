@@ -49,8 +49,8 @@ namespace LongLiveKhioyen
 
            if(isPrimaryButtonDown)
                Pan(raw);
-           if(isSecondaryButtonDown)
-               Rotate(raw);
+          // if(isSecondaryButtonDown)
+            //   Rotate(raw);
        }
 
        protected void OnScroll(InputValue value)
@@ -87,8 +87,27 @@ namespace LongLiveKhioyen
 
        protected void OnSecondaryClick(InputValue value)
        {
+           if(isPointerOverGameObjects)
+               return;
            var raw = value.isPressed;
            isSecondaryButtonDown = raw;
+           
+           if(raw)
+           {
+               lastPrimaryClickTime = Time.realtimeSinceStartup;
+               primaryStartScreenPosition = pointerScreenPosition;
+           }
+           else
+           {
+               float elapsedTime = Time.realtimeSinceStartup - lastPrimaryClickTime;
+               Vector2 mouseMoved = primaryStartScreenPosition - pointerScreenPosition;
+               if(
+                   elapsedTime <= 0.3f &&
+                   mouseMoved.magnitude <= 5 &&
+                   !isPointerOverGameObjects
+               )
+                   SecondaryInteract(pointerScreenPosition);
+           }
        }
        #endregion
        
@@ -133,15 +152,47 @@ namespace LongLiveKhioyen
 
        protected void Interact(Vector2 screenPos)
        {
-           if (Battle.isInArrangementModal)
-           {
-               Battle.arrangementModal.TryPlaceReserveTeam();
-               return;
-           }
            var ray = Camera.main.ScreenPointToRay(screenPos);
-           
            if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
                return;
+           
+           if (Battle.isInArrangementModal)
+           {
+               if (Battle.isReserveTeamSelected)
+               {
+                   Battle.arrangementModal.TryPlaceReserveTeam();
+               }
+               else if (Battle.isBattalionSelected)
+               {
+                   Battle.arrangementModal.TryMoveBattalionArrangement();
+               }
+               else
+               {
+                   var hitBattalion = hit.collider.GetComponentInParent<Battalion>();
+                   Battle.SelectedBattalion = hitBattalion;
+                   Battle.isBattalionSelected = true;
+               }
+           }
+       }
+       
+       protected void SecondaryInteract(Vector2 screenPos)
+       {
+           var ray = Camera.main.ScreenPointToRay(screenPos);
+           if(!Physics.Raycast(ray, out var hit, Mathf.Infinity))
+               return;
+           
+           if (Battle.isInArrangementModal)
+           {
+               if (Battle.isReserveTeamSelected)
+               {
+                   Battle.ClearReserveTeamSelection();
+               }
+               else if (Battle.isBattalionSelected)
+               {
+                   Battle.ClearBattalionSelection();
+               }
+               
+           }
        }
        #endregion
     }

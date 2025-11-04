@@ -51,7 +51,7 @@ namespace LongLiveKhioyen
 		 {
 			 GenerateUi();
 			 Debug.Log("Arrangement Modal Enabled");
-			 SelectedReserveTeam = null;
+			 Battle.SelectedReserveTeam = null;
 		 }
 		void GenerateUi()
 		{
@@ -78,7 +78,11 @@ namespace LongLiveKhioyen
   //
 		void OnBattalionCardSelected(BattalionArrangementUi card)
 		{
-			SelectedReserveTeam = card.reserveTeam;
+			if (!card.reserveTeam.placed)
+			{
+				Battle.SelectedReserveTeam = card.reserveTeam;
+				Battle.isReserveTeamSelected = true;
+			}
 		}
   
 		void OnBattalionCardHovered(BattalionArrangementUi card)
@@ -94,33 +98,10 @@ namespace LongLiveKhioyen
 		 #endregion
 
 		#region Selection
-		ReserveTeam selectedReserveTeam, hoveredReserveTeam;
+		ReserveTeam  hoveredReserveTeam;
 		//ArrangementPreview preview;
-		public ReserveTeam SelectedReserveTeam
-		{
-			get => selectedReserveTeam;
-			set
-			{
-				if(value == selectedReserveTeam)
-					return;
-
-				// if(preview != null)
-				// {
-				// 	Destroy(preview.gameObject);
-				// 	preview = null;
-				// }
-
-				selectedReserveTeam = value;
-
-				if(selectedReserveTeam != null)
-				{
-					// preview = new GameObject("Construction Preview").AddComponent<ConstructPreview>();
-					// preview.Definition = selectedBuildingType;
-					// preview.transform.SetParent(Polis.transform, false);
-					// preview.onInitialized += UpdatePreviewModel;
-				}
-			}
-		}
+		
+		
 
 		// void UpdatePreviewModel()
 		// {
@@ -164,7 +145,7 @@ namespace LongLiveKhioyen
 				return;
 			}
 			
-			if (SelectedReserveTeam == null)
+			if (Battle.SelectedReserveTeam == null)
 			{
 				Debug.LogWarning("No reserve team selected." + Battle.WorldToMapInt(groundPosition));
 				return;
@@ -172,7 +153,7 @@ namespace LongLiveKhioyen
 			
 			
 			
-			if (selectedReserveTeam.placed == true)
+			if (Battle.SelectedReserveTeam.placed == true)
 			{
 				Debug.LogWarning("Reserve team already placed." + Battle.WorldToMapInt(groundPosition));
 				return;
@@ -188,9 +169,31 @@ namespace LongLiveKhioyen
 				Debug.LogWarning($"Cannot place {compilation.battalionId} at {compilation.position}.");
 				return;
 			}
-			Battle.PlacingBattalion(SelectedReserveTeam, compilation.position);
+			Battle.PlacingBattalion(Battle.SelectedReserveTeam, compilation.position);
 		}
+		
+		public void TryMoveBattalionArrangement()
+		{
+			if (!Battle.ScreenToGround(arrangementMode.PointerScreenPosition, out Vector3 groundPosition))
+			{
+				Debug.LogWarning("Position not valid." + Battle.WorldToMapInt(groundPosition));
+				return;
+			}
+			
+			if (Battle.SelectedBattalion == null)
+			{
+				Debug.LogWarning("No battalion selected." + Battle.WorldToMapInt(groundPosition));
+				return;
+			}
 
+			
+			if (!Battle.ValidateArrangementPlacement(Battle.WorldToMapInt(groundPosition)))
+			{
+				Debug.LogWarning($"Cannot move {Battle.SelectedBattalion.Compilation.battalionId} at {Battle.WorldToMapInt(groundPosition)}.");
+				return;
+			}
+			Battle.MovingBattalionArrangement(Battle.WorldToMapInt(groundPosition));
+		}
 		#endregion
     }
 }

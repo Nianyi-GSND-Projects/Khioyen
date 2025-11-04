@@ -20,6 +20,7 @@ namespace LongLiveKhioyen
 
         //public GameObject ModelTemplate => Resources.Load<GameObject>($"Models/Battalions/{battalionId}");
         public GameObject ModelTemplate => Resources.Load<GameObject>($"Models/Battalions/0");
+        public AudioClip SelectedSoundEffect => Resources.Load<AudioClip>($"SE/Battle/Horse_Neigh");
         public int defaultDiscipline;
         public int defaultAttack;
         public int defaultDefence;

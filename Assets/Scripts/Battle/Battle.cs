@@ -18,6 +18,7 @@ namespace LongLiveKhioyen
 	}
 	public class Battle : MonoBehaviour
 	{
+		AudioSource audioSource;
 		static Battle instance;
 		public static Battle Instance => instance;
 		public System.Action onInitialized;
@@ -26,6 +27,7 @@ namespace LongLiveKhioyen
 		void Awake()
 		{
 			instance = this;
+			audioSource = GetComponent<AudioSource>();
 		}
 
 		void OnDestroy()
@@ -73,6 +75,9 @@ namespace LongLiveKhioyen
 		#region Stages
 		
 		public bool isInArrangementModal = false;
+		public bool isInBattleModal = false;
+		public bool isReserveTeamSelected = false;
+		public bool isBattalionSelected = false;
 		public void ChangeStage(Stage stage)
 		{
 			OnExitStage(currentStage);
@@ -149,13 +154,41 @@ namespace LongLiveKhioyen
 			SpawnBattalion(compilation);
 			data.PlayerBattalions.Add(compilation);
 			reserveTeam.placed = true;
+			ClearReserveTeamSelection();
+		}
+		
+		public void MovingBattalionArrangement(Vector2Int mapPosition)
+		{
+			if (!isBattalionSelected)
+			{
+				Debug.Log("No battalion selected.");
+				return;
+			}
+			BattalionCompilation compilation = SelectedBattalion.Compilation;
+			arrangementOccupancy[compilation.position.x, compilation.position.y] = null;
+			compilation.position = mapPosition;
+			SelectedBattalion.transform.localPosition = MapToLocal(compilation.position) - new Vector3(0, 0, 0.5f);
+			arrangementOccupancy[compilation.position.x, compilation.position.y] = SelectedBattalion;
+			
+			ClearBattalionSelection();
 		}
 
+		public void ClearReserveTeamSelection()
+		{
+			SelectedReserveTeam = null;
+			isReserveTeamSelected = false;
+		}
+		
+		public void ClearBattalionSelection()
+		{
+			SelectedBattalion = null;
+			isBattalionSelected = false;
+		}
 		
 		#endregion
 		
 		#region Battle
-
+		
 		
 		#endregion
 		
@@ -219,8 +252,8 @@ namespace LongLiveKhioyen
 				{
 					Vector2Int cellCoord = new Vector2Int(x, y);
 
-					 Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord) + new Vector3(-Size.x / 2.0f *Xscale,0,-Size.y / 2.0f *Yscale);
-					//Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord);
+					 //Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord) + new Vector3(-Size.x / 2.0f *Xscale,0,-Size.y / 2.0f *Yscale);
+					Vector3 hexCenter = hexgrid.CellToWorld((Vector3Int)cellCoord);
 					Vector3[] corners = new Vector3[6];
 					for (int i = 0; i < 6; i++)
 					{
@@ -374,7 +407,8 @@ namespace LongLiveKhioyen
 		Battalion[,] arrangementOccupancy;
 		readonly List<Battalion> battalions = new();
 		public System.Action onArrangementOccupancyChanged;
-		Battalion currentSelection;
+		public ReserveTeam currentReserveTeam;
+		Battalion currentBattalion;
 		public BattalionDefinition defaultReserveTeamDefinition;
 		public ReserveTeam CreateDefaultReserveTeam()
 		{
@@ -390,18 +424,44 @@ namespace LongLiveKhioyen
 		
 		public Battalion SelectedBattalion
 		{
-			get => currentSelection;
+			get => currentBattalion;
 			set
 			{
-				if (currentSelection != null)
-					currentSelection.Selected = false;
+				if (currentBattalion != null)
+					currentBattalion.Selected = false;
 				
-				currentSelection = value;
+				currentBattalion = value;
 
-				if (currentSelection != null)
+				if (currentBattalion != null)
 				{
-					currentSelection.Selected = true;
+					currentBattalion.Selected = true;
 					//TODO: 打开行动面板
+				}
+			}
+		}
+
+		public ReserveTeam SelectedReserveTeam
+		{
+			get => currentReserveTeam;
+			set
+			{
+				if (value == currentReserveTeam)
+					return;
+
+				// if(preview != null)
+				// {
+				// 	Destroy(preview.gameObject);
+				// 	preview = null;
+				// }
+
+				currentReserveTeam = value;
+
+				if (currentReserveTeam != null)
+				{
+					// preview = new GameObject("Construction Preview").AddComponent<ConstructPreview>();
+					// preview.Definition = selectedBuildingType;
+					// preview.transform.SetParent(Polis.transform, false);
+					// preview.onInitialized += UpdatePreviewModel;
 				}
 			}
 		}
@@ -411,7 +471,7 @@ namespace LongLiveKhioyen
 			
 			var battalion = new GameObject().AddComponent<Battalion>();
 			PositionBattalion(battalion.transform, compilation.battalionDefinition,compilation);
-			
+			audioSource.PlayOneShot(compilation.battalionDefinition.SelectedSoundEffect);
 			battalions.Add(battalion);
 			battalion.Compilation = compilation;
 			battalion.Definition = compilation.battalionDefinition;

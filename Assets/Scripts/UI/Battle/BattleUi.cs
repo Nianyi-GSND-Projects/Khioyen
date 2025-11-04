@@ -35,25 +35,7 @@ namespace LongLiveKhioyen
         [Header("Bottom Button")]
         public GameObject ArrangementButtonPrefab;
         public RectTransform contentContainer;
-
-        void GenerateBattalions()
-        {
-            foreach (Transform child in contentContainer)
-            {
-                Destroy(child.gameObject);
-            }
-
-            foreach (var reserveTeam in battle.data.playerReserveTeams)
-            {
-                GameObject newBattalion = Instantiate(ArrangementButtonPrefab, contentContainer);
-                BattalionArrangementUi battalionUiScript=  newBattalion.GetComponent<BattalionArrangementUi>();
-
-                if (battalionUiScript != null)
-                {
-                    battalionUiScript.Setup(reserveTeam);
-                }
-            }
-        }
+        
         #endregion
         
         #region StageManagement
